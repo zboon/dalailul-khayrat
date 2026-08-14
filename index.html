@@ -2962,9 +2962,9 @@ const DALAIL_CHAPTERS = [
     ]
   },
   {
-    "titleArabic": "اَلْاَسْمَاءُ الْحُسْنَى",
-    "titleEnglish": "The Names of Allah",
-    "cartouche": "اَلْاَسْمَاءُ الْحُسْنَى",
+    "titleArabic": "اَلْاَسْمَاءُ الْحُسْنَى ﷻ",
+    "titleEnglish": "The Names of Allah ﷻ",
+    "cartouche": "اَلْاَسْمَاءُ الْحُسْنَى ﷻ",
     "note": "The ninety-nine Names, as set out in Dalāʾil al-Khayrāt.",
     "folios": [
       {
@@ -8168,7 +8168,7 @@ const MAWLID_COLLECTIONS = [
 
 /* Bumped with sw.js on every release. Shown small at the foot of the home page
    so you can tell at a glance which build a given phone is actually running. */
-const APP_VERSION = 'v4';
+const APP_VERSION = 'v8';
 /* Where the home-page feedback button sends corrections. Change to your address. */
 const FEEDBACK_EMAIL = 'zayd.boon@gmail.com';
 
@@ -8185,7 +8185,7 @@ function versionTag(){
 
 const TABS = [
   { id:'dalail',   label:'Dalāʾil al-Khayrāt',  ar:'دلائل الْخيرات' },
-  { id:'litanies', label:'Daily Litanies',      ar:'الْأَوْرَادُ الْيَوْمِيَّةُ' },
+  { id:'litanies', label:'Al-Aḥzāb',      ar:'الْأَحْزَابُ' },
 ];
 
 /* A hub tab stays highlighted while you're inside any of its sections. */
@@ -9792,7 +9792,7 @@ function displayTitle(piece){
    computed live, so they stay right as content is added. */
 const HOME_CARDS = [
   { id:'dalail',   ar:'دلائل الْخيرات', en:'Dalāʾil al-Khayrāt', desc:'Imam al-Jazūlī’s book of blessings upon the Prophet ﷺ, divided for the week.' },
-  { id:'litanies', ar:'الْأَوْرَادُ الْيَوْمِيَّةُ', en:'Daily Litanies', desc:'The daily awrād, each read straight through.' },
+  { id:'litanies', ar:'الْأَحْزَابُ', en:'Al-Aḥzāb', desc:'The aḥzāb, each read straight through.' },
 ];
 
 function sectionCount(id){
@@ -9815,7 +9815,7 @@ function countLabel(id, n){
   if(id === 'mawlids') return n + (n === 1 ? ' collection' : ' collections'); /* includes Burdah */
   if(id === 'praises') return n + (n === 1 ? ' section' : ' sections');
   if(id === 'nasheeds')return n ? n + (n === 1 ? ' nasheed' : ' nasheeds') : 'Coming soon';
-  if(id === 'litanies')return n + (n === 1 ? ' litany' : ' litanies');
+  if(id === 'litanies')return n + (n === 1 ? ' ḥizb' : ' aḥzāb');
   if(id === 'qawwalis') return n ? n + (n === 1 ? ' qawwali' : ' qawwalis') : 'Coming soon';
   if(id === 'mawlid')  return n + ' sections';
   if(id === 'burdah')  return n + ' chapters';
@@ -9903,7 +9903,7 @@ function renderResults(){
     const ilahis = ilahiCards();
     if(ilahis) html += label('Ilahis · الْإلهيات', !!mawlid || !!barz || !!burd || !!qas || !!dal || !!nash) + ilahis;
     const lit = litanyCards();
-    if(lit) html += label('Daily Litanies · الْأوراد الْيومية', !!mawlid || !!barz || !!burd || !!qas || !!dal || !!nash || !!ilahis) + lit;
+    if(lit) html += label('Al-Aḥzāb · الْأَحْزَابُ', !!mawlid || !!barz || !!burd || !!qas || !!dal || !!nash || !!ilahis) + lit;
     if(!html) return `<div class="no-results">No matches for "${q.replace(/</g,'&lt;')}". Try a different spelling.</div>`;
     return html;
   }
@@ -9919,7 +9919,7 @@ function renderResults(){
   if(tab === 'nasheeds')return backToPraises() + sectionIntro('nasheeds') + (nasheedCards() || placeholder('Nasheeds'));
   if(tab === 'qasidas') return backToPraises() + sectionIntro('qasidas') + (additionalQasidaCards() || placeholder('Qasidas'));
   if(tab === 'ilahis')  return backToPraises() + sectionIntro('ilahis') + label('Select an ilahi · ilahi seçin') + ilahiCards();
-  if(tab === 'litanies')return sectionIntro('litanies') + label('Select a litany · اختر حزباً') + litanyCards();
+  if(tab === 'litanies')return sectionIntro('litanies') + label('Select a ḥizb · اختر حزباً') + litanyCards();
   if(tab === 'before')  return backToDalail() + label('Before the reading · قَبْلَ الْقِرَاءَةِ') + dalailBeforeCards();
   if(tab === 'qawwalis') return backToPraises() + sectionIntro('qawwalis') + placeholder('Qawwalis');
   if(tab === 'favs'){
