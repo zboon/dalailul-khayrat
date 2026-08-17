@@ -1,6 +1,6 @@
 /* Offline support: caches the app shell and fonts on first visit,
    then serves everything from cache (works with no connection). */
-const CACHE = 'dalail-v8'; // bump this (v2, v3…) whenever you update index.html
+const CACHE = 'dalail-v15'; // bump this (v2, v3…) whenever you update index.html
 const CORE = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', e => {
