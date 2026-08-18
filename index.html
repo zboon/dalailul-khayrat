@@ -524,7 +524,10 @@
   .ms-band-div{ margin-top:1.4rem; }
   .ms-band-inline{ display:block; margin:1.15rem 0 1.05rem; }
   .ms-cartouche-div{ font-size:.98rem; }
-  .ms-band-art{ position:absolute; inset:0; width:100%; height:100%; display:block; }
+  .ms-band-art{ position:absolute; left:0; right:0; top:50%;
+    transform:translateY(-50%); height:40px; width:100%; display:block; }
+  /* A mid-chapter division is a pause, not a second headpiece. */
+  .ms-band-div .ms-band-art{ opacity:.55; }
   .ms-cartouche{ position:relative; z-index:1; }
   .ms-cartouche{
     display:inline-block; padding:.28rem 1.5rem;
@@ -4932,7 +4935,7 @@ const DALAIL_CHAPTERS = [
         "en": "O Allah, widen for him his place in Your Eden and reward him doubly with the goodness of Your favour, granting him untarnished felicitations from the victory of Your reward, which is plentiful and fitting, and from Your lofty gift."
       },
       {
-        "ar": "اَللّٰهُمَّ أَعْلِ عَلٰى بِنَاءِ النَّاسِ بِنَاءَهُ، وَأَكْرِمْ مَثْوَاهُ لَدَيْكَ وَنُزُلَهُ، وَأَتْمِمْ لَهُ نُورَهُ، وَاجْزِهِ مِنِ ابْتِعَاثِكَ لَهُ مَقْبُولَ الشَّهَادَةِ، وَمَرْضِيَّ الْمَقَالَةِ، ذَا مَنْطِقٍ عَدْلٍ، وَخُطَّةٍ فَصْلٍ، وَبُرْهَانٍ عَظِيمٍ ۞ ﴿إِنَّ اللّٰهَ وَمَلَـٰٓئِكَتَهۥ يُصَلُّونَ عَلٰى النَّبِىِّ ۚ يـٰٓأَيُّهَا الَّذِينَ ءَامَنُواْ صَلُّواْ عَلَيْهِ وَسَلِّمُواْ تَسْلِيمًا ۞ ﴾، لَبَّيْكَ اللّٰهُمَّ رَبِّى ‖ وَسَعْدَيْكَ صَلَوَاتُ اللّٰهِ الْبَرِّ الرَّحِيمِ، وَالمَلَائِكَةِ الْمُقَرَّبِينَ، وَالنَّبِيِّينَ وَالصِّدِّيقِينَ، وَالشُّهَدَاءِ وَالصَّالِحِينَ، وَمَا سَبَّحَ لَكَ مِنْ شَيْءٍ يَا رَبَّ الْعَالَمِينَ ۞ عَلٰى سَيِّدِنَا مُحَمَّدِ بْنِ عَبْدِ اللّٰهِ، خَاتِمِ النَّبِيِّينَ، وَسَيِّدِ الْمُرْسَلِينَ، وَإِمَامِ الْمُتَّقِينَ، وَرَسُولِ رَبِّ الْعَالَمِينَ، الشَّاهِدِ الْبَشِيرِ، الدَّاعِي إِلَيْكَ بِإِذْنِكَ، السِّرَاجِ الْمُنِيرِ، وَعَلَيْهِ السَّلَامُ",
+        "ar": "اَللّٰهُمَّ أَعْلِ عَلٰى بِنَاءِ النَّاسِ بِنَاءَهُ، وَأَكْرِمْ مَثْوَاهُ لَدَيْكَ وَنُزُلَهُ، وَأَتْمِمْ لَهُ نُورَهُ، وَاجْزِهِ مِنِ ابْتِعَاثِكَ لَهُ مَقْبُولَ الشَّهَادَةِ، وَمَرْضِيَّ الْمَقَالَةِ، ذَا مَنْطِقٍ عَدْلٍ، وَخُطَّةٍ فَصْلٍ، وَبُرْهَانٍ عَظِيمٍ ۞ ﴿إِنَّ اللّٰهَ وَمَلَـٰٓئِكَتَهۥ يُصَلُّونَ عَلٰى النَّبِىِّ ۚ يـٰٓأَيُّهَا الَّذِينَ ءَامَنُواْ صَلُّواْ عَلَيْهِ وَسَلِّمُواْ تَسْلِيمًا ﴾ ۞ لَبَّيْكَ اللّٰهُمَّ رَبِّى ‖ وَسَعْدَيْكَ صَلَوَاتُ اللّٰهِ الْبَرِّ الرَّحِيمِ، وَالمَلَائِكَةِ الْمُقَرَّبِينَ، وَالنَّبِيِّينَ وَالصِّدِّيقِينَ، وَالشُّهَدَاءِ وَالصَّالِحِينَ، وَمَا سَبَّحَ لَكَ مِنْ شَيْءٍ يَا رَبَّ الْعَالَمِينَ ۞ عَلٰى سَيِّدِنَا مُحَمَّدِ بْنِ عَبْدِ اللّٰهِ، خَاتِمِ النَّبِيِّينَ، وَسَيِّدِ الْمُرْسَلِينَ، وَإِمَامِ الْمُتَّقِينَ، وَرَسُولِ رَبِّ الْعَالَمِينَ، الشَّاهِدِ الْبَشِيرِ، الدَّاعِي إِلَيْكَ بِإِذْنِكَ، السِّرَاجِ الْمُنِيرِ، وَعَلَيْهِ السَّلَامُ",
         "tr": "Allāhumma aʿli ʿalā binā’i n-nāsi binā’ahu, wa akrim mathwāhu ladayka wa nuzulahu, wa atmim lahu nūrahu, wa jzihi min ibʿāthika lahu maqbūla sh-shahādahi, wa marḍiyya l-maqālati, dhā manṭiqin ʿadlin wa khuṭṭatin faṣlin wa burhānin ʿaẓīm. Inna llāha wa malā’ikatahu yuṣallūna ʿalā n-nabiyyi, yā ayyuhā lladhīna āmanū ṣallū ʿalayhi wa sallimū taslīmā. Labbayka llāhumma rabbī wa saʿdayka, ṣalawātu llāhi l-barri r-raḥīmi, wa l-malā’ikati l-muqarrabīna, wa n-nabiyyīna wa ṣ-ṣiddīqīna, wa sh-shuhadā’i wa ṣ-ṣāliḥīna, wa mā sabbaḥa laka min shay’in yā rabba l-ʿālamīna, ʿalā sayyidinā Muḥammadin ibn ʿAbdillāh, khātami n-nabiyyīna, wa sayyidi l-mursalīna, wa imāmi l-muttaqīna, wa rasūli rabbi l-ʿālamīna, ash-shāhidi l-bashīri, ad-dāʿī ilayka bi-idhnika, as-sirāji l-munīri, wa ʿalayhi s-salām.",
         "en": "O Allah, raise that which he has built up over all that mankind has built up, and ennoble his place and his sojourn with You, and complete for him his light and reward him with Your approval so that his testimony is accepted and his word is pleasing to You, making him the one whose utterance is just and whose course is distinct and whose argument is mighty. Verily, Allah and His Angels bless the Prophet. O you who believe, ask Allah to bless him and grant him abundant peace. I am here, O Allah, at Your service and at Your command, my Lord. The blessings of Allah, the Good, the Merciful, and of His closest angels and of the Prophets and of the sincere ones, and of the martyrs and of the good ones, and whatever else exists, which glorifies You, O Lord of the Worlds, are for our master Muhammad, son of Abdullah, the Seal of the Prophets and Master of the Messengers, the Leader of the Pious and the Messenger of the Lord of the Worlds, the Witness, the Bringer of Good Tidings, the Caller to You by Your leave, the Lamp, the illuminated one upon him be peace."
       },
@@ -5134,7 +5137,7 @@ const DALAIL_CHAPTERS = [
         "en": "O Allah I ask You the good of what You know and I seek refuge in You from the evil of what You know and I seek Your forgiveness for everything You know, for You indeed know and we do not know and indeed You are the Knower of the Unseen."
       },
       {
-        "ar": "اللّٰهُمَّ ارْحَمْنِي مِنْ زَمَانِي هٰذَا ۞ وَإِحْدَاقِ الْفِتَنِ، وَتَطَاوُلِ أَهْلِ الْجُرْأَةِ عَلَيَّ وَاسْتِضْعَافِهِمْ إِيَّايَ",
+        "ar": "اللّٰهُمَّ ارْحَمْنِي مِنْ زَمَانِي هٰذَا ۞ وَإِحْدَاقِ الْفِتَنِ وَتَطَاوُلِ أَهْلِ الْجُرْأَةِ عَلَيَّ وَاسْتِضْعَافِهِمْ إِيَّايَ",
         "tr": "Allāhumma irḥamnī min zamānī hādhā wa iḥdāqi l-fitani, wa taṭāwuli ahli l-jurāʾati ʿalayya wa istisḍʿāfihim īyāya.",
         "en": "O Allah, have mercy on me in this time from the encirclement of discord, from the oppression of the insolent and their deficiencies and all such ills."
       },
@@ -8189,7 +8192,7 @@ const MAWLID_COLLECTIONS = [
 
 /* Bumped with sw.js on every release. Shown small at the foot of the home page
    so you can tell at a glance which build a given phone is actually running. */
-const APP_VERSION = 'v15';
+const APP_VERSION = 'v16';
 /* Where the home-page feedback button sends corrections. Change to your address. */
 const FEEDBACK_EMAIL = 'zayd.boon@gmail.com';
 
@@ -11022,8 +11025,9 @@ function toggle(kind,i){ state.showTr = !state.showTr; reopen(kind,i); }
    selected, searched and marked, and costs nothing to download. */
 /* Ornament for the manuscript leaves — drawn, not photographed, so it takes
    the theme colours and stays sharp at any size. */
-const MS_BAND = `<svg class="ms-band-art" viewBox="0 0 120 40" preserveAspectRatio="none" aria-hidden="true"><defs><pattern id="msw" width="20" height="40" patternUnits="userSpaceOnUse"><rect width="20" height="40" fill="var(--ms-band-a)"/><path d="M10,3 L17,20 L10,37 L3,20 Z" fill="var(--ms-band-b)" stroke="var(--ms-gold)" stroke-width=".8"/><path d="M0,20 L3,20 M17,20 L20,20" stroke="var(--ms-gold)" stroke-width=".8"/><circle cx="10" cy="20" r="2.6" fill="var(--ms-paper)" stroke="var(--ms-gold)" stroke-width=".6"/><circle cx="0" cy="3" r="1.6" fill="var(--ms-gold)"/><circle cx="20" cy="3" r="1.6" fill="var(--ms-gold)"/><circle cx="0" cy="37" r="1.6" fill="var(--ms-gold)"/><circle cx="20" cy="37" r="1.6" fill="var(--ms-gold)"/></pattern></defs><rect width="120" height="40" fill="url(#msw)"/><rect width="120" height="1.6" fill="var(--ms-gold)"/><rect y="38.4" width="120" height="1.6" fill="var(--ms-gold)"/></svg>`;
-const MS_CORNER = `<svg class="ms-corner" viewBox="0 0 100 100" aria-hidden="true"><path d="M0,0 L100.0,0 Q99.8,7.7 85.7,14.3 Q85.3,23.3 71.4,28.6 Q70.4,39.1 57.1,42.9 Q54.9,54.9 42.9,57.1 Q39.1,70.4 28.6,71.4 Q23.3,85.3 14.3,85.7 Q7.7,99.8 0.0,100.0 Z" fill="var(--ms-band-a)" stroke="var(--ms-gold)" stroke-width="1.1"/><path d="M0,0 L74.0,0 Q72.8,6.6 61.7,12.3 Q60.2,20.1 49.3,24.7 Q47.2,33.7 37.0,37.0 Q33.7,47.2 24.7,49.3 Q20.1,60.2 12.3,61.7 Q6.6,72.8 0.0,74.0 Z" fill="var(--ms-band-b)" stroke="var(--ms-gold)" stroke-width=".9"/><path d="M0,0 L48.0,0 Q47.2,5.2 38.4,9.6 Q37.3,16.0 28.8,19.2 Q26.8,26.8 19.2,28.8 Q16.0,37.3 9.6,38.4 Q5.2,47.2 0.0,48.0 Z" fill="var(--ms-band-a)" stroke="var(--ms-gold)" stroke-width=".8"/><circle cx="17" cy="17" r="5.4" fill="var(--ms-paper)" stroke="var(--ms-gold)" stroke-width=".9"/><circle cx="17" cy="17" r="2.1" fill="var(--ms-rosette)"/><circle cx="47" cy="14" r="2.6" fill="var(--ms-gold)"/><circle cx="14" cy="47" r="2.6" fill="var(--ms-gold)"/></svg>`;
+const MS_DEFS = `<svg width="0" height="0" aria-hidden="true" style="position:absolute"><defs><pattern id="msRub" width="40" height="40" patternUnits="userSpaceOnUse"><rect width="40" height="40" fill="var(--ms-band-a)"/><path d="M0,20 H40" stroke="var(--ms-gold)" stroke-width="1.2"/><path d="M30.25,9.75 L30.25,30.25 L9.75,30.25 L9.75,9.75 Z" fill="var(--ms-band-b)" stroke="var(--ms-gold)" stroke-width="1.1"/><path d="M20.00,5.50 L34.50,20.00 L20.00,34.50 L5.50,20.00 Z" fill="none" stroke="var(--ms-gold)" stroke-width="1.1"/><circle cx="20" cy="20" r="4.4" fill="var(--ms-paper)" stroke="var(--ms-gold)" stroke-width="1"/><circle cx="20" cy="20" r="1.8" fill="var(--ms-rosette)"/><circle cx="0" cy="20" r="1.8" fill="var(--ms-gold)"/><circle cx="40" cy="20" r="1.8" fill="var(--ms-gold)"/></pattern></defs></svg>`;
+const MS_BAND = `<svg class="ms-band-art" aria-hidden="true"><rect width="100%" height="40" fill="url(#msRub)"/><rect width="100%" height="1.4" fill="var(--ms-gold)"/><rect y="38.6" width="100%" height="1.4" fill="var(--ms-gold)"/></svg>`;
+const MS_CORNER = `<svg class="ms-corner" viewBox="0 0 100 100" aria-hidden="true"><path d="M8,8 H64 M8,8 V64" fill="none" stroke="var(--ms-gold)" stroke-width="2" stroke-linecap="round"/><path d="M15,15 H48 M15,15 V48" fill="none" stroke="var(--ms-rule)" stroke-width="1" stroke-linecap="round"/><path d="M44.14,15.86 L44.14,44.14 L15.86,44.14 L15.86,15.86 Z" fill="var(--ms-band-b)" stroke="var(--ms-gold)" stroke-width="1.4"/><path d="M30.00,10.00 L50.00,30.00 L30.00,50.00 L10.00,30.00 Z" fill="none" stroke="var(--ms-gold)" stroke-width="1.4"/><circle cx="30" cy="30" r="6.1" fill="var(--ms-paper)" stroke="var(--ms-gold)" stroke-width="1.2"/><circle cx="30" cy="30" r="2.5" fill="var(--ms-rosette)"/></svg>`;
 
 /* The basmala opens a piece; it stands on its own line above the text rather
    than running into it. Harakat and spacing are stripped before matching, so
@@ -11182,6 +11186,7 @@ function manuscriptPages(q, kind, idx){
              aria-label="${two ? 'Pages ' + (i + 1) + '\u2013' + (i + 2) : 'Page ' + (i + 1)}"></button>`).join('');
   return `${noteBlock(q.note)}
     <p class="ms-hint">Turn the leaf right to left · tap a phrase to mark your place</p>
+    ${MS_DEFS}
     <div class="ms-book${two ? ' spread' : ''}" id="ms-book" onscroll="msSyncDots()">${expandedFolios.map(sheet).join('')}</div>
     <div class="ms-nav">
       <button class="ms-arrow next" onclick="msStep(1)" aria-label="Next page">‹</button>
