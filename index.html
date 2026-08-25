@@ -2485,7 +2485,7 @@ function resumeCard(){
 
 const state = { showTr: true, showEn: true, arScale: 1, latinScale: 1, msZoom: 1, query: '', tab: 'home', burdahChapter: null, scrollSpeedIdx: 3, favs: loadFavs() , pageView:true, immersive:false};
 
-/* The four content arrays, keyed by the same letters reopen() uses. */
+/* The content arrays, keyed by the same letters as OPENERS. */
 function arrayOf(kind){
   return kind === 'q' ? QASIDAS
        : kind === 'b' ? BURDAH_CHAPTERS
@@ -8203,7 +8203,7 @@ const MAWLID_COLLECTIONS = [
 
 /* Bumped with sw.js on every release. Shown small at the foot of the home page
    so you can tell at a glance which build a given phone is actually running. */
-const APP_VERSION = 'v22';
+const APP_VERSION = 'v23';
 /* Where the home-page feedback button sends corrections. Change to your address. */
 const FEEDBACK_EMAIL = 'zayd.boon@gmail.com';
 
@@ -9803,18 +9803,16 @@ function ilahiCards(){
         </button>` + hitList('i', n)).join('');
 }
 
-/* The reader opener for each kind, matching reopen()'s letters. */
-function openFnOf(kind){
-  return kind === 'q' ? 'openQasida'
-       : kind === 'b' ? 'openBurdah'
-       : kind === 's' ? 'openSirah'
-       : kind === 'd' ? 'openDalail'
-       : kind === 'z' ? 'openBarzanji'
-       : kind === 'n' ? 'openNasheed'
-       : kind === 'l' ? 'openLitany'
-       : kind === 'y' ? 'openDiya'
-       : 'openIlahi';
-}
+/* ONE table of reader openers, keyed by kind. openFnOf() and reopen() both
+   read it, so the two can no longer drift — which is exactly how the Ḍiyāʾ
+   ('y') came to be missing from reopen() while openFnOf() had it, sending
+   every Ḍiyāʾ control and every follower in a live session into QASIDAS. */
+const OPENERS = {
+  q: 'openQasida',  b: 'openBurdah',   s: 'openSirah',
+  i: 'openIlahi',   d: 'openDalail',   z: 'openBarzanji',
+  y: 'openDiya',    n: 'openNasheed',  l: 'openLitany'
+};
+function openFnOf(kind){ return OPENERS[kind] || 'openQasida'; }
 /* Mawlid pieces carry their kitab number in the title; drop it for display. */
 function displayTitle(piece){
   const s = sectionOf(piece.titleEnglish);
@@ -10032,6 +10030,9 @@ function goBack(){
 }
 
 function renderIndex(){
+  /* The index is about to replace whatever was on screen, so no reader is
+     showing any more. See readerOpen's use in setSessionStatus below. */
+  readerOpen = false;
   stopAutoScroll();
   document.documentElement.style.setProperty('--ar-size', '1.9rem');
   document.documentElement.style.setProperty('--latin-scale', 1);
@@ -10233,7 +10234,11 @@ function loadSupabase(){
 
 function newSessionCode(){ return String(Math.floor(1000 + Math.random() * 9000)); }
 
-function setSessionStatus(msg){ session.status = msg; renderSessionBanner(); if(state.tab === 'session') renderIndex(); }
+function setSessionStatus(msg){
+  session.status = msg;
+  renderSessionBanner();                       /* the banner lives outside #app */
+  if(state.tab === 'session' && !readerOpen) renderIndex();
+}
 
 /* The last session this device joined, kept on the device. An accidental Leave
    — or the app being closed mid-gathering — shouldn't strand someone who never
@@ -10361,7 +10366,7 @@ function connectSession(code, role, opts){
               setSessionStatus("No one is leading here yet — take the lead when you're ready.");
             }
             renderSessionBanner();
-            if(state.tab === 'session') renderIndex();
+            if(state.tab === 'session' && !readerOpen) renderIndex();
           }, 1400);
         } else {
           setSessionStatus('Leading — others can join with this code.');
@@ -10527,7 +10532,10 @@ function handleLeadMsg(p){
 /* Called by every open*() — the single place navigation is signalled. */
 function onNavigated(kind, idx){
   if(suppressNavSignals) return;
-  if(session.role) session.lastNav = { kind, idx };   // so whoever takes the mic can resync
+  /* Recorded even before a session exists: a leader who opened the piece
+     first and started the session second would otherwise have nothing to
+     answer a joiner's 'where' with. */
+  session.lastNav = { kind, idx };
   if(session.role === 'leader'){ sendNav(kind, idx); }
   else if(session.role === 'follower' && !session.leaderless){ pauseFollowing(); }
 }
@@ -10688,7 +10696,14 @@ function noteBlock(note){
     </details>`;
 }
 
+/* Opening a reader swaps #app's contents without touching state.tab, so a
+   follower who joined from the session tab still counts as being "on" it.
+   Session-status updates used to re-render the index on that basis and paint
+   over the piece the leader had just sent them to — about a second after they
+   arrived. This flag lets those re-renders tell the difference. */
+let readerOpen = false;
 function readerHTML(q, backOnclick, kind, idx){
+  readerOpen = true;
   msPiece = { kind, idx };
   const empty = !q.verses || q.verses.length === 0;
   /* Turkish ilahis carry their own name in both title fields, so the subheader
@@ -11025,9 +11040,14 @@ function openIlahi(n){
 /* Re-render the current piece (control toggles, remote applies). Signals are
    suppressed so toggling translation never counts as navigating away. */
 function reopen(kind, i){
+  const fn = window[OPENERS[kind]];
+  /* An unrecognised kind used to fall through to openQasida(), which silently
+     teleported the reader into an unrelated piece. Staying put is the safe
+     failure. */
+  if(typeof fn !== 'function') return;
   const prev = suppressNavSignals;
   suppressNavSignals = true;
-  try { kind==='b' ? openBurdah(i) : kind==='s' ? openSirah(i) : kind==='i' ? openIlahi(i) : kind==='d' ? openDalail(i) : kind==='z' ? openBarzanji(i) : kind==='n' ? openNasheed(i) : kind==='l' ? openLitany(i) : openQasida(i); }
+  try { fn(i); }
   finally { suppressNavSignals = prev; }
 }
 function toggle(kind,i){ state.showTr = !state.showTr; reopen(kind,i); }
