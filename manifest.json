@@ -1,14 +1,23 @@
 {
   "name": "Dalāʾil al-Khayrāt",
-  "short_name": "Dalāʾil Khayrāt",
-  "description": "Dalāʾil al-Khayrāt of Imam al-Jazūlī and the daily litanies — Arabic, transliteration and English. Works offline.",
+  "short_name": "Dalāʾil",
+  "description": "Imam al-Jazūlī’s Dalāʾil al-Khayrāt and the aḥzāb — Arabic, transliteration and English, divided for the week.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "background_color": "#FAF5EA",
   "theme_color": "#123528",
   "icons": [
-    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
   ]
 }
