@@ -26,7 +26,7 @@
      script, where nothing that reads the page without running it can see
      it — so "which version is actually live?" could only be answered from
      a phone. Keep the two in step when bumping. -->
-<meta name="app-version" content="v48">
+<meta name="app-version" content="v50">
 <!-- YouTube's embedded player refuses to configure itself unless the host page
      sends a Referer (Error 153 / embedder.identity.missing.referrer). This is
      the browser default in most cases, but a standalone PWA or a WebView may
@@ -10956,7 +10956,7 @@ const MAWLID_COLLECTIONS = [
 
 /* Bumped with sw.js on every release. Shown small at the foot of the home page
    so you can tell at a glance which build a given phone is actually running. */
-const APP_VERSION = 'v48';
+const APP_VERSION = 'v50';
 /* Where the home-page feedback button sends corrections. Change to your address. */
 const FEEDBACK_EMAIL = 'zayd.boon@gmail.com';
 
@@ -13123,7 +13123,8 @@ function myClientId(){
    with an older term is ignored — that's what stops a phone that dropped out
    while leading from fighting the new leader when it wakes up. */
 const session = { role:null, code:null, client:null, channel:null, paused:false, status:'',
-                  lastNav:null, leaderAt:null, id:myClientId(), term:0, leaderless:false, claiming:false, probing:false, probeHeard:false, connecting:null };
+                  lastNav:null, leaderAt:null, id:myClientId(), term:0, leaderless:false, claiming:false, probing:false, probeHeard:false, connecting:null,
+                  leaderPending:false, presentTimer:null, lastWhereReply:0 };
 let claimState = { term:0, ids:[], timer:null };
 
 /* A short history of what the session machinery actually did. The faults left
@@ -13309,10 +13310,17 @@ function connectSession(code, role, opts){
         setSessionStatus('Following the leader.');
         return;
       }
-      if(session.role === 'follower' && session.leaderless){
-        session.leaderless = false;
-        setSessionStatus('Following the leader.');
+      if(session.role === 'follower' && (session.leaderless || session.leaderPending)){
+        clearLeaderPending('Following the leader.');
       }
+    });
+    /* "Someone here is following a leader." Deliberately NOT an 'alive': that
+       carries a client id and would drag a real leader through the demotion
+       tiebreak against a follower. This says only that the room is not empty. */
+    channel.on('broadcast', { event: 'present' }, () => {
+      if(session.presentTimer){ clearTimeout(session.presentTimer); session.presentTimer = null; }
+      if(session.probing) session.probeHeard = true;
+      if(session.leaderPending) clearLeaderPending('Following the leader.');
     });
     channel.on('broadcast', { event: 'lead' }, ({ payload }) => {
       if(session.probing) session.probeHeard = true;
@@ -13320,7 +13328,27 @@ function connectSession(code, role, opts){
     });
     /* A late joiner asks where everyone is; the leader answers. */
     channel.on('broadcast', { event: 'where' }, () => {
+      /* A follower corroborates. Discovery used to rest on the leader alone,
+         so one dropped reply told a joiner the room was empty. Everyone who
+         is following answers instead — but after a random pause, and only if
+         nobody else has answered first, so a hall of thirty phones still
+         produces about one reply rather than thirty. */
+      if(session.role === 'follower' && !session.leaderless && !session.presentTimer){
+        session.presentTimer = setTimeout(() => {
+          session.presentTimer = null;
+          if(session.role !== 'follower' || session.leaderless || !session.channel) return;
+          try{ session.channel.send({ type:'broadcast', event:'present', payload:{} }); }catch(e){}
+        }, 250 + Math.random() * 2250);   /* wide: keeps it near one reply even in a full hall */
+        return;
+      }
       if(session.role !== 'leader') return;
+      /* Each joiner asks up to five times and every ask drew three messages
+         back. Thirty phones arriving together made hundreds in a couple of
+         seconds, past what the channel will carry, and the drops fell on the
+         very packets discovery depends on. One answer per burst is enough. */
+      const now = Date.now();
+      if(session.lastWhereReply && now - session.lastWhereReply < 700) return;
+      session.lastWhereReply = now;
       /* A leader that isn't beating can't be heard. Cheap net against any
          future path that sets the role without starting the clock. */
       if(!beatTimer) startBeating();
@@ -13377,9 +13405,25 @@ function connectSession(code, role, opts){
               becomeLeader(code);
               setSessionStatus('Leading — others can join with this code.');
             } else {
-              session.role = 'follower'; session.leaderless = true;
-              stopBeating(); stopWatchingLeader();
-              setSessionStatus("No one is leading here yet — take the lead when you're ready.");
+              /* Silence is not proof. A joiner that heard nothing used to be
+                 handed the mic immediately, which is what put "take the lead"
+                 in front of someone joining a room that already had a leader.
+                 Wait one more beat window listening before saying that; any
+                 beat or corroboration in the meantime settles it quietly. */
+              session.role = 'follower'; session.leaderless = false;
+              session.leaderPending = true;
+              stopBeating(); startWatchingLeader();
+              setSessionStatus('Still looking for the leader…');
+              setTimeout(() => {
+                if(!session.leaderPending || session.code !== code) return;
+                session.leaderPending = false;
+                if(session.role !== 'follower') return;
+                session.leaderless = true;
+                stopWatchingLeader();
+                setSessionStatus("No one is leading here yet — take the lead when you're ready.");
+                renderSessionBanner();
+                if(state.tab === 'session' && renderedView() === 'none') renderIndex();
+              }, LEADER_PENDING_MS);
             }
             renderSessionBanner();
             if(state.tab === 'session' && renderedView() === 'none') renderIndex();
@@ -13436,6 +13480,8 @@ function leaveSession(){
   clearSessionHash();
   try { if(session.channel) session.channel.unsubscribe(); } catch(e){}
   try { if(session.client) session.client.removeAllChannels(); } catch(e){}
+  if(session.presentTimer){ clearTimeout(session.presentTimer); session.presentTimer = null; }
+  session.leaderPending = false; session.lastWhereReply = 0;
   session.role = null; session.code = null; session.channel = null;
   session.client = null; session.paused = false; session.lastNav = null;
   session.term = 0; session.leaderless = false; session.claiming = false; session.leaderAt = null;
@@ -13794,13 +13840,32 @@ function sendNav(kind, idx){
    there for ever with no one able to take over. So the leader beats quietly
    and followers give up on him after a while, which opens the mic through the
    claim machinery that already exists. */
-const PROBE_TRIES = [350, 800, 1400, 2100];   /* re-ask at these marks */
-const PROBE_MS = 2800;        /* only then is the room really empty */
+const PROBE_TRIES = [400, 1100, 2200, 3600];  /* re-ask at these marks */
+/* The probe must outlast a whole heartbeat, or a joiner can decide a busy room
+   is empty without that being detectable. It used to be 2800ms against a
+   4000ms beat: the window shut 1200ms BEFORE the next natural beat could
+   arrive, so discovery rested entirely on a 'where' packet AND its reply both
+   surviving. With two phones that nearly always happened; with a hall full it
+   often didn't, and the joiner was offered the mic while someone was leading.
+   At 5200 the ambient beat alone settles it even if every 'where' is lost. */
+const PROBE_MS = 5200;        /* only then is the room really empty */
 const BEAT_MS = 4000;         /* leader's heartbeat */
 const BEAT_LOST_MS = 14000;   /* followers wait this long before opening the mic */
 let beatTimer = null, beatWatch = null;
 
+const LEADER_PENDING_MS = 9000;  /* keep listening this long before opening the mic */
+
 function noteLeaderAlive(){ session.lastBeat = Date.now(); }
+
+/* A leader turned up (or a peer vouched for one) while we were still unsure. */
+function clearLeaderPending(msg){
+  session.leaderPending = false;
+  session.leaderless = false;
+  noteLeaderAlive();
+  stopBeating(); startWatchingLeader();
+  setSessionStatus(msg);
+  renderSessionBanner();
+}
 
 function sendAlive(){
   if(!session.channel) return;
@@ -14514,6 +14579,16 @@ function sessionPanel(){
       ${note}
       <button class="session-btn" onclick="releaseLead()">Pass the mic</button>
       <button class="session-btn quiet" onclick="leaveSession()">End session</button>
+    </div>`;
+  }
+  if(session.role === 'follower' && session.leaderPending){
+    return `<div class="session-panel">
+      <div class="session-code">${session.code}</div>
+      <p>Looking for the leader…</p>
+      <p class="session-hint">If someone is already leading, your screen will start following in a moment. Only take the mic if nothing happens.</p>
+      ${note}
+      <button class="session-btn quiet" onclick="takeLead()">Take the lead anyway</button>
+      <button class="session-btn quiet" onclick="leaveSession()">Leave session</button>
     </div>`;
   }
   if(session.role === 'follower' && session.leaderless){
