@@ -26,7 +26,7 @@
      script, where nothing that reads the page without running it can see
      it — so "which version is actually live?" could only be answered from
      a phone. Keep the two in step when bumping. -->
-<meta name="app-version" content="v50">
+<meta name="app-version" content="v52">
 <!-- YouTube's embedded player refuses to configure itself unless the host page
      sends a Referer (Error 153 / embedder.identity.missing.referrer). This is
      the browser default in most cases, but a standalone PWA or a WebView may
@@ -783,6 +783,15 @@
     flex:1; min-width:0; font-family:'Crimson Pro',serif; font-size:.85rem;
     white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
   }
+  /* Title and reciter stack, so the name survives the ellipsis that the
+     single nowrap line would otherwise eat on a phone. */
+  .ytdock-titles{ flex:1; min-width:0; display:flex; flex-direction:column; gap:.05rem; }
+  .ytdock-titles .ytdock-title{ flex:none; }
+  .ytdock-reciter{
+    font-family:'Crimson Pro',serif; font-size:.72rem; opacity:.72;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .ytdock-reciter .r-ar{ font-family:'UthmanicHafs',serif; font-size:.8rem; }
   .ytdock-btn{
     background:transparent; border:1px solid var(--rule); color:var(--paper);
     border-radius:999px; padding:.26rem .6rem; font-size:.74rem;
@@ -10956,7 +10965,7 @@ const MAWLID_COLLECTIONS = [
 
 /* Bumped with sw.js on every release. Shown small at the foot of the home page
    so you can tell at a glance which build a given phone is actually running. */
-const APP_VERSION = 'v50';
+const APP_VERSION = 'v52';
 /* Where the home-page feedback button sends corrections. Change to your address. */
 const FEEDBACK_EMAIL = 'zayd.boon@gmail.com';
 
@@ -15310,6 +15319,7 @@ function applyPlaybackRate(frame, rate){
    for next time. */
 function cycleRate(){
   if(!ytPlayer) return;
+  if(ytPlayer.audio){ cycleARate(); return; }   /* the audio dock has its own finer set */
   const i = RATES.indexOf(ytPlayer.rate);
   ytPlayer.rate = RATES[(i + 1) % RATES.length];
   try{ localStorage.setItem(RATE_KEY, String(ytPlayer.rate)); }catch(e){}
@@ -15323,9 +15333,280 @@ function ytId(url){
   return m ? m[1] : null;
 }
 
+/* ── Local recitations ───────────────────────────────────────────────────
+   The Dalāʾil recordings are hosted in a second GitHub Pages repo. Same
+   origin as this app (origin is scheme+host; the path is irrelevant), which
+   is what makes fetch, progress and the Cache API work at all — release
+   assets on github.com send no CORS header and are blocked outright.
+
+   Kept out of the service worker's CORE list on purpose: precaching 150MB on
+   first visit would be indefensible on a phone. A portion is fetched only
+   when someone asks for it, into a cache the worker is told to spare. */
+const AUDIO_BASE = 'https://zboon.github.io/mawlid-audio/';
+const AUDIO_CACHE = 'mawlid-audio';
+
+const RECITERS = {
+  khayzaran: { ar: 'الشيخ حكيم خيزران',  en: 'Ḥakīm Khayzarān' },
+  shamali:   { ar: 'الشيخ حازم الشمالي', en: 'Ḥāzim ash-Shamālī' },
+};
+
+/* Recordings hang off the chapter, not the collection: these seven portions
+   are Khayzarān's and Monday Part 2 is ash-Shamālī's, so one reciter per
+   collection would already be wrong. A list, so a second reciter for the
+   same portion is an append rather than a restructure.
+
+   `secs` is measured from the files and is what the button shows before any
+   download starts. Byte sizes are deliberately NOT stored — the copies on
+   the server carry an extra metadata atom, so any figure recorded here would
+   drift from what actually arrives. content-length is read at fetch time. */
+const DALAIL_AUDIO = {
+  6:  [{ reciter:'khayzaran', file:'dalail-01-monday-1.mp4',  secs:1577 }],
+  7:  [{ reciter:'khayzaran', file:'dalail-02-tuesday.mp4',   secs:1348 }],
+  8:  [{ reciter:'khayzaran', file:'dalail-03-wednesday.mp4', secs:1291 }],
+  9:  [{ reciter:'khayzaran', file:'dalail-04-thursday.mp4',  secs:1331 }],
+  10: [{ reciter:'khayzaran', file:'dalail-05-friday.mp4',    secs:1239 }],
+  11: [{ reciter:'khayzaran', file:'dalail-06-saturday.mp4',  secs:1240 }],
+  12: [{ reciter:'khayzaran', file:'dalail-07-sunday.mp4',    secs:1242 }],
+  13: [{ reciter:'shamali',   file:'dalail-08-monday-2.mp4',  secs:553  }],
+};
+
+const RECITER_KEY = 'mawlid-reciter';
+
+function storedReciter(){
+  try{ return localStorage.getItem(RECITER_KEY) || null; }catch(e){ return null; }
+}
+
+/* The recordings available for a piece, preferred reciter first. */
+function audioFor(kind, idx){
+  if(kind !== 'd') return [];
+  const list = DALAIL_AUDIO[idx];
+  if(!list || !list.length) return [];
+  const want = storedReciter();
+  if(!want) return list.slice();
+  return list.slice().sort((a, b) => (b.reciter === want) - (a.reciter === want));
+}
+
+function audioUrl(rec){ return AUDIO_BASE + rec.file; }
+
+function reciterName(rec){
+  const r = RECITERS[rec && rec.reciter];
+  return r ? r.en : '';
+}
+function reciterNameAr(rec){
+  const r = RECITERS[rec && rec.reciter];
+  return r ? r.ar : '';
+}
+
+function fmtDur(s){
+  s = Math.round(s || 0);
+  const m = Math.floor(s / 60);
+  return m + ':' + String(s % 60).padStart(2, '0');
+}
+function fmtMB(b){ return (b / 1048576).toFixed(1) + ' MB'; }
+
+/* ── storage ─────────────────────────────────────────────────────────── */
+
+async function audioCached(rec){
+  try{
+    const c = await caches.open(AUDIO_CACHE);
+    const r = await c.match(audioUrl(rec));
+    return r ? r : null;
+  }catch(e){ return null; }
+}
+
+async function audioCachedSize(rec){
+  const r = await audioCached(rec);
+  if(!r) return 0;
+  try{ return (await r.clone().blob()).size; }catch(e){ return 0; }
+}
+
+/* Streamed so the bar moves against real bytes rather than a spinner. Note
+   content-length is the ENCODED length; on a plain response it matches the
+   decoded stream, but the total is treated as a hint and the bar is clamped,
+   because a server that compresses would otherwise push it past 100%. */
+async function downloadAudio(rec, onProgress){
+  const url = audioUrl(rec);
+  const resp = await fetch(url);
+  if(!resp.ok) throw new Error('HTTP ' + resp.status);
+  const total = Number(resp.headers.get('content-length')) || 0;
+  if(!resp.body){                      /* no streaming: fall back to one gulp */
+    const blob = await resp.blob();
+    const c = await caches.open(AUDIO_CACHE);
+    await c.put(url, new Response(blob, { headers:{ 'Content-Type':'video/mp4' } }));
+    if(onProgress) onProgress(blob.size, blob.size);
+    return blob.size;
+  }
+  const reader = resp.body.getReader();
+  const chunks = []; let got = 0;
+  for(;;){
+    const { done, value } = await reader.read();
+    if(done) break;
+    chunks.push(value); got += value.length;
+    if(onProgress) onProgress(got, total);
+  }
+  const blob = new Blob(chunks, { type:'video/mp4' });
+  const c = await caches.open(AUDIO_CACHE);
+  await c.put(url, new Response(blob, { headers:{ 'Content-Type':'video/mp4' } }));
+  return blob.size;
+}
+
+async function removeAudio(rec){
+  try{
+    const c = await caches.open(AUDIO_CACHE);
+    await c.delete(audioUrl(rec));
+  }catch(e){}
+}
+
+/* ── the audio dock ──────────────────────────────────────────────────── */
+
+/* A real <audio> element rather than the YouTube frame, which buys three
+   things the embed could not give: it plays with the screen off, it takes
+   any playback rate (the embed's list is fixed at quarter steps and rounds
+   anything else down to 1), and it works with no connection once downloaded. */
+const A_RATES = [0.75, 0.9, 1, 1.15, 1.25, 1.5, 1.75];
+
+function aRateLabel(v){ return (v === 1 ? '1' : String(v)) + '×'; }
+
+function storedARate(){
+  try{
+    const v = parseFloat(localStorage.getItem(RATE_KEY));
+    return A_RATES.indexOf(v) === -1 ? 1 : v;
+  }catch(e){ return 1; }
+}
+
+function cycleARate(){
+  if(!ytPlayer || !ytPlayer.audio) return;
+  const i = A_RATES.indexOf(ytPlayer.rate);
+  ytPlayer.rate = A_RATES[(i + 1) % A_RATES.length];
+  try{ localStorage.setItem(RATE_KEY, String(ytPlayer.rate)); }catch(e){}
+  const el = document.querySelector('#ytdock audio');
+  if(el) el.playbackRate = ytPlayer.rate;
+  const b = document.getElementById('ytdock-rate');
+  if(b) b.textContent = aRateLabel(ytPlayer.rate);
+}
+
+function audioDockState(){
+  const b = document.getElementById('aud-dl');
+  if(!b || !ytPlayer || !ytPlayer.rec) return;
+  audioCachedSize(ytPlayer.rec).then(sz => {
+    b.textContent = sz ? 'Saved ' + fmtMB(sz) + ' ·  Remove' : 'Download ' + fmtDur(ytPlayer.rec.secs);
+    b.dataset.have = sz ? '1' : '';
+  });
+}
+
+async function toggleAudioDownload(){
+  const b = document.getElementById('aud-dl');
+  if(!b || !ytPlayer || !ytPlayer.rec || b.dataset.busy) return;
+  const rec = ytPlayer.rec;
+  if(b.dataset.have){
+    await removeAudio(rec);
+    audioDockState();
+    return;
+  }
+  b.dataset.busy = '1';
+  b.textContent = 'Starting…';
+  try{
+    await downloadAudio(rec, (got, total) => {
+      const pct = total ? Math.min(100, Math.round(got * 100 / total)) : 0;
+      b.textContent = total ? pct + '%  ' + fmtMB(got) : fmtMB(got);
+    });
+    b.dataset.busy = '';
+    audioDockState();
+    /* Swap the element over to the stored copy so the rest of the sitting
+       plays from disk rather than continuing to pull from the network. */
+    const el = document.querySelector('#ytdock audio');
+    if(el && !el.paused){
+      const at = el.currentTime;
+      const src = await audioSrc(rec);
+      if(src && src !== el.src){ el.src = src; el.currentTime = at; el.play().catch(()=>{}); }
+    }
+  }catch(e){
+    b.dataset.busy = '';
+    b.textContent = 'Failed — retry';
+  }
+}
+
+/* A stored copy if there is one, otherwise the network. */
+async function audioSrc(rec){
+  const hit = await audioCached(rec);
+  if(hit){
+    try{
+      const blob = await hit.blob();
+      if(ytPlayer && ytPlayer.objUrl) URL.revokeObjectURL(ytPlayer.objUrl);
+      const u = URL.createObjectURL(blob);
+      if(ytPlayer) ytPlayer.objUrl = u;
+      return u;
+    }catch(e){}
+  }
+  return audioUrl(rec);
+}
+
+async function openAudioDock(kind, idx, rec){
+  const a = arrayOf(kind), q = a && a[idx];
+  if(!q) return;
+  const cue = 'a:' + rec.file;
+  if(ytPlayer && ytPlayer.cue === cue){ togglePlayerSize(); return; }
+  closePlayer(true);
+
+  ytPlayer = { audio:true, cue, rec, kind, idx, big:false, rate:storedARate(), objUrl:null };
+  const who = reciterName(rec), whoAr = reciterNameAr(rec);
+  const d = document.createElement('div');
+  d.id = 'ytdock';
+  d.className = 'ytdock';
+  d.innerHTML =
+    '<div class="ytdock-in">' +
+      '<div class="ytdock-meta">' +
+        '<div class="ytdock-titles">' +
+          '<span class="ytdock-title">' + attrEsc(displayTitle(q)) + '</span>' +
+          (who ? '<span class="ytdock-reciter">' + attrEsc(who) +
+                 (whoAr ? ' <span class="r-ar">' + attrEsc(whoAr) + '</span>' : '') +
+                 '</span>' : '') +
+        '</div>' +
+        '<button class="ytdock-btn" id="ytdock-rate" onclick="cycleARate()" ' +
+          'title="Playback speed">' + aRateLabel(ytPlayer.rate) + '</button>' +
+        '<button class="ytdock-btn" id="aud-dl" onclick="toggleAudioDownload()">…</button>' +
+        '<button class="ytdock-btn" onclick="closePlayer()" aria-label="Close player">✕</button>' +
+      '</div>' +
+      '<audio id="aud-el" controls preload="metadata" style="width:100%;margin-top:.5rem"></audio>' +
+    '</div>';
+  document.body.appendChild(d);
+  document.body.classList.add('has-player');
+
+  const el = d.querySelector('audio');
+  el.src = await audioSrc(rec);
+  el.playbackRate = ytPlayer.rate;
+  el.play().catch(()=>{});
+  audioDockState();
+  setMediaSession(q, who, el);
+  measurePlayer();
+}
+
+/* Lock-screen controls and the correct title while the screen is off. */
+function setMediaSession(q, who, el){
+  if(!('mediaSession' in navigator)) return;
+  try{
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: displayTitle(q),
+      artist: who || '',
+      album: 'Dalāʾil al-Khayrāt',
+    });
+    navigator.mediaSession.setActionHandler('play',  () => el.play());
+    navigator.mediaSession.setActionHandler('pause', () => el.pause());
+    navigator.mediaSession.setActionHandler('seekbackward', () => { el.currentTime = Math.max(0, el.currentTime - 15); });
+    navigator.mediaSession.setActionHandler('seekforward',  () => { el.currentTime = el.currentTime + 15; });
+  }catch(e){}
+}
+
 /* Called from the gold pill. Taking kind+idx rather than the URL keeps the
    quoting out of the onclick attribute — titles carry apostrophes. */
 function openPlayerFor(kind, idx, which){
+  /* A local recording wins over the embed: it plays offline once downloaded,
+     survives the screen going off, and takes any playback rate. The YouTube
+     path stays for everything that has no file. */
+  if(which !== 2){
+    const recs = audioFor(kind, idx);
+    if(recs.length){ openAudioDock(kind, idx, recs[0]); return; }
+  }
   const a = arrayOf(kind), q = a && a[idx];
   if(!q) return;
   const url = which === 2 ? q.video2 : q.video;
@@ -15385,6 +15666,9 @@ function togglePlayerSize(){
 function closePlayer(quiet){
   const d = document.getElementById('ytdock');
   if(d) d.remove();
+  /* A blob URL pins the whole file in memory until it is revoked; opening a
+     few portions in a sitting would otherwise hold hundreds of MB. */
+  if(ytPlayer && ytPlayer.objUrl){ try{ URL.revokeObjectURL(ytPlayer.objUrl); }catch(e){} }
   ytPlayer = null;
   document.body.classList.remove('has-player');
   document.documentElement.style.setProperty('--player-h', '0px');

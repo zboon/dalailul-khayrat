@@ -7,8 +7,23 @@
    missed sw.js froze the app permanently with no way out from the phone.
    Everything else (fonts, icons, manifest) stays cache-first: it's large,
    it doesn't change, and it's what makes the app work with no signal. */
-const CACHE = 'dalail-v50'; // bump this whenever you update index.html
+const CACHE = 'dalail-v52'; // bump this whenever you update index.html
 const CORE = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png'];
+
+/* Downloaded recitations live in their own cache, opened by the page rather
+   than by this worker. It is listed here so the cleanup below spares it.
+
+   This matters more than it looks. The cleanup deletes every cache whose name
+   is not the current one — which is right for the app shell, and was quietly
+   fatal for audio: a listener downloads all seven portions over the masjid
+   wifi, a typo fix ships, and 150MB disappears on next launch with nothing
+   said. Audio is expensive to fetch and must outlive app versions, so its
+   cache name carries no version and is never swept.
+
+   Anything added here must likewise be version-free, or it will be collected
+   on the very next release. */
+const AUDIO_CACHE = 'mawlid-audio';
+const KEEP = [CACHE, AUDIO_CACHE];
 
 self.addEventListener('install', e => {
   e.waitUntil(
@@ -21,7 +36,7 @@ self.addEventListener('install', e => {
 self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
+      Promise.all(keys.filter(k => KEEP.indexOf(k) === -1).map(k => caches.delete(k)))
     ).then(() => self.clients.claim())
   );
 });
