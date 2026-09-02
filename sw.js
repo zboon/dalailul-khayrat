@@ -7,7 +7,7 @@
    missed sw.js froze the app permanently with no way out from the phone.
    Everything else (fonts, icons, manifest) stays cache-first: it's large,
    it doesn't change, and it's what makes the app work with no signal. */
-const CACHE = 'dalail-v52'; // bump this whenever you update index.html
+const CACHE = 'dalail-v55'; // bump this whenever you update index.html
 const CORE = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png'];
 
 /* Downloaded recitations live in their own cache, opened by the page rather
@@ -28,7 +28,14 @@ const KEEP = [CACHE, AUDIO_CACHE];
 self.addEventListener('install', e => {
   e.waitUntil(
     caches.open(CACHE)
-      .then(c => c.addAll(CORE))
+      /* cache:'reload' bypasses the browser's HTTP cache. addAll() does NOT do
+         this by default, and the consequence was ugly: a newly installed
+         worker could precache the PREVIOUS index.html — the copy still sitting
+         in the HTTP cache from before the deploy — and then the timeout path
+         below would serve that stale page whenever the network was slow. The
+         app appeared to update, then flipped back to the old build on the next
+         refresh. Always fetch the shell fresh at install. */
+      .then(c => c.addAll(CORE.map(u => new Request(u, { cache: 'reload' }))))
       .then(() => self.skipWaiting())
   );
 });
@@ -51,7 +58,9 @@ self.addEventListener('fetch', e => {
   if (req.mode === 'navigate') {
     e.respondWith(
       Promise.race([
-        fetch(req).then(resp => {
+        /* Same reasoning: ask the network, not the HTTP cache, or a stale
+           copy gets stored and served back as though it were current. */
+        fetch(new Request(req.url, { cache: 'no-store' })).then(resp => {
           if (resp && resp.ok) {
             const copy = resp.clone();
             caches.open(CACHE).then(c => c.put('./index.html', copy)).catch(() => {});
