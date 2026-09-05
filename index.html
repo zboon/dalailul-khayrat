@@ -26,7 +26,7 @@
      script, where nothing that reads the page without running it can see
      it — so "which version is actually live?" could only be answered from
      a phone. Keep the two in step when bumping. -->
-<meta name="app-version" content="v60">
+<meta name="app-version" content="v61">
 <!-- YouTube's embedded player refuses to configure itself unless the host page
      sends a Referer (Error 153 / embedder.identity.missing.referrer). This is
      the browser default in most cases, but a standalone PWA or a WebView may
@@ -2424,11 +2424,40 @@ function topVisibleMsVerse(){
 }
 
 /* Show which verse holds the bookmark — one at a time. */
-function markPlacedMsVerse(idx, n, seg){
+/* Mark exactly the word group that was tapped — the .seg span carrying that
+   data-mk, and nothing wider.
+
+   This used to fall back to msVerseEl(), which returns the whole .ms-v verse
+   element. A Dalāʾil verse can hold several ۞ internally, so that lit up
+   rosette after rosette instead of the phrase the reader chose, and when the
+   fallback fired it marked the top verse of the leaf — a highlight that began
+   earlier than the tap and stopped before reaching it. Marking by exact key
+   makes both impossible. */
+function markPlacedMsVerse(idx, n, seg, mk){
   [].forEach.call(document.querySelectorAll('.placed'), el => el.classList.remove('placed'));
-  if(seg != null){ const s = document.querySelector('[data-mk="d:' + idx + ':' + n + ':' + seg + '"]'); if(s){ s.classList.add('placed'); return; } }
-  const el = msVerseEl(idx, n);
-  if(el) el.classList.add('placed');
+  const key = mk || (seg != null ? 'd:' + idx + ':' + n + ':' + seg : null);
+  if(!key) return;
+  const s = document.querySelector('[data-mk="' + key + '"]');
+  if(s) s.classList.add('placed');
+}
+
+/* The place is shown as saved only while the word group holding it is still
+   highlighted. Lift the highlight and the bookmark goes with it. */
+function placeStillMarked(){
+  const p = loadPlace();
+  if(!p || !p.mk) return false;
+  try { return !!loadMarks()[p.mk]; } catch(e){ return false; }
+}
+function placeBtnLabel(idx){
+  return (placeIsHere(idx) && placeStillMarked()) ? 'Place saved' : 'Save my place';
+}
+function refreshPlaceBtn(){
+  const btn = document.querySelector('.place-btn');
+  if(!btn) return;
+  const idx = Number(btn.dataset.idx);
+  const on = placeIsHere(idx) && placeStillMarked();
+  btn.textContent = on ? 'Place saved' : 'Save my place';
+  btn.classList.toggle('on', on);
 }
 
 function saveDalailPlace(idx){
@@ -2439,21 +2468,23 @@ function saveDalailPlace(idx){
   if(p.view === 'book'){
     /* The verse the reader last tapped in this chapter, else the top of the
        page they are on. Only fall back to a bare leaf if no verse is found. */
-    let n = (msPlaceCandidate && msPlaceCandidate.idx === idx) ? msPlaceCandidate.n : null;
-    let sg = (msPlaceCandidate && msPlaceCandidate.idx === idx) ? msPlaceCandidate.seg : null;
+    const cand = (msPlaceCandidate && msPlaceCandidate.idx === idx) ? msPlaceCandidate : null;
+    /* Tapping Save again with nothing newly highlighted must not move the
+       bookmark. It used to: the candidate was cleared on every save, so the
+       second tap fell through to the top verse of the leaf and quietly
+       overwrote a good mark. A standing place is now left alone. */
+    if(!cand && placeIsHere(idx) && placeStillMarked()){ refreshPlaceBtn(); return; }
+    let n  = cand ? cand.n   : null;
+    let sg = cand ? cand.seg : null;
+    let mk = cand ? cand.mk  : null;
     if(n == null) n = topVisibleMsVerse();
     if(n == null) p.leaf = msCurrentPage();
-    else { p.verse = n; if(sg != null) p.seg = sg; markPlacedMsVerse(idx, n, sg); }
+    else { p.verse = n; if(sg != null) p.seg = sg; if(mk) p.mk = mk; markPlacedMsVerse(idx, n, sg, mk); }
   } else {
     p.verse = topVisibleVerse();
   }
   writePlace(p);
-  const btn = document.querySelector('.place-btn');
-  if(btn){
-    btn.classList.add('on');
-    btn.textContent = 'Place saved';
-    setTimeout(() => { if(btn.isConnected) btn.textContent = 'Save my place'; }, 1600);
-  }
+  refreshPlaceBtn();
 }
 
 function clearDalailPlace(){
@@ -10973,7 +11004,7 @@ const MAWLID_COLLECTIONS = [
 
 /* Bumped with sw.js on every release. Shown small at the foot of the home page
    so you can tell at a glance which build a given phone is actually running. */
-const APP_VERSION = 'v60';
+const APP_VERSION = 'v61';
 /* Where the home-page feedback button sends corrections. Change to your address. */
 const FEEDBACK_EMAIL = 'zayd.boon@gmail.com';
 
@@ -14633,8 +14664,8 @@ function readerHTML(q, backOnclick, kind, idx){
       ${enTitle ? `<div class="piece-title-en">${enTitle}</div>` : ''}
     </div>
     ${empty ? '' : `<div class="controls">
-      ${kind === 'd' && pageView ? `<button class="chip place-btn ${placeIsHere(idx)?'on':''}"
-        onclick="saveDalailPlace(${idx})">Save my place</button>` : ''}
+      ${kind === 'd' && pageView ? `<button class="chip place-btn ${placeIsHere(idx)&&placeStillMarked()?'on':''}"
+        data-idx="${idx}" onclick="saveDalailPlace(${idx})">${placeBtnLabel(idx)}</button>` : ''}
       ${hasPages ? `<span class="view-switch" role="group" aria-label="How to read this">
         <button class="${pageView?'on':''}" onclick="setPageView(true,${controlsTarget})">Book Version</button>
         <button class="${pageView?'':'on'}" onclick="setPageView(false,${controlsTarget})">Study Version</button>
@@ -15850,8 +15881,19 @@ function markVerse(kind, idx, n, seg){
      will bookmark. */
   if(kind === 'd'){
     const vi = parseInt(n, 10), sv = (seg != null ? seg : null);
-    if(on) msPlaceCandidate = { idx, n: vi, seg: sv };
+    if(on) msPlaceCandidate = { idx, n: vi, seg: sv, mk: k };
     else if(msPlaceCandidate && msPlaceCandidate.idx === idx && msPlaceCandidate.n === vi && msPlaceCandidate.seg === sv) msPlaceCandidate = null;
+    /* Un-highlighting the bookmarked group clears the place, so the mark can
+       be lifted from the leaf itself rather than only from the index. */
+    if(!on){
+      const pl = loadPlace();
+      if(pl && pl.mk === k){
+        try { localStorage.removeItem(PLACE_KEY); } catch(e){}
+        const was = document.querySelector('.placed');
+        if(was) was.classList.remove('placed');
+      }
+    }
+    refreshPlaceBtn();
   }
 }
 
