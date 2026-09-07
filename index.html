@@ -26,7 +26,7 @@
      script, where nothing that reads the page without running it can see
      it — so "which version is actually live?" could only be answered from
      a phone. Keep the two in step when bumping. -->
-<meta name="app-version" content="v62">
+<meta name="app-version" content="v63">
 <!-- YouTube's embedded player refuses to configure itself unless the host page
      sends a Referer (Error 153 / embedder.identity.missing.referrer). This is
      the browser default in most cases, but a standalone PWA or a WebView may
@@ -858,7 +858,47 @@
     font-size:1.05rem; line-height:1; align-items:center; justify-content:center;
     box-shadow:0 2px 10px rgba(11,36,27,.3);
   }
-  html.immersive .ms-close{ display:flex }
+  html.immersive .ms-close{ display:none }   /* folded into the menu below */
+
+  /* Full screen used to offer only a way out. Everything else — the theme,
+     the two readings, and Save my place — lived in furniture that immersive
+     mode hides, so a reader following the leaf had to leave full screen to
+     mark their place and then find it again. Home and a menu now ride at the
+     top instead, and the menu carries what the hidden bars used to. */
+  .ms-bar{
+    display:none;
+    position:fixed; top:calc(env(safe-area-inset-top, 0px) + .7rem);
+    left:.8rem; right:.8rem; z-index:61;
+    justify-content:space-between; align-items:flex-start; pointer-events:none;
+  }
+  html.immersive .ms-bar{ display:flex }
+  .ms-bar > *{ pointer-events:auto; }
+  .ms-rnd{
+    width:2.4rem; height:2.4rem; border-radius:50%; cursor:pointer; padding:0;
+    border:1px solid var(--ms-gold); background:var(--ms-paper); color:var(--ms-rule);
+    font-size:1.05rem; line-height:1; display:flex; align-items:center; justify-content:center;
+    box-shadow:0 2px 10px rgba(11,36,27,.3); font-family:inherit;
+  }
+  .ms-rnd:active{ transform:scale(.94); }
+  .ms-rnd svg{ width:1.15rem; height:1.15rem; display:block; }
+  .ms-menu-wrap{ position:relative; display:flex; flex-direction:column; align-items:flex-end; gap:.45rem; }
+  /* Stacked vertically, in the order a reader reaches for them. */
+  .ms-menu{
+    display:none; flex-direction:column; gap:.3rem;
+    background:var(--ms-paper); border:1px solid var(--ms-gold); border-radius:14px;
+    padding:.4rem; box-shadow:0 6px 22px rgba(11,36,27,.34); min-width:11.5rem;
+  }
+  .ms-menu.open{ display:flex }
+  .ms-menu button{
+    display:flex; align-items:center; gap:.55rem; width:100%;
+    background:transparent; border:none; cursor:pointer; text-align:left;
+    color:var(--ms-rule); font-family:'Crimson Pro',serif; font-size:.92rem;
+    padding:.5rem .6rem; border-radius:9px; line-height:1.2;
+  }
+  .ms-menu button:active{ background:rgba(11,36,27,.09); }
+  .ms-menu button svg{ width:1.05rem; height:1.05rem; flex:0 0 auto; }
+  .ms-menu button .tick{ margin-left:auto; opacity:.75; font-size:.8rem; }
+  .ms-menu hr{ border:none; border-top:1px solid var(--ms-gold); opacity:.5; margin:.15rem .3rem; }
   html.immersive .masthead,
   html.immersive .tabbar,
   html.immersive .reader-bar,
@@ -11004,7 +11044,7 @@ const MAWLID_COLLECTIONS = [
 
 /* Bumped with sw.js on every release. Shown small at the foot of the home page
    so you can tell at a glance which build a given phone is actually running. */
-const APP_VERSION = 'v62';
+const APP_VERSION = 'v63';
 /* Where the home-page feedback button sends corrections. Change to your address. */
 const FEEDBACK_EMAIL = 'zayd.boon@gmail.com';
 
@@ -15163,7 +15203,13 @@ function manuscriptPages(q, kind, idx){
       <div class="ms-dots">${dots}</div>
       <button class="ms-arrow prev" onclick="msStep(-1)" disabled aria-label="Previous page">›</button>
     </div>
-    <button class="ms-close" onclick="setImmersive(false)" aria-label="Leave full screen">✕</button>
+    <div class="ms-bar">
+      <button class="ms-rnd" onclick="goHome()" aria-label="Home">⌂</button>
+      <div class="ms-menu-wrap">
+        <button class="ms-rnd" onclick="toggleMsMenu(event)" aria-label="More">⋮</button>
+        <div class="ms-menu" id="ms-menu"></div>
+      </div>
+    </div>
     <div class="ms-float" id="ms-float">
       <button class="ms-arrow next" onclick="msStep(1)" aria-label="Next page">‹</button>
       <button class="ms-arrow prev" onclick="msStep(-1)" disabled aria-label="Previous page">›</button>
@@ -15985,7 +16031,56 @@ window.addEventListener('keydown', e => { if(e.key === 'Escape') hideInstrBubble
 
 /* Full screen is done with layout rather than the Fullscreen API, which iOS
    won't grant to anything but video. Everything but the leaf steps aside. */
+/* Built on open so the labels reflect the moment — which reading is showing,
+   whether this leaf already holds the bookmark, which way the theme goes. */
+function msMenuHTML(){
+  const p = msPiece || {};
+  const isD = p.kind === 'd';
+  const dark = document.documentElement.classList.contains('dark');
+  const saved = isD && placeIsHere(p.idx) && placeStillMarked();
+  let h = '';
+  h += '<button onclick="msMenuAct(\'theme\')">' + themeGlyph() +
+       '<span>' + (dark ? 'Day' : 'Night') + '</span></button>';
+  if(isD) h += '<button onclick="msMenuAct(\'place\')">⚑<span>' +
+       (saved ? 'Place saved' : 'Save my place') + '</span>' +
+       (saved ? '<span class="tick">✓</span>' : '') + '</button>';
+  h += '<button onclick="msMenuAct(\'study\')">⇄<span>Study Version</span></button>';
+  h += '<hr>';
+  h += '<button onclick="msMenuAct(\'exit\')">✕<span>Leave full screen</span></button>';
+  return h;
+}
+
+function toggleMsMenu(e){
+  if(e) e.stopPropagation();
+  const m = document.getElementById('ms-menu');
+  if(!m) return;
+  const open = !m.classList.contains('open');
+  if(open) m.innerHTML = msMenuHTML();
+  m.classList.toggle('open', open);
+}
+
+function closeMsMenu(){
+  const m = document.getElementById('ms-menu');
+  if(m) m.classList.remove('open');
+}
+
+function msMenuAct(what){
+  closeMsMenu();
+  const p = msPiece || {};
+  if(what === 'theme') toggleTheme();
+  else if(what === 'place'){ saveDalailPlace(p.idx); }
+  else if(what === 'study'){ setImmersive(false); setPageView(false, p.idx); }
+  else if(what === 'exit') setImmersive(false);
+}
+
+/* A tap anywhere else closes it, including on the leaf itself. */
+document.addEventListener('click', e => {
+  const m = document.getElementById('ms-menu');
+  if(m && m.classList.contains('open') && !e.target.closest('.ms-menu-wrap')) closeMsMenu();
+}, true);
+
 function setImmersive(on){
+  closeMsMenu();
   state.immersive = !!on;
   document.documentElement.classList.toggle('immersive', state.immersive);
   /* The leaf frame changes size going in and out of full screen, so the text
