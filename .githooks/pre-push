@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+# Refuse a push to a protected branch unless it was explicitly approved.
+#
+# Second layer, and the one that holds when the first does not. The Claude Code
+# PreToolUse hook in .claude/ only loads for sessions that started with that
+# directory present, so a session which creates it is not itself covered. Git
+# runs this one regardless of who or what is pushing.
+#
+# To push to main on purpose:  MAIN_PUSH_OK=1 git push origin main
+# The variable has to be typed into the command, so it cannot happen absently —
+# and in a Claude session it appears in the command the owner is approving.
+#
+# Enable in a clone with:  git config core.hooksPath .githooks
+set -uo pipefail
+PROTECTED='^refs/heads/(main|master)$'
+
+while read -r _local_ref _local_sha remote_ref _remote_sha; do
+  if printf '%s' "$remote_ref" | grep -Eq "$PROTECTED"; then
+    if [ "${MAIN_PUSH_OK:-}" = "1" ]; then
+      echo "pre-push: approved push to ${remote_ref#refs/heads/} (MAIN_PUSH_OK=1)." >&2
+    else
+      cat >&2 <<MSG
+pre-push: refusing to push to ${remote_ref#refs/heads/}.
+
+Anything on that branch is live to people reciting from the app within a
+minute, so it needs a deliberate decision, not a reflex.
+
+If this was meant, re-run it as:
+    MAIN_PUSH_OK=1 git push ...
+MSG
+      exit 1
+    fi
+  fi
+done
+exit 0
