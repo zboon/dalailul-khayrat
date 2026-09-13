@@ -26,7 +26,7 @@
      script, where nothing that reads the page without running it can see
      it — so "which version is actually live?" could only be answered from
      a phone. Keep the two in step when bumping. -->
-<meta name="app-version" content="v70">
+<meta name="app-version" content="v71">
 <!-- YouTube's embedded player refuses to configure itself unless the host page
      sends a Referer (Error 153 / embedder.identity.missing.referrer). This is
      the browser default in most cases, but a standalone PWA or a WebView may
@@ -2380,9 +2380,26 @@ function placeChapter(){
   if(p.title && c.titleEnglish !== p.title) return null;
   return { p, c };
 }
+/* True only while the CURRENT leaf is the one the bookmark actually sits on —
+   not merely "this chapter has a bookmark somewhere." It used to be the
+   latter, so "Place saved" stayed lit across the whole chapter as you paged
+   forward, with nothing to say the bookmark was still back on the page you
+   left. Book-Version only: a Study-view place has no leaf to compare against,
+   so it never reads as "here" for the Book-Version button. */
 function placeIsHere(idx){
   const cur = placeChapter();
-  return !!cur && cur.p.idx === idx;
+  if(!cur || cur.p.idx !== idx || cur.p.view !== 'book') return false;
+  const book = document.getElementById('ms-book');
+  if(!book) return false;
+  const p = cur.p;
+  let sheet = null;
+  if(p.verse != null){
+    const vEl = msVerseEl(idx, p.verse, p.mk);
+    if(vEl) sheet = vEl.closest('.ms-sheet');
+  }
+  if(!sheet && p.leaf != null) sheet = book.children[p.leaf];
+  if(!sheet) return false;
+  return Array.from(book.children).indexOf(sheet) === msCurrentPage();
 }
 
 /* The first verse still on screen — where the eye is, not where the page
@@ -2441,9 +2458,26 @@ function mkVerseIndex(mk){
   return parseInt(parts[2], 10);        // parseInt stops at the dot for "n.c"
 }
 
-/* The Book-Version span for a verse — its first chunk if the verse was split
-   across pages, so the bookmark lands on the leaf where the verse begins. */
-function msVerseEl(idx, n){
+/* The Book-Version span for a verse. Pass the bookmark's own mk (a seg key
+   like "d:6:33.0:0") and, if the verse was split across a page turn, this
+   lands on the CHUNK that seg actually sits in — not just any chunk of the
+   same verse number. Without it (or if that chunk isn't in the DOM), falls
+   back to the first chunk, so the bookmark lands on the leaf where the verse
+   begins rather than nowhere.
+
+   The prefix search alone can't tell chunks apart: "d:6:33." matches both
+   "d:6:33.0" and "d:6:33.1", and always returns whichever is first in the
+   DOM — the earlier page, even when the bookmarked phrase is on the later
+   one. That silently mis-targeted both the resume scroll and the "is this
+   leaf the one" check the place chip depends on. */
+function msVerseEl(idx, n, mk){
+  if(mk){
+    const parts = String(mk).split(':');
+    if(parts.length > 3){
+      const chunk = document.querySelector('[data-mk="' + parts.slice(0, 3).join(':') + '"]');
+      if(chunk) return chunk;
+    }
+  }
   const base = 'd:' + idx + ':' + n;
   return document.querySelector('[data-mk="' + base + '"]')
       || document.querySelector('[data-mk^="' + base + '."]');
@@ -2562,7 +2596,7 @@ function resumeDalail(){
       if(!book) return;
       let sheet = null, vEl = null;
       if(p.verse != null){
-        vEl = msVerseEl(p.idx, p.verse);
+        vEl = msVerseEl(p.idx, p.verse, p.mk);
         if(vEl) sheet = vEl.closest('.ms-sheet');
       }
       if(!sheet && p.leaf != null) sheet = book.children[p.leaf];   // older page-level bookmark
@@ -11044,7 +11078,7 @@ const MAWLID_COLLECTIONS = [
 
 /* Bumped with sw.js on every release. Shown small at the foot of the home page
    so you can tell at a glance which build a given phone is actually running. */
-const APP_VERSION = 'v70';
+const APP_VERSION = 'v71';
 /* Where the home-page feedback button sends corrections. Change to your address. */
 const FEEDBACK_EMAIL = 'zayd.boon@gmail.com';
 
@@ -15252,6 +15286,9 @@ function msSyncDots(){
      a tall page never opens scrolled halfway down. */
   if(cur !== msLastPage){
     msLastPage = cur;
+    /* The place chip reads "here" per leaf now, so it has to be told a page
+       turn happened — nothing else calls it on a swipe. */
+    if(typeof refreshPlaceBtn === 'function') refreshPlaceBtn();
     if(!suppressNavSignals && session.role === 'leader' && session.channel && session.lastNav){
       try { session.channel.send({ type:'broadcast', event:'page', payload:{ kind: session.lastNav.kind, idx: session.lastNav.idx, page: cur, term: session.term } }); } catch(e){}
     }
