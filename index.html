@@ -26,7 +26,7 @@
      script, where nothing that reads the page without running it can see
      it — so "which version is actually live?" could only be answered from
      a phone. Keep the two in step when bumping. -->
-<meta name="app-version" content="v71">
+<meta name="app-version" content="v72">
 <!-- YouTube's embedded player refuses to configure itself unless the host page
      sends a Referer (Error 153 / embedder.identity.missing.referrer). This is
      the browser default in most cases, but a standalone PWA or a WebView may
@@ -7974,37 +7974,735 @@ const DIYA_CHAPTERS = [
 const BARZANJI_CHAPTERS = [
   {
     "titleArabic": "الْمُقَدِّمَةُ",
-    "titleEnglish": "Opening Praise",
+    "titleEnglish": "Preface",
     "verses": [
       {
-        "ar": "أَبْتَدِئُ الْإِمْلَاءَ بِاسْمِ الذَّاتِ الْعَلِيَّةْ ۞ مُسْتَدِرًّا فَيْضَ الْبَرَكَاتِ عَلٰى مَا أَنَالَهُ وَأَوْلَاهْ ۞ وَأُثَنِّي بِحَمْدٍ مَوَارِدُهُ سَائِغَةٌ هَنِيَّةْ ۞ مُمْتَطِيًا مِنَ الشُّكْرِ الْجَمِيلِ مَطَايَاهْ ۞ وَأُصَلِّي وَأُسَلِّمُ عَلٰى النُّورِ الْمَوْصُوفِ بِالتَّقَدُّمِ وَالْأَوَّلِيَّةْ ۞ الْمُنْتَقِلِ فِي الْغُرَرِ الْكَرِيمَةِ وَالْجِبَاهْ ۞ وَأَسْتَمْنِحُ اللّٰهَ تَعَالَى رِضْوَانًا يَخُصُّ الْعِتْرَةَ الطَّاهِرَةَ النَّبَوِيَّةْ ۞ وَيَعُمُّ الصَّحَابَةَ وَالْأَتْبَاعَ وَمَنْ وَالَاهْ ۞ وَأَسْتَجْدِيهِ هِدَايَةً لِسُلُوكِ السُّبُلِ الْوَاضِحَةِ الْجَلِيَّةْ ۞ وَحِفْظًا مِنَ الْغَوَايَةِ فِي خِطَطِ الْخَطَإِ وَخُطَاهْ ۞ وَأَنْشُرُ مِنْ قِصَّةِ الْمَوْلِدِ النَّبَوِيِّ الشَّرِيفِ بُرُودًا حِسَانًا عَبْقَرِيَّةْ ۞ نَاظِمًا مِنَ النَّسَبِ الشَّرِيفِ عِقْدًا تُحَلَّى الْمَسَامِعُ بِحُلَاهْ ۞ وَأَسْتَعِينُ بِحَوْلِ اللّٰهِ تَعَالَى وَقُوَّتِهِ الْقَوِيَّةْ ۞ فَإِنَّهُ لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللّٰهْ",
-        "tr": "Abtadi'u l-imlā'a bi-smi dh-dhāti l-ʿaliyyah, mustadirran fayḍa l-barakāti ʿalā mā anālahu wa awlāh, wa uthannī bi-ḥamdin mawāriduhu sā'ighatun haniyyah, mumtaṭīyan mina sh-shukri l-jamīli maṭāyāh, wa uṣallī wa usallimu ʿalā n-nūri l-mawṣūfi bi-t-taqaddumi wa l-awwaliyyah, al-muntaqili fi l-ghurari l-karīmati wa l-jibāh, wa astamniḥu Llāha taʿālā riḍwānan yakhuṣṣu l-ʿitrata ṭ-ṭāhirata n-nabawiyyah, wa yaʿummu ṣ-ṣaḥābata wa l-atbāʿa wa man wālāh, wa astajdīhi hidāyatan li-sulūki s-subuli l-waḍiḥati l-jaliyyah, wa ḥifẓan mina l-ghawāyati fī khiṭaṭi l-khaṭa'i wa khuṭāh, wa anshuru min qiṣṣati l-mawlidi n-nabawiyyi sh-sharīfi burūdan ḥisānan ʿabqariyyah, nāẓiman mina n-nasabi sh-sharīfi ʿiqdan tuḥalla l-masāmiʿu bi-ḥulāh, wa astaʿīnu bi-ḥawli Llāhi taʿālā wa quwwatihi l-qawiyyah, fa-innahu lā ḥawla wa lā quwwata illā bi-Llāh.",
-        "en": "I commence [this] composition in the Name of the Supreme Being, seeking the outpouring of abundant blessings upon whatever He may enable it to achieve and bring about. Next, I extol [Him] and offer thanks whose sources are pure and refreshing, while mounted on the steed of comely thankfulness. Blessings and peace I invoke upon the Light described as first and foremost, passed on in features and upon brows most noble. I ask Allah Most High to bestow especial good pleasure upon the pure Prophetic family, embracing also his Companions, Followers, and all that truly follow them. I ask Allah for guidance in travelling by pathways clear and radiant; and for protection from straying into or approaching the tracts of error. I shall unfold, from the story of the Prophet's nativity, garments fair and vivid, assembling from [his] noble lineage a necklace whose beauty regales the listener. And I seek help from the strength and power of Allah Most Mighty; for truly there is no power or strength but through Allah."
+        "ar": "أَبْتَدِئُ الْإِمْلَاءَ بِاسْمِ الذَّاتِ الْعَلِيَّةْ ۞ مُسْتَدِرًّا فَيْضَ الْبَرَكَاتِ عَلٰى مَا أَنَالَهُ وَأَوْلَاهْ ۞ وَأُثَنِّي بِحَمْدٍ مَوَارِدُهُ سَائِغَةٌ هَنِيَّةْ ۞ مُمْتَطِيًا مِنَ الشُّكْرِ الْجَمِيلِ مَطَايَاهْ ۞ وَأُصَلِّي وَأُسَلِّمُ عَلٰى النُّورِ الْمَوْصُوفِ بِالتَّقَدُّمِ وَالْأَوَّلِيَّةْ",
+        "tr": "Abtadi'u l-imlā'a bi-smi dh-dhāti l-ʿaliyyah, mustadirran fayḍa l-barakāti ʿalā mā anālahu wa-awlāh, wa-uthannī bi-ḥamdin mawāriduhu sā'ighatun haniyyah, mumtaṭiyan mina sh-shukri l-jamīli maṭāyāh, wa-uṣallī wa-usallimu ʿalā n-nūri l-mawṣūfi bi-t-taqaddumi wa-l-awwaliyyah.",
+        "en": "I begin this composition in the Name of the Most Exalted Essence, seeking the abundant outpouring of blessings through what He has bestowed and graciously conferred. I follow this with praise whose streams are sweet and pleasant to drink, mounting the steeds of beautiful gratitude. And I send prayers and peace upon the Light described by precedence and primacy."
+      },
+      {
+        "ar": "الْمُنْتَقِلِ فِي الْغُرَرِ الْكَرِيمَةِ وَالْجِبَاهْ ۞ وَأَسْتَمْنِحُ اللّٰهَ تَعَالَى رِضْوَانًا يَخُصُّ الْعِتْرَةَ الطَّاهِرَةَ النَّبَوِيَّةْ ۞ وَيَعُمُّ الصَّحَابَةَ وَالْأَتْبَاعَ وَمَنْ وَالَاهْ ۞ وَأَسْتَجْدِيهِ هِدَايَةً لِسُلُوكِ السُّبُلِ الْوَاضِحَةِ الْجَلِيَّةْ ۞ وَحِفْظًا مِنَ الْغَوَايَةِ فِي خِطَطِ الْخَطَإِ وَخُطَاهْ",
+        "tr": "Al-muntaqili fī l-ghurari l-karīmati wa-l-jibāh, wa-astamniḥu Llāha taʿālā riḍwānan yakhuṣṣu l-ʿitrata ṭ-ṭāhirata n-nabawiyyah, wa-yaʿummu ṣ-ṣaḥābata wa-l-atbāʿa wa-man wālāh, wa-astajdīhi hidāyatan li-sulūki s-subuli l-wāḍiḥati l-jaliyyah, wa-ḥifẓan mina l-ghawāyati fī khiṭaṭi l-khaṭa'i wa-khuṭāh.",
+        "en": "Who passed through noble countenances and radiant brows. I beseech Allah Most High for a special pleasure bestowed upon the pure Prophetic Household, and extended to all the Companions, the Followers, and those who are devoted to him. I implore Him for guidance to tread the clear and manifest paths, and for protection from straying into the ways and footsteps of error."
+      },
+      {
+        "ar": "وَأَنْشُرُ مِنْ قِصَّةِ الْمَوْلِدِ النَّبَوِيِّ الشَّرِيفِ بُرُودًا حِسَانًا عَبْقَرِيَّةْ ۞ نَاظِمًا مِنَ النَّسَبِ الشَّرِيفِ عِقْدًا تُحَلَّى الْمَسَامِعُ بِحُلَاهْ ۞ وَأَسْتَعِينُ بِحَوْلِ اللّٰهِ تَعَالَى وَقُوَّتِهِ الْقَوِيَّةْ ۞ فَإِنَّهُ لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللّٰهْ",
+        "tr": "Wa-anshuru min qiṣṣati l-mawlidi n-nabawiyyi sh-sharīfi burūdan ḥisānan ʿabqariyyah, nāẓiman mina n-nasabi sh-sharīfi ʿiqdan tuḥalla l-masāmiʿu bi-ḥulāh, wa-astaʿīnu bi-ḥawli Llāhi taʿālā wa-quwwatihi l-qawiyyah, fa-innahu lā ḥawla wa-lā quwwata illā bi-Llāh.",
+        "en": "And I unfold from the account of the noble Prophetic birth splendid and exquisite robes, stringing from the noble lineage a necklace whose ornaments adorn the ears. I seek aid through the might of Allah Most High and His mighty power, for there is no might and no power except through Allah."
       },
       {
         "ar": "عَطِّرِ اللّٰهُمَّ قَبْرَهُ الْكَرِيمَ بِعَرْفٍ شَذِيٍّ مِنْ صَلَاةٍ وَتَسْلِيمٍ\nاللّٰهُمَّ صَلِّ وَسَلِّمْ وَبَارِكْ عَلَيْهِ",
-        "tr": "ʿAṭṭiri Llāhumma qabrahu l-karīma bi-ʿarfin shadhiyyin min ṣalātin wa taslīmin\nAllāhumma ṣalli wa sallim wa bārik ʿalayhi.",
-        "en": "Perfume, O Allah, his noble tomb with a fragrant scent of blessing and salutation.\n(O Allah, exalt him, preserve him and bless him.)"
+        "tr": "ʿAṭṭiri Llāhumma qabrahu l-karīma bi-ʿarfin shadhiyyin min ṣalātin wa-taslīmin.\nAllāhumma ṣalli wa-sallim wa-bārik ʿalayhi.",
+        "en": "O Allah, perfume his noble grave with a fragrant scent of prayers and peace.\nO Allah, send prayers, peace, and blessings upon him."
       }
     ]
   },
-  { titleArabic:"النَّسَبُ الشَّرِيفُ",         titleEnglish:"The Noble Lineage", verses:[] },
-  { titleArabic:"نَقْلُ النُّورِ",              titleEnglish:"The Passing of the Light", verses:[] },
-  { titleArabic:"عَبْدُ اللّٰهِ وَآمِنَةُ",        titleEnglish:"ʿAbdullāh and Āminah", verses:[] },
-  { titleArabic:"الْحَمْلُ الشَّرِيفُ",         titleEnglish:"The Noble Pregnancy", verses:[] },
-  { titleArabic:"الْمَوْلِدُ الشَّرِيفُ",        titleEnglish:"The Noble Birth", note:"The gathering stands here · مَحَلُّ الْقِيَامِ", verses:[] },
-  { titleArabic:"آيَاتُ الْمَوْلِدِ",           titleEnglish:"Signs at the Birth", verses:[] },
-  { titleArabic:"الرَّضَاعَةُ",                titleEnglish:"The Nursing — Ḥalīmah", verses:[] },
-  { titleArabic:"شَقُّ الصَّدْرِ",             titleEnglish:"The Opening of the Breast", verses:[] },
-  { titleArabic:"الصِّبَا",                   titleEnglish:"His Childhood", verses:[] },
-  { titleArabic:"الشَّبَابُ وَالتِّجَارَةُ",     titleEnglish:"Youth and the Trading Journeys", verses:[] },
-  { titleArabic:"الزَّوَاجُ بِخَدِيجَةَ",        titleEnglish:"The Marriage to Khadījah", verses:[] },
-  { titleArabic:"الْبِعْثَةُ",                 titleEnglish:"The Prophetic Call", verses:[] },
-  { titleArabic:"الْإِسْرَاءُ وَالْمِعْرَاجُ",    titleEnglish:"The Night Journey and Ascension", verses:[] },
-  { titleArabic:"الْهِجْرَةُ",                 titleEnglish:"The Migration", verses:[] },
-  { titleArabic:"الشَّمَائِلُ الشَّرِيفَةُ",     titleEnglish:"His Noble Form and Character", verses:[] },
-  { titleArabic:"الدُّعَاءُ",                  titleEnglish:"The Closing Duʿāʾ", verses:[] },
-];
+  {
+    "titleArabic": "النَّسَبُ الشَّرِيفُ",
+    "titleEnglish": "The Prophet's Lineage ﷺ",
+    "verses": [
+      {
+        "ar": "وَبَعْدُ فَأَقُولُ: هُوَ سَيِّدُنَا مُحَمَّدُ بْنُ عَبْدِ اللّٰهِ بْنِ عَبْدِ الْمُطَّلِبِ وَاسْمُهُ شَيْبَةُ الْحَمْدِ حُمِدَتْ خِصَالُهُ السَّنِيَّةْ ۞ ابْنِ هَاشِمٍ وَاسْمُهُ عَمْرٌو ابْنِ عَبْدِ مَنَافٍ وَاسْمُهُ الْمُغِيرَةُ الَّذِي يَنْتَمِي الِارْتِقَاءُ لِعُلْيَاهْ",
+        "tr": "Wa-baʿdu fa-aqūlu: huwa sayyidunā Muḥammadu bnu ʿAbdi Llāhi-bni ʿAbdi l-Muṭṭalibi wa-smuhu Shaybatu l-Ḥamdi ḥumidat khiṣāluhu s-saniyyah, ibni Hāshimin, wa-smuhu ʿAmrun ibni ʿAbdi Manāfin wa-smuhu l-Mughīratu lladhī yantami l-irtiqā'u li-ʿulyāh.",
+        "en": "Thereafter, I say: He is our master Muhammad, son of Abd Allah, son of Abd al-Muttalib, whose name was Shaybat al-Hamd and whose noble qualities were praised, son of Hashim, whose name was Amr, son of Abd Manaf, whose name was al-Mughirah, to whose lofty rank all heights aspire."
+      },
+      {
+        "ar": "ابْنِ قُصَيٍّ وَاسْمُهُ مُجَمِّعٌ سُمِّيَ بِقُصَيٍّ لِتَقَاصِيهِ فِي بِلَادِ قُضَاعَةَ الْقَصِيَّةْ ۞ إِلَى أَنْ أَعَادَهُ اللّٰهُ تَعَالَى إِلَى الْحَرَمِ الْمُحْتَرَمِ فَحَمَى حِمَاهْ ۞ ابْنِ كِلَابٍ وَاسْمُهُ حَكِيمٌ ابْنِ مُرَّةَ بْنِ كَعْبِ بْنِ لُؤَيِّ بْنِ غَالِبِ بْنِ فِهْرٍ وَاسْمُهُ قُرَيْشٌ وَإِلَيْهِ تُنْسَبُ الْبُطُونُ الْقُرَشِيَّةْ",
+        "tr": "Ibni Quṣayyin wa-smuhu Mujammiʿun summiya bi-Quṣayyin li-taqāṣīhi fī bilādi Quḍāʿata l-qaṣiyyah, ilā an aʿādahu Llāhu taʿālā ilā l-ḥarami l-muḥtarami fa-ḥamā ḥimāh, ibni Kilābin wa-smuhu Ḥakīmun ibni Murrata-bni Kaʿbi-bni Lu'ayyi-bni Ghālibi-bni Fihrin wa-smuhu Qurayshun wa-ilayhi tunsabu l-buṭūnu l-Qurashiyyah.",
+        "en": "He is the son of Qusayy, whose name was Mujammi, and he was called Qusayy because of his being far away in the distant lands of Quda'ah, until Allah Most High returned him to the Sacred Sanctuary, where he protected its precincts. He is the son of Kilab, whose name was Hakim, son of Murrah, son of Kab, son of Luayy, son of Ghalib, son of Fihr, whose name was Quraysh, to whom the Qurashite clans trace their lineage."
+      },
+      {
+        "ar": "وَمَا فَوْقَهُ كِنَانِيٌّ كَمَا جَنَحَ إِلَيْهِ الْكَثِيرُ وَارْتَضَاهْ ۞ ابْنِ مَالِكِ بْنِ النَّضْرِ بْنِ كِنَانَةَ بْنِ خُزَيْمَةَ بْنِ مُدْرِكَةَ بْنِ إِلْيَاسَ وَهُوَ أَوَّلُ مَنْ أَهْدَى الْبُدْنَ إِلَى الرِّحَابِ الْحَرَمِيَّةْ ۞ وَسُمِعَ فِي صُلْبِهِ النَّبِيُّ صَلَّى اللّٰهُ تَعَالَى عَلَيْهِ وَسَلَّمَ ذَكَرَ اللّٰهَ تَعَالَى وَلَبَّاهْ ۞ ابْنِ مُضَرَ بْنِ نِزَارِ بْنِ مَعَدِّ بْنِ عَدْنَانَ ۞ وَهَذَا سِلْكٌ نَظَمَتْ فَرَائِدَهُ بَنَانُ السُّنَّةِ السَّنِيَّةْ",
+        "tr": "Wa-mā fawqahu Kināniyyun kamā janaḥa ilayhi l-kathīru wa-rtaḍāh, ibni Māliki-bni n-Naḍri-bni Kinānata-bni Khuzaymata-bni Mudrikata-bni Ilyāsa wa-huwa awwalu man ahda l-budna ilā r-riḥābi l-ḥaramiyyah, wa-sumiʿa fī ṣulbihi n-nabiyyu ṣalla Llāhu taʿālā ʿalayhi wa-sallama dhakara Llāha taʿālā wa-labbāh, ibni Muḍara-bni Nizāri-bni Maʿaddi-bni ʿAdnāna wa-hādhā silkun naẓamat farā'idahu banānu s-sunnati s-saniyyah.",
+        "en": "Those above him are of Kinanah, according to the view favoured and accepted by many. He is the son of Malik, son of al-Nadr, son of Kinanah, son of Khuzaymah, son of Mudrikah, son of Ilyas, who was the first to offer sacrificial camels in the Sacred Precinct. From his loins, the Prophet, may Allah Most High send prayers and peace upon him, was heard remembering Allah Most High and answering His call. He is the son of Mudar, son of Nizar, son of Maadd, son of Adnan. This is a strand whose precious pearls were threaded by the fingers of the exalted Sunnah."
+      },
+      {
+        "ar": "وَرَفْعُهُ إِلَى الْخَلِيلِ إِبْرَاهِيمَ عَلَيْهِ السَّلَامُ أَمْسَكَ عَنْهُ الشَّارِعُ وَأَبَاهْ ۞ وَعَدْنَانُ بِلَا رَيْبٍ عِنْدَ ذَوِي الْعُلُومِ النَّسَبِيَّةْ ۞ إِلَى الذَّبِيحِ إِسْمَاعِيلَ نِسْبَتُهُ وَمُنْتَمَاهُ وَمُنْتَهَاهْ ۞ فَأَعْظِمْ بِهِ مِنْ عِقْدٍ تَأَلَّقَتْ كَوَاكِبُهُ الدُّرِّيَّةْ ۞ وَكَيْفَ لَا وَالسَّيِّدُ الْأَكْرَمُ صَلَّى اللّٰهُ تَعَالَى عَلَيْهِ وَسَلَّمَ وَاسِطَتُهُ الْمُنْتَقَاةْ",
+        "tr": "Wa-rafʿuhu ilā l-khalīli Ibrāhīma ʿalayhi s-salāmu amsaka ʿanhu sh-shāriʿu wa-abāh, wa-ʿAdnānu bilā raybin ʿinda dhawī l-ʿulūmi n-nasabiyyah, ilā dh-dhabīḥi Ismāʿīla nisbatuhu wa-muntamāhu wa-muntahāh fa-aʿẓim bihi min ʿiqdin ta'allaqat kawākibuhu d-durriyyah, wa-kayfa lā wa-s-sayyidu l-akramu ṣalla Llāhu taʿālā ʿalayhi wa-sallama wāsiṭatuhu l-muntaqāh.",
+        "en": "As for tracing the lineage back to the Friend of Allah, Ibrahim, peace be upon him, the Lawgiver refrained from doing so and declined it. Yet there is no doubt among the scholars of genealogy that Adnan's lineage, ancestry, and ultimate descent reach back to Ismail, the one offered for sacrifice. How magnificent is this necklace, whose radiant stars shine brilliantly. And how could it be otherwise, when the Most Noble Master, may Allah Most High send prayers and peace upon him, is its chosen central jewel?"
+      },
+      {
+        "ar": "نَسَبٌ تَحْسَبُ الْعُلَا بِحُلَاهُ ۞ قَلَّدَتْهَا نُجُومَهَا الْجَوْزَاءُ ۞ حَبَّذَا عِقْدُ سُؤْدَدٍ وَفَخَارٍ ۞ أَنْتَ فِيهِ الْيَتِيمَةُ الْعَصْمَاءُ ۞ أَكْرِمْ بِهِ مِنْ نَسَبٍ طَهَّرَهُ اللّٰهُ تَعَالَى مِنْ سِفَاحِ الْجَاهِلِيَّةْ ۞ أَوْرَدَ الزَّيْنُ الْعِرَاقِيُّ وَارِدَهُ فِي مَوْرِدِهِ الْهَنِيِّ وَرَوَاهْ",
+        "tr": "Nasabun taḥsabu l-ʿulā bi-ḥulāhu, qalladat-hā nujūmaha l-jawzā'u, ḥabbadhā ʿiqdu su'dadin wa-fakhārin, anta fīhi l-yatīmatu l-ʿaṣmā'u, akrim bihi min nasabin ṭahharahu Llāhu taʿālā min sifāḥi l-jāhiliyyah, awrada z-Zaynu l-ʿIrāqiyyu wāridahu fī mawridihi l-haniyyi wa-rawāh.",
+        "en": "A lineage whose ornaments make you think that Orion has adorned the heights of glory with its stars. How splendid is this necklace of nobility and honour, in which you are the peerless and flawless pearl. How noble is this lineage, which Allah Most High purified from the unlawful unions of the Age of Ignorance. Zayn al-Iraqi cited and narrated this account in his delightful work."
+      },
+      {
+        "ar": "حَفِظَ الْإِلَهُ كَرَامَةً لِمُحَمَّدٍ ۞ آبَاءَهُ الْأَمْجَادَ صَوْنًا لِاسْمِهِ ۞ تَرَكُوا السِّفَاحَ فَلَمْ يُصِبْهُمْ عَارُهُ ۞ مِنْ آدَمَ وَإِلَى أَبِيهِ وَأُمِّهِ ۞ سَرَاةٌ سَرَى نُورُ النُّبُوَّةِ فِي أَسَارِيرِ غُرَرِهِمُ الْبَهِيَّةْ ۞ وَبَدَرَ بَدْرُهُ فِي جَبِينِ جَدِّهِ عَبْدِ الْمُطَّلِبِ وَابْنِهِ عَبْدِ اللّٰهْ",
+        "tr": "Ḥafiẓa l-Ilāhu karāmatan li-Muḥammadin, ābā'ahu l-amjāda ṣawnan li-smihi, taraku s-sifāḥa fa-lam yuṣibhum ʿāruhu, min Ādama wa-ilā abīhi wa-ummihi, sarātun sarā nūru n-nubuwwati fī asārīri ghurarihimu l-bahiyyah, wa-badara badruhu fī jabīni jaddihi ʿAbdi l-Muṭṭalibi wa-bnihi ʿAbdi Llāh.",
+        "en": "Allah, in honour of Muhammad, safeguarded his noble forefathers, preserving them for the sake of his name. They abstained from unlawful unions, and no shame from them touched his lineage, from Adam down to his father and mother. They were noble men through whose radiant countenances the light of Prophethood passed, and its full moon shone forth upon the brow of his grandfather Abd al-Muttalib and his son Abd Allah."
+      },
+      {
+        "ar": "عَطِّرِ اللّٰهُمَّ قَبْرَهُ الْكَرِيمَ بِعَرْفٍ شَذِيٍّ مِنْ صَلَاةٍ وَتَسْلِيمٍ\nاللّٰهُمَّ صَلِّ وَسَلِّمْ وَبَارِكْ عَلَيْهِ",
+        "tr": "ʿAṭṭiri Llāhumma qabrahu l-karīma bi-ʿarfin shadhiyyin min ṣalātin wa-taslīmin.\nAllāhumma ṣalli wa-sallim wa-bārik ʿalayhi.",
+        "en": "O Allah, perfume his noble grave with a fragrant scent of prayers and peace.\nO Allah, send prayers, peace, and blessings upon him."
+      }
+    ]
+  },
+  {
+    "titleArabic": "نَقْلُ النُّورِ",
+    "titleEnglish": "The Events Leading to the Prophet's Birth ﷺ",
+    "verses": [
+      {
+        "ar": "وَلَمَّا أَرَادَ اللّٰهُ تَعَالَى إِبْرَازَ حَقِيقَتِهِ الْمُحَمَّدِيَّةْ ۞ وَإِظْهَارَهُ جِسْمًا وَرُوحًا بِصُورَتِهِ وَمَعْنَاهْ ۞ نَقَلَهُ إِلَى مَقَرِّهِ مِنْ صَدَفَةِ آمِنَةَ الزُّهْرِيَّةْ ۞ وَخَصَّهَا الْقَرِيبُ الْمُجِيبُ بِأَنْ تَكُونَ أُمًّا لِمُصْطَفَاهْ ۞ وَنُودِيَ فِي السَّمَاوَاتِ وَالْأَرْضِ بِحَمْلِهَا لِأَنْوَارِهِ الذَّاتِيَّةْ",
+        "tr": "Wa-lammā arāda Llāhu taʿālā ibrāza ḥaqīqatihi l-Muḥammadiyyah, wa-iẓhārahu jisman wa-rūḥan bi-ṣūratihi wa-maʿnāh, naqalahu ilā maqarrihi min ṣadafati Āminata z-Zuhriyyah, wa-khaṣṣaha l-qarību l-mujību bi-an takūna umman li-muṣṭafāh, wa-nūdiya fī s-samāwāti wa-l-arḍi bi-ḥamlihā li-anwārihi dh-dhātiyyah.",
+        "en": "When Allah Most High willed to bring forth the Muhammadan Reality and manifest him in body and spirit, in his outward form and inward meaning, He transferred him to his dwelling within the shell of Aminah al-Zuhriyyah. The Near, the Responsive, specially chose her to be the mother of His Chosen One. Then it was proclaimed throughout the heavens and the earth that she was carrying his essential lights."
+      },
+      {
+        "ar": "وَصَبَا كُلُّ صَبٍّ لِهُبُوبِ نَسِيمِ صَبَاهْ ۞ وَكُسِيَتِ الْأَرْضُ بَعْدَ طُولِ جَدْبِهَا مِنَ النَّبَاتِ حُلَلًا سُنْدُسِيَّةْ ۞ وَأَيْنَعَتِ الثِّمَارُ وَأَدْنَى الشَّجَرُ لِلْجَانِي جَنَاهْ ۞ وَنَطَقَتْ بِحَمْلِهِ كُلُّ دَابَّةٍ لِقُرَيْشٍ بِفِصَاحِ الْأَلْسُنِ الْعَرَبِيَّةْ ۞ وَخَرَّتِ الْأَسِرَّةُ وَالْأَصْنَامُ عَلٰى الْوُجُوهِ وَالْأَفْوَاهْ",
+        "tr": "Wa-ṣabā kullu ṣabbin li-hubūbi nasīmi ṣabāh, wa-kusiyati l-arḍu baʿda ṭūli jadbihā mina n-nabāti ḥulalan sundusiyyah, wa-aynaʿati th-thimāru wa-adnā sh-shajaru li-l-jānī janāh, wa-naṭaqat bi-ḥamlihi kullu dābbatin li-Qurayshin bi-fiṣāḥi l-alsuni l-ʿarabiyyah, wa-kharrati l-asirratu wa-l-aṣnāmu ʿalā l-wujūhi wa-l-afwāh.",
+        "en": "Every yearning soul longed for the blowing of the gentle breeze of his coming. After its long barrenness, the earth was clothed with garments of silken green vegetation. The fruits ripened, and the trees brought their produce within reach of those who would gather it. Every beast belonging to Quraysh spoke of her bearing him in eloquent Arabic. Couches and idols fell upon their faces and mouths."
+      },
+      {
+        "ar": "وَتَبَاشَرَتْ وُحُوشُ الْمَشَارِقِ وَالْمَغَارِبِ وَدَوَابُّهَا الْبَحْرِيَّةْ ۞ وَاحْتَسَتِ الْعَوَالِمُ مِنَ السُّرُورِ كَأْسَ حُمَيَّاهْ ۞ وَبُشِّرَتِ الْجِنُّ بِإِظْلَالِ زَمَنِهِ وَانْتُهِكَتِ الْكَهَانَةْ ۞ وَرَهِبَتِ الرَّهْبَانِيَّةْ",
+        "tr": "Wa-tabāsharat wuḥūshu l-mashāriqi wa-l-maghāribi wa-dawābbuha l-baḥriyyah, wa-ḥtasati l-ʿawālimu mina s-surūri ka'sa ḥumayyāh, wa-bush-shirati l-jinnu bi-iẓlāli zamanihi wa-ntuhikati l-kahānah, wa-rahibati r-rahbāniyyah.",
+        "en": "The beasts of the East and West rejoiced with one another, as did the creatures of the seas. The worlds drank deeply from the intoxicating cup of joy. The jinn were given glad tidings of the approaching shadow of his time, soothsaying was brought to ruin, and monasticism was struck with fear."
+      },
+      {
+        "ar": "وَلَهِجَ بِخَبَرِهِ كُلُّ حَبْرٍ خَبِيرٍ وَفِي حُلَا حُسْنِهِ تَاهْ ۞ وَأُتِيَتْ أُمُّهُ فِي الْمَنَامِ فَقِيلَ لَهَا: إِنَّكِ قَدْ حَمَلْتِ بِسَيِّدِ الْعَالَمِينَ وَخَيْرِ الْبَرِيَّةْ ۞ فَسَمِّيهِ إِذَا وَضَعْتِيهِ مُحَمَّدًا فَإِنَّهُ سَتُحْمَدُ عُقْبَاهْ",
+        "tr": "Wa-lahija bi-khabarihi kullu ḥabrin khabīrin wa-fī ḥulā ḥusnihi tāh, wa-utiyat ummuhu fī l-manāmi fa-qīla lahā: innaki qad ḥamalti bi-sayyidi l-ʿālamīna wa-khayri l-bariyyah, fa-sammīhi idhā waḍaʿtīhi Muḥammadan fa-innahu sa-tuḥmadu ʿuqbāh.",
+        "en": "Every learned sage spoke eagerly of his news and was lost in wonder at the adornments of his beauty. His mother was visited in a dream and told, “You are carrying the Master of the Worlds and the best of creation. When you give birth to him, name him Muhammad, for his outcome shall be praised.”"
+      },
+      {
+        "ar": "عَطِّرِ اللّٰهُمَّ قَبْرَهُ الْكَرِيمَ بِعَرْفٍ شَذِيٍّ مِنْ صَلَاةٍ وَتَسْلِيمٍ\nاللّٰهُمَّ صَلِّ وَسَلِّمْ وَبَارِكْ عَلَيْهِ",
+        "tr": "ʿAṭṭiri Llāhumma qabrahu l-karīma bi-ʿarfin shadhiyyin min ṣalātin wa-taslīmin.\nAllāhumma ṣalli wa-sallim wa-bārik ʿalayhi.",
+        "en": "O Allah, perfume his noble grave with a fragrant scent of prayers and peace.\nO Allah, send prayers, peace, and blessings upon him."
+      }
+    ]
+  },
+  {
+    "titleArabic": "الْمَوْلِدُ الشَّرِيفُ",
+    "titleEnglish": "The Birth of the Prophet ﷺ",
+    "verses": [
+      {
+        "ar": "وَلَمَّا تَمَّ مِنْ حَمْلِهِ شَهْرَانِ عَلٰى مَشْهُورِ الْأَقْوَالِ الْمَرْوِيَّةْ ۞ تُوُفِّيَ بِالْمَدِينَةِ الْمُنَوَّرَةِ أَبُوهُ عَبْدُ اللّٰهْ ۞ وَكَانَ قَدِ اجْتَازَ بِأَخْوَالِهِ بَنِي عَدِيٍّ مِنَ الطَّائِفَةِ النَّجَّارِيَّةْ ۞ وَمَكَثَ فِيهِمْ شَهْرًا سَقِيمًا يُعَانُونَ سُقْمَهُ وَشَكْوَاهْ",
+        "tr": "Wa-lammā tamma min ḥamlihi shahrāni ʿalā mash-hūri l-aqwāli l-marwiyyah, tuwuffiya bi-l-Madīnati l-Munawwarati abūhu ʿAbdu Llāh, wa-kāna qadi jtāza bi-akhwālihi Banī ʿAdiyyin mina ṭ-ṭā'ifati n-Najjāriyyah, wa-makatha fīhim shahran saqīman yuʿānūna suqmahu wa-shakwāh.",
+        "en": "When two months of the pregnancy had passed, according to the most widely reported account, his father Abd Allah passed away in al-Madinah al-Munawwarah. He had stopped with his maternal relatives, the Banu Adiyy of the Najjar clan, and remained among them for a month while ill, as they tended to his sickness and suffering."
+      },
+      {
+        "ar": "وَلَمَّا تَمَّ مِنْ حَمْلِهِ عَلٰى الرَّاجِحِ تِسْعَةُ أَشْهُرٍ قَمَرِيَّةْ ۞ وَآنَ لِلزَّمَانِ أَنْ يَنْجَلِيَ عَنْهُ صَدَاهْ ۞ حَضَرَ أُمَّهُ لَيْلَةَ مَوْلِدِهِ آسِيَةُ وَمَرْيَمُ فِي نِسْوَةٍ مِنَ الْحَظِيرَةِ الْقُدْسِيَّةْ ۞ وَأَخَذَهَا الْمَخَاضُ فَوَلَدَتْهُ صَلَّى اللّٰهُ تَعَالَى عَلَيْهِ وَسَلَّمَ نُورًا يَتَلَأْلَأُ سَنَاهْ",
+        "tr": "Wa-lammā tamma min ḥamlihi ʿalā r-rājiḥi tisʿatu ash-hurin qamariyyah, wa-āna li-z-zamāni an yanjaliya ʿanhu ṣadāh, ḥaḍara ummahu laylata mawlidihi Āsiyatu wa-Maryamu fī niswatin mina l-ḥaẓīrati l-qudsiyyah, wa-akhadhaha l-makhāḍu fa-waladat-hu ṣalla Llāhu taʿālā ʿalayhi wa-sallama nūran yatala'la'u sanāh.",
+        "en": "When the pregnancy reached nine lunar months, according to the strongest view, and the time had come for the age to be cleansed of its rust, Asiyah and Maryam came to his mother on the night of his birth, among a company of women from the sacred assembly. Then the pangs of labour came upon her, and she gave birth to him, may Allah Most High send prayers and peace upon him, as a light whose radiance shone brilliantly."
+      },
+      {
+        "ar": "يَا نَبِيّ سَلَامْ عَلَيْكَ ۞ يَا رَسُولْ سَلَامْ عَلَيْكَ\nيَا حَبِيبْ سَلَامْ عَلَيْكَ ۞ صَلَوَاتُ اللّٰهِ عَلَيْكَ",
+        "tr": "Yā nabiyy salām ʿalayka, yā rasūl salām ʿalayka,\nyā ḥabīb salām ʿalayka, ṣalawātu Llāhi ʿalayka.",
+        "en": "O Prophet, peace be upon you. O Messenger, peace be upon you.\nO Beloved, peace be upon you. Allah’s prayers be upon you.",
+        "note": "The gathering stands here · مَحَلُّ الْقِيَامِ"
+      },
+      {
+        "ar": "أَشْرَقَ الْبَدْرُ عَلَيْنَا ۞ فَاخْتَفَتْ مِنْهُ الْبُدُورُ\nمِثْلَ حُسْنِكَ مَا رَأَيْنَا ۞ قَطُّ يَا وَجْهَ السُّرُورِ",
+        "tr": "Ashraqa l-badru ʿalaynā, fa-khtafat minhu l-budūru,\nmithla ḥusnika mā ra'aynā, qaṭṭu yā wajha s-surūri.",
+        "en": "The full moon has risen upon us, and all other moons have faded before it.\nNever have we seen beauty like yours, O face of joy."
+      },
+      {
+        "ar": "أَنْتَ شَمْسٌ أَنْتَ بَدْرٌ ۞ أَنْتَ نُورٌ فَوْقَ نُورٍ\nأَنْتَ إِكْسِيرٌ وَغَالِي ۞ أَنْتَ مِصْبَاحُ الصُّدُورِ",
+        "tr": "Anta shamsun anta badrun, anta nūrun fawqa nūrin,\nanta iksīrun wa-ghālī, anta miṣbāḥu ṣ-ṣudūri.",
+        "en": "You are a sun, you are a full moon, you are light upon light,\nyou are a precious elixir, you are the lamp of hearts."
+      },
+      {
+        "ar": "يَا حَبِيبِي يَا مُحَمَّدُ ۞ يَا عَرُوسَ الْخَافِقَيْنِ\nيَا مُؤَيَّدُ يَا مُمَجَّدُ ۞ يَا إِمَامَ الْقِبْلَتَيْنِ",
+        "tr": "Yā ḥabībī yā Muḥammadu, yā ʿarūsa l-khāfiqayni,\nyā mu'ayyadu yā mumajjadu, yā imāma l-qiblatayni.",
+        "en": "O my beloved, O Muhammad, O bridegroom of the two horizons.\nO you who are supported, O you who are glorified, O leader of the two qiblas."
+      },
+      {
+        "ar": "مَنْ رَأَى وَجْهَكَ يَسْعَدْ ۞ يَا كَرِيمَ الْوَالِدَيْنِ\nحَوْضُكَ الصَّافِي الْمُبَرَّدُ ۞ وِرْدُنَا يَوْمَ النُّشُورِ",
+        "tr": "Man ra'ā wajhaka yasʿad, yā karīma l-wālidayni,\nḥawḍuka ṣ-ṣāfī l-mubarradu, wirdunā yawma n-nushūri.",
+        "en": "Whoever sees your face finds happiness, O you of noble parents,\nyour pure, cool Basin will be our watering place on the Day of Resurrection."
+      },
+      {
+        "ar": "مَا رَأَيْنَا الْعِيسَ حَنَّتْ ۞ بِالسُّرَى إِلَّا إِلَيْكَ\nوَالْغَمَامَةُ قَدْ أَظَلَّتْ ۞ وَالْمَلَا صَلَّوْا عَلَيْكَ",
+        "tr": "Mā ra'aynā l-ʿīsa ḥannat, bi-s-surā illā ilayka,\nwa-l-ghamāmatu qad aẓallat, wa-l-malā ṣallaw ʿalayka.",
+        "en": "Never have we seen the camels yearn through the night except towards you,\nand the cloud indeed shaded you, and the heavenly assembly sent prayers upon you."
+      },
+      {
+        "ar": "وَأَتَاكَ الْعُودُ يَبْكِي ۞ وَتَذَلَّلَ بَيْنَ يَدَيْكَ\nوَاسْتَجَارَتْ يَا حَبِيبِي ۞ عِنْدَكَ الظَّبْيُ النُّفُورُ",
+        "tr": "Wa-atāka l-ʿūdu yabkī, wa-tadhallala bayna yadayka,\nwa-stajārat yā ḥabībī, ʿindaka ẓ-ẓabyu n-nufūru.",
+        "en": "The tree trunk came to you weeping and humbled itself before you,\nand the timid gazelle sought refuge with you, O my beloved."
+      },
+      {
+        "ar": "عِنْدَمَا شَدُّوا الْمَحَامِلَ ۞ وَتَنَادَوْا لِلرَّحِيلِ\nجِئْتُهُمْ وَالدَّمْعُ سَائِلٌ ۞ قُلْتُ قِفْ لِي يَا دَلِيلُ",
+        "tr": "ʿIndamā shaddū l-maḥāmila, wa-tanādaw li-r-raḥīli,\nji'tuhum wa-d-damʿu sā'ilun, qultu qif lī yā dalīlu.",
+        "en": "When they secured their litters and called out to depart,\nI came to them with tears flowing and said, “Wait for me, O guide."
+      },
+      {
+        "ar": "وَتَحَمَّلْ لِي رَسَائِلَ ۞ أَيُّهَا الشَّوْقُ الْجَزِيلُ\nنَحْوَ هَاتِيكَ الْمَنَازِلِ ۞ فِي الْعَشِيِّ وَالْبُكُورِ",
+        "tr": "Wa-taḥammal lī rasā'ila, ayyuha sh-shawqu l-jazīlu,\nnaḥwa hātīka l-manāzili, fī l-ʿashiyyi wa-l-bukūri.",
+        "en": "And convey messages for me, O great longing,\nTo those distant dwellings, in the evening and at dawn.”"
+      },
+      {
+        "ar": "كُلُّ مَنْ فِي الْكَوْنِ هَامُوا ۞ فِيكَ يَا بَاهِيَ الْجَبِينِ\nوَلَهُمْ فِيكَ غَرَامٌ ۞ وَاشْتِيَاقٌ وَحَنِينُ",
+        "tr": "Kullu man fī l-kawni hāmū, fīka yā bāhiya l-jabīni,\nwa-lahum fīka gharāmun, wa-shtiyāqun wa-ḥanīnu.",
+        "en": "All who dwell within creation are enraptured by you, O you whose brow is radiant,\nand for you they bear a passionate love, a longing and a yearning."
+      },
+      {
+        "ar": "فِي مَعَانِيكَ الْأَنَامُ ۞ قَدْ تَبَدَّتْ حَائِرِينَ\nأَنْتَ لِلرُّسُلِ خِتَامٌ ۞ أَنْتَ لِلْمَوْلَى شَكُورُ",
+        "tr": "Fī maʿānīka l-anāmu, qad tabaddat ḥā'irīna,\nanta li-r-rusuli khitāmun, anta li-l-mawlā shakūru.",
+        "en": "Before your sublime qualities, all people stand bewildered.\nYou are the Seal of the Messengers, and ever grateful to the Lord."
+      },
+      {
+        "ar": "عَبْدُكَ الْمِسْكِينُ يَرْجُو ۞ فَضْلَكَ الْجَمَّ الْغَفِيرَ\nفِيكَ قَدْ أَحْسَنْتُ ظَنِّي ۞ يَا بَشِيرُ يَا نَذِيرُ",
+        "tr": "ʿAbduka l-miskīnu yarjū, faḍlaka l-jamma l-ghafīra,\nfīka qad aḥsantu ẓannī, yā bashīru yā nadhīru.",
+        "en": "Your poor slave hopes for your immense and abundant grace,\nand I have placed my good expectations in you, O bearer of glad tidings, O warner."
+      },
+      {
+        "ar": "فَأَغِثْنِي وَأَجِرْنِي ۞ يَا مُجِيرَ مِنَ السَّعِيرِ\nيَا غِيَاثِي يَا مَلَاذِي ۞ فِي مُهِمَّاتِ الْأُمُورِ",
+        "tr": "Fa-aghithnī wa-ajirnī, yā mujīra mina s-saʿīri,\nyā ghiyāthī yā malādhī, fī muhimmāti l-umūri.",
+        "en": "So come to my aid and grant me refuge, O protector from the Blazing Fire,\nO my aid, O my refuge in the most pressing of affairs."
+      },
+      {
+        "ar": "سَعِدَ عَبْدٌ قَدْ تَمَلَّى ۞ وَانْجَلَى عَنْهُ الْحَزِينُ\nفِيكَ يَا بَدْرُ تَجَلَّى ۞ فَلَكَ الْوَصْفُ الْحَسِينُ",
+        "tr": "Saʿida ʿabdun qad tamallā, wanjalā ʿanhu l-ḥazīnu,\nfīka yā badru tajallā, falaka l-waṣfu l-ḥasīnu.",
+        "en": "Blessed is the slave who has found joy, and whose sorrow has departed.\nIn you, O full moon, splendour has manifested, and yours is the beautiful description."
+      },
+      {
+        "ar": "لَيْسَ أَزْكَى مِنْكَ أَصْلًا ۞ قَطُّ يَا جَدَّ الْحُسَيْنِ\nفَعَلَيْكَ اللّٰهُ صَلَّى ۞ دَائِمًا طُولَ الدُّهُورِ",
+        "tr": "Laysa azkā minka aṣlan, qaṭṭu yā jadda l-Ḥusayni,\nfa-ʿalayka Llāhu ṣallā, dā'iman ṭūla d-duhūri.",
+        "en": "None is purer than you in lineage, O grandfather of al-Husayn,\nand may Allah send prayers upon you always, throughout the ages."
+      },
+      {
+        "ar": "يَا وَلِيَّ الْحَسَنَاتِ ۞ يَا رَفِيعَ الدَّرَجَاتِ\nكَفِّرْ عَنِّي الذُّنُوبَ ۞ وَاغْفِرْ عَنِّي السَّيِّئَاتِ",
+        "tr": "Yā waliyya l-ḥasanāti, yā rafīʿa d-darajāti,\nkaffir ʿannī dh-dhunūba, waghfir ʿannī s-sayyi'āti.",
+        "en": "O Guardian of good deeds, O Exalted in rank,\nremove my sins from me, and forgive me my misdeeds."
+      },
+      {
+        "ar": "أَنْتَ غَفَّارُ الْخَطَايَا ۞ وَالذُّنُوبِ الْمُوبِقَاتِ\nأَنْتَ سَتَّارُ الْمَسَاوِي ۞ وَمُقِيلُ الْعَثَرَاتِ",
+        "tr": "Anta ghaffāru l-khaṭāyā, wa-dh-dhunūbi l-mūbiqāti,\nanta sattāru l-masāwī, wa-muqīlu l-ʿatharāti.",
+        "en": "You are the Great Forgiver of faults and of sins that bring ruin,\nand You are the Concealer of shortcomings and the Pardoner of slips."
+      },
+      {
+        "ar": "عَالِمُ السِّرِّ وَأَخْفَى ۞ مُسْتَجِيبُ الدَّعَوَاتِ\nرَبِّ فَارْحَمْنَا جَمِيعًا ۞ بِجَمِيعِ الصَّالِحَاتِ",
+        "tr": "ʿĀlimu s-sirri wa-akhfā, mustajību d-daʿawāti,\nRabbi farḥamnā jamīʿan, bi-jamīʿi ṣ-ṣāliḥāti.",
+        "en": "Knower of the secret and what is more hidden still, Responder to supplications,\nO Lord, have mercy upon us all through every righteous deed."
+      },
+      {
+        "ar": "وَمُحَيًّا كَالشَّمْسِ مِنْكَ مُضِيءٌ أَسْفَرَتْ عَنْهُ لَيْلَةٌ غَرَّاءُ ۞ لَيْلَةُ الْمَوْلِدِ الَّذِي كَانَ لِلدِّينِ سُرُورٌ بِيَوْمِهِ وَازْدِهَاءُ ۞ يَوْمَ نَالَتْ بِوَضْعِهِ ابْنَةُ وَهْبٍ مِنْ فَخَارٍ مَا لَمْ تَنَلْهُ النِّسَاءُ ۞ وَأَتَتْ قَوْمَهَا بِأَفْضَلَ مِمَّا حَمَلَتْ قَبْلُ مَرْيَمُ الْعَذْرَاءُ ۞ مَوْلِدٌ كَانَ مِنْهُ فِي طَالِعِ الْكُفْرِ وَبَالٌ عَلَيْهُمْ وَوَبَاءُ",
+        "tr": "Wa-muḥayyan ka-sh-shamsi minka muḍī'un asfarat ʿanhu laylatun gharrā'u laylatu l-mawlidi lladhī kāna li-d-dīni surūrun bi-yawmihi wa-zdihā'u yawma nālat bi-waḍʿihi-bnatu Wahbin min fakhārin mā lam tanalhu n-nisā'u, wa-atat qawmahā bi-afḍala mimmā ḥamalat qablu Maryamu l-ʿadhrā'u, mawlidun kāna minhu fī ṭāliʿi l-kufri wabālun ʿalayhum wa-wabā'u.",
+        "en": "And from you came a countenance radiant like the sun, unveiled by a resplendent night, the night of the Birth, whose day brought joy and splendour to the religion. On that day, through giving birth to him, the daughter of Wahb attained an honour that no woman had ever attained, and she brought to her people one more excellent than he whom Maryam the Virgin had borne before, a birth whose rising brought calamity and affliction upon disbelief."
+      },
+      {
+        "ar": "وَتَوَالَتْ بُشْرَى الْهَوَاتِفِ أَنْ قَدْ وُلِدَ الْمُصْطَفَى وَحَقَّ الْهَنَاءُ ۞ هَذَا وَقَدِ اسْتَحْسَنَ الْقِيَامَ عِنْدَ ذِكْرِ مَوْلِدِهِ الشَّرِيفِ أَئِمَّةٌ ذَوُو رِوَايَةٍ وَرَوِيَّةْ ۞ فَطُوبَى لِمَنْ كَانَ تَعْظِيمُهُ صَلَّى اللّٰهُ عَلَيْهِ تَعَالَى وَسَلَّمَ غَايَةَ مَرَامِهِ وَمَرْمَاهْ",
+        "tr": "Wa-tawālat bushra l-hawātifi an qad wulida l-Muṣṭafā wa-ḥaqqa l-hanā'u, hādhā wa-qadi-s-taḥsana l-qiyāma ʿinda dhikri mawlidihi sh-sharīfi a'immatun dhawū riwāyatin wa-rawiyyah, fa-ṭūba li-man kāna taʿẓīmuhu ṣalla Llāhu ʿalayhi taʿālā wa-sallama ghāyata marāmihi wa-marmāh.",
+        "en": "And the glad tidings of the voices followed one after another, proclaiming that the Chosen One had indeed been born and that the time for rejoicing had truly come. Leading scholars endowed with sound transmission and considered judgement have deemed it commendable to stand at the mention of his noble birth. So blessed is the one whose ultimate aim and aspiration is to honour him, may Allah Most High send prayers and peace upon him."
+      },
+      {
+        "ar": "عَطِّرِ اللّٰهُمَّ قَبْرَهُ الْكَرِيمَ بِعَرْفٍ شَذِيٍّ مِنْ صَلَاةٍ وَتَسْلِيمٍ\nاللّٰهُمَّ صَلِّ وَسَلِّمْ وَبَارِكْ عَلَيْهِ",
+        "tr": "ʿAṭṭiri Llāhumma qabrahu l-karīma bi-ʿarfin shadhiyyin min ṣalātin wa-taslīmin.\nAllāhumma ṣalli wa-sallim wa-bārik ʿalayhi.",
+        "en": "O Allah, perfume his noble grave with a fragrant scent of prayers and peace.\nO Allah, send prayers, peace, and blessings upon him."
+      }
+    ]
+  },
+  {
+    "titleArabic": "الْمَوْلُودُ الشَّرِيفُ",
+    "titleEnglish": "The Newborn Prophet ﷺ",
+    "verses": [
+      {
+        "ar": "وَبَرَزَ صَلَّى اللّٰهُ تَعَالَى عَلَيْهِ وَسَلَّمَ وَاضِعًا يَدَيْهِ عَلٰى الْأَرْضِ رَافِعًا رَأْسَهُ إِلَى السَّمَاءِ الْعَلِيَّةْ ۞ مُومِيًا بِذَلِكَ الرَّفْعِ إِلَى سُؤْدَدِهِ وَعُلَاهْ ۞ وَمُشِيرًا إِلَى رِفْعَةِ قَدْرِهِ عَلٰى سَائِرِ الْبَرِيَّةْ ۞ وَأَنَّهُ الْحَبِيبُ الَّذِي حَسُنَتْ طِبَاعُهُ وَسَجَايَاهْ ۞ وَدَعَتْ أُمُّهُ عَبْدَ الْمُطَّلِبِ وَهُوَ يَطُوفُ بِهَاتِيكَ الْبَنِيَّةْ",
+        "tr": "Wa-baraza ṣalla Llāhu taʿālā ʿalayhi wa-sallama wāḍiʿan yadayhi ʿalā l-arḍi rāfiʿan ra'sahu ilā s-samā'i l-ʿaliyyah, mūmiyan bi-dhālika r-rafʿi ilā su'dadihi wa-ʿulāh, wa-mushīran ilā rifʿati qadrihi ʿalā sā'iri l-bariyyah, wa-annahu l-ḥabību lladhī ḥasunat ṭibāʿuhu wa-sajāyāh, wa-daʿat ummuhu ʿAbda l-Muṭṭalibi wa-huwa yaṭūfu bi-hātīka l-baniyyah.",
+        "en": "He, may Allah Most High send prayers and peace upon him, emerged with his hands placed upon the earth and his head raised towards the lofty heavens, alluding through this raising to his nobility and exalted rank, and indicating the loftiness of his station above all creation, and that he is the Beloved whose nature and character are beautiful. His mother then called for Abd al-Muttalib while he was circumambulating that Sacred House."
+      },
+      {
+        "ar": "فَأَقْبَلَ مُسْرِعًا وَنَظَرَ إِلَيْهِ وَبَلَغَ مِنَ السُّرُورِ مُنَاهْ ۞ وَأَدْخَلَهُ الْكَعْبَةَ الْغَرَّاءَ وَقَامَ يَدْعُو بِخُلُوصِ النِّيَّةْ ۞ وَيَشْكُرُ اللّٰهَ تَعَالَى عَلٰى مَا مَنَّ بِهِ عَلَيْهِ وَأَعْطَاهْ ۞ وَوُلِدَ صَلَّى اللّٰهُ تَعَالَى عَلَيْهِ وَسَلَّمَ نَظِيفًا مَخْتُونًا مَقْطُوعَ السُّرِّ بِيَدِ الْقُدْرَةِ الْإِلَهِيَّةْ",
+        "tr": "Fa-aqbala musriʿan wa-naẓara ilayhi wa-balagha mina s-surūri munāh, wa-adkhalahu l-kaʿbata l-gharrā'a wa-qāma yadʿū bi-khulūṣi n-niyyah, wa-yash-kuru Llāha taʿālā ʿalā mā manna bihi ʿalayhi wa-aʿṭāh, wa-wulida ṣalla Llāhu taʿālā ʿalayhi wa-sallama naẓīfan makhtūnan maqṭūʿa s-surri bi-yadi l-qudrati l-ilāhiyyah.",
+        "en": "And he came quickly, looked upon him, and attained the fullness of his joy. He took him into the radiant Ka'bah and stood supplicating with sincere intention, and thanking Allah Most High for what He had graciously bestowed upon him and given him. And he, may Allah Most High send prayers and peace upon him, was born clean, circumcised, and with his umbilical cord severed by the hand of Divine Power."
+      },
+      {
+        "ar": "طَيِّبًا دَهِينًا مَكْحُولَةً بِكُحْلِ الْعِنَايَةِ عَيْنَاهْ ۞ وَقِيلَ خَتَنَهُ جَدُّهُ بَعْدَ سَبْعِ لَيَالٍ سَوِيَّةْ ۞ وَأَوْلَمَ وَأَطْعَمَ وَسَمَّاهُ مُحَمَّدًا وَأَكْرَمَ مَثْوَاهْ",
+        "tr": "Ṭayyiban dahīnan makḥūlatan bi-kuḥli l-ʿināyati ʿaynāh, wa-qīla khatanahu jadduhu baʿda sabʿi layālin sawiyyah, wa-awlama wa-aṭʿama wa-sammāhu Muḥammadan wa-akrama mathwāh.",
+        "en": "Fragrant and anointed, with his eyes lined with the kohl of Divine Care. And it is said that his grandfather circumcised him after seven full nights, held a feast and fed the people, named him Muhammad, and honoured his abode."
+      },
+      {
+        "ar": "عَطِّرِ اللّٰهُمَّ قَبْرَهُ الْكَرِيمَ بِعَرْفٍ شَذِيٍّ مِنْ صَلَاةٍ وَتَسْلِيمٍ\nاللّٰهُمَّ صَلِّ وَسَلِّمْ وَبَارِكْ عَلَيْهِ",
+        "tr": "ʿAṭṭiri Llāhumma qabrahu l-karīma bi-ʿarfin shadhiyyin min ṣalātin wa-taslīmin.\nAllāhumma ṣalli wa-sallim wa-bārik ʿalayhi.",
+        "en": "O Allah, perfume his noble grave with a fragrant scent of prayers and peace.\nO Allah, send prayers, peace, and blessings upon him."
+      }
+    ]
+  },
+  {
+    "titleArabic": "آيَاتُ الْمَوْلِدِ",
+    "titleEnglish": "The Signs and Miracles of His Blessed Birth ﷺ",
+    "verses": [
+      {
+        "ar": "وَظَهَرَ عِنْدَ وَلَادَتِهِ صَلَّى اللّٰهُ تَعَالَى عَلَيْهِ وَسَلَّمَ خَوَارِقُ وَغَرَائِبُ غَيْبِيَّةْ ۞ إِرْهَاصًا لِنُبُوَّتِهِ وَإِعْلَامًا بِأَنَّهُ مُخْتَارُ اللّٰهِ تَعَالَى وَمُجْتَبَاهْ ۞ فَزِيدَتِ السَّمَاءُ حِفْظًا وَرُدَّ عَنْهَا الْمَرَدَةُ وَذَوُو النُّفُوسِ الشَّيْطَانِيَّةْ ۞ وَرَجَمَتْ نُجُومُ النَّيِّرَاتِ كُلَّ رَجِيمٍ فِي حَالِ مَرْقَاهْ",
+        "tr": "Wa-ẓahara ʿinda wilādatihi ṣalla Llāhu taʿālā ʿalayhi wa-sallama khawāriqu wa-gharā'ibu ghaybiyyah, irhāṣan li-nubuwwatihi wa-iʿlāman bi-annahu mukhtāru Llāhi taʿālā wa-mujtabāh, fa-zīdati s-samā'u ḥifẓan wa-rudda ʿanha l-maradatu wa-dhawū n-nufūsi sh-shayṭāniyyah, wa-rajamat nujūmu n-nayyirāti kulla rajīmin fī ḥāli marqāh.",
+        "en": "At his birth, may Allah Most High send prayers and peace upon him, extraordinary wonders and unseen marvels appeared as signs heralding his Prophethood and proclaiming that he was the one chosen and elected by Allah Most High. And the heavens were further guarded, and the rebellious ones and those of satanic souls were driven away from them, and the radiant stars pelted every accursed one as he attempted to ascend."
+      },
+      {
+        "ar": "وَتَدَلَّتْ إِلَيْهِ صَلَّى اللّٰهُ عَلَيْهِ وَسَلَّمَ الْأَنْجُمُ الزُّهْرِيَّةْ ۞ وَاسْتَنَارَتْ بِنُورِهَا وِهَادُ الْحَرَمِ وَرُبَاهْ ۞ وَخَرَجَ مَعَهُ صَلَّى اللّٰهُ عَلَيْهِ وَسَلَّمَ نُورٌ أَضَاءَتْ لَهُ قُصُورُ الشَّامِ الْقَيْصَرِيَّةْ ۞ فَرَآهَا مَنْ بِطَاحُ مَكَّةَ دَارُهُ وَمَغْنَاهْ ۞ وَانْصَدَعَ الْإِيوَانُ بِالْمَدَائِنِ الْكِسْرَوِيَّةْ ۞ الَّذِي رَفَعَ أَنُوشَرْوَانُ سَمْكَهُ وَسَوَّاهْ",
+        "tr": "Wa-tadallat ilayhi ṣalla Llāhu ʿalayhi wa-sallama l-anjumu z-zuhriyyah, wa-s-tanārat bi-nūrihā wihādu l-ḥarami wa-rubāh, wa-kharaja maʿahu ṣalla Llāhu ʿalayhi wa-sallama nūrun aḍā'at lahu quṣūru sh-Shāmi l-qayṣariyyah, fa-ra'āhā man biṭāḥu Makkata dāruhu wa-maghnāh, wa-n-ṣadaʿa l-īwānu bi-l-Madā'ini l-kisrawiyyah, alladhī rafaʿa Anūsharwānu samkahu wa-sawwāh.",
+        "en": "The radiant stars drew near to him, may Allah send prayers and peace upon him, and by their light the valleys and hills of the Sacred Sanctuary were illuminated. With him, may Allah send prayers and peace upon him, came forth a light by which the imperial palaces of Syria were illuminated, and they were seen by those whose homes and dwellings were in the plains of Makkah. And the imperial palace at al-Mada'in was split apart, whose lofty structure Anushirwan had raised and fashioned."
+      },
+      {
+        "ar": "وَسَقَطَ أَرْبَعٌ وَعَشْرٌ مِنْ شُرُفَاتِهِ الْعُلْوِيَّةْ ۞ وَكُسِرَ سَرِيرُ الْمَلِكِ كِسْرَى لِهَوْلِ مَا أَصَابَهُ وَعَرَاهْ ۞ وَخَمَدَتِ النِّيرَانُ الْمَعْبُودَةُ بِالْمَمَالِكِ الْفَارِسِيَّةْ ۞ لِطُلُوعِ بَدْرِهِ الْمُنِيرِ وَإِشْرَاقِ مُحَيَّاهْ ۞ وَغَاضَتْ بُحَيْرَةُ سَاوَةَ وَكَانَتْ بَيْنَ هَمَذَانَ وَقُمَّ مِنَ الْبِلَادِ الْعَجَمِيَّةْ ۞ وَجَفَّتْ إِذْ كَفَّ وَاكِفُ مَوْجِهَا الثَّجَّاجِ يَنَابِيعُ هَاتِيكَ الْمِيَاهْ",
+        "tr": "Wa-saqaṭa arbaʿun wa-ʿashrun min shurufātihi l-ʿulwiyyah, wa-kusira sarīru l-maliki Kisrā li hawli mā aṣābahu wa-ʿarāh, wa-khamadati n-nīrānu l-maʿbūdatu bi-l-mamāliki l-fārisiyyah, li-ṭulūʿi badrihi l-munīri wa-ishrāqi muḥayyāh, wa-ghāḍat buḥayratu Sāwata wa-kānat bayna Hamadhāna wa-Qumma mina l-bilādi l-ʿajamiyyah, wa-jaffat idh kaffa wākifu mawjiha th-thajjāji yanābīʿu hātīka l-miyāh.",
+        "en": "Fourteen of its lofty balconies fell, and the throne of Kisra was broken by the terror of what had befallen him. And the fires worshipped throughout the Persian realms were extinguished at the rising of his radiant full moon and the shining of his countenance. Lake Sawah, which lay between Hamadhan and Qumm in the Persian lands, receded and dried up when the abundant flow of its surging waters ceased, along with the springs that fed them."
+      },
+      {
+        "ar": "وَفَاضَ وَادِي سَمَاوَةَ وَهِيَ مَفَازَةٌ فِي فَلَاةٍ وَبَرِّيَّةْ ۞ لَمْ يَكُنْ بِهَا مِنْ قَبْلُ مَاءٌ يَنْقَعُ لِلظَّمْآنِ اللّٰهَاهْ ۞ وَكَانَ مَوْلِدُهُ صَلَّى اللّٰهُ تَعَالَى عَلَيْهِ وَسَلَّمَ بِالْمَوْضِعِ الْمَعْرُوفِ بِالْعِرَاصِ الْمَكِّيَّةْ ۞ وَالْبَلَدِ الْحَرَامِ الَّذِي لَا يُعْضَدُ شَجَرُهُ وَلَا يُخْتَلَى خَلَاهْ",
+        "tr": "Wa-fāḍa wādī Samāwata wa-hiya mafāzatun fī falātin wa-barriyyah, lam yakun bihā min qablu mā'un yanqaʿu li-ẓ-ẓam'āni l-lahāh, wa-kāna mawliduhu ṣalla Llāhu taʿālā ʿalayhi wa-sallama bi-l-mawḍiʿi l-maʿrūfi bi-l-ʿIrāṣi l-Makkiyyah, wa-l-baladi l-ḥarāmi lladhī lā yuʿḍadu shajaruhu wa-lā yukhtalā khalāh.",
+        "en": "The Valley of Samawah overflowed, though it was a waterless wilderness in a barren and desolate land where, before this, there had been no water to quench the thirst of the parched. And his birth, may Allah Most High send prayers and peace upon him, took place at the location known as al-Iras in Makkah, within the Sacred City, whose trees may not be cut down and whose wild herbage may not be gathered."
+      },
+      {
+        "ar": "وَاخْتُلِفَ فِي عَامِ وَلَادَتِهِ صَلَّى اللّٰهُ عَلَيْهِ وَسَلَّمَ وَفِي شَهْرِهَا وَفِي يَوْمِهَا عَلٰى أَقْوَالٍ لِلْعُلَمَاءِ مَرْوِيَّةْ ۞ وَالرَّاجِحُ أَنَّهَا قُبَيْلَ فَجْرِ يَوْمِ الِاثْنَيْنِ ثَانِيَ عَشَرَ شَهْرِ رَبِيعٍ الْأَوَّلِ مِنْ عَامِ الْفِيلِ الَّذِي صَدَّهُ اللّٰهُ تَعَالَى عَنِ الْحَرَمِ وَحَمَاهْ",
+        "tr": "Wa-khtulifa fī ʿāmi wilādatihi ṣalla Llāhu ʿalayhi wa-sallama wa-fī shahrihā wa-fī yawmihā ʿalā aqwālin li-l-ʿulamā'i marwiyyah, wa-r-rājiḥu annahā qubayla fajri yawmi l-ithnayni thāniya ʿashara shahri rabīʿin l-awwali min ʿāmi l-fīli lladhī ṣaddahu Llāhu taʿālā ʿani l-ḥarami wa-ḥamāh.",
+        "en": "The scholars have differed regarding the year of his birth, may Allah send prayers and peace upon him, as well as its month and its day, with various opinions having been transmitted. The strongest view is that it occurred shortly before dawn on Monday, the twelfth of Rabi al-Awwal, in the Year of the Elephant, which Allah Most High turned away from the Sacred Sanctuary and thereby protected it."
+      },
+      {
+        "ar": "عَطِّرِ اللّٰهُمَّ قَبْرَهُ الْكَرِيمَ بِعَرْفٍ شَذِيٍّ مِنْ صَلَاةٍ وَتَسْلِيمٍ\nاللّٰهُمَّ صَلِّ وَسَلِّمْ وَبَارِكْ عَلَيْهِ",
+        "tr": "ʿAṭṭiri Llāhumma qabrahu l-karīma bi-ʿarfin shadhiyyin min ṣalātin wa-taslīmin.\nAllāhumma ṣalli wa-sallim wa-bārik ʿalayhi.",
+        "en": "O Allah, perfume his noble grave with a fragrant scent of prayers and peace.\nO Allah, send prayers, peace, and blessings upon him."
+      }
+    ]
+  },
+  {
+    "titleArabic": "الرَّضَاعَةُ",
+    "titleEnglish": "The Prophet’s Childhood ﷺ",
+    "verses": [
+      {
+        "ar": "وَأَرْضَعَتْهُ صَلَّى اللّٰهُ عَلَيْهِ وَسَلَّمَ أُمُّهُ أَيَّامًا ثُمَّ أَرْضَعَتْهُ ثُوَيْبَةُ الْأَسْلَمِيَّةْ ۞ الَّتِي أَعْتَقَهَا أَبُو لَهَبٍ حِينَ وَافَتْهُ عِنْدَ مِيلَادِهِ عَلَيْهِ الصَّلَاةُ وَالسَّلَامُ بِبُشْرَاهْ ۞ فَأَرْضَعَتْهُ صَلَّى اللّٰهُ عَلَيْهِ وَسَلَّمَ مَعَ ابْنِهَا مَسْرُوحٍ وَأَبِي سَلَمَةَ وَهِيَ بِهِ حَفِيَّةْ ۞ وَأَرْضَعَتْ قَبْلَهُ حَمْزَةَ الَّذِي حُمِدَ فِي نُصْرَةِ الدِّينِ سُرَاهْ",
+        "tr": "Wa-arḍaʿat-hu ṣalla Llāhu ʿalayhi wa-sallama ummuhu ayyāman thumma arḍaʿat-hu Thuwaybatu l-Aslamiyyah, allatī aʿtaqahā Abū Lahabin ḥīna wāfat-hu ʿinda mīlādihi ʿalayhi ṣ-ṣalātu wa-s-salāmu bi-bushrāh, fa-arḍaʿat-hu ṣalla Llāhu ʿalayhi wa-sallama maʿa-bnihā Masrūḥin wa-Abī Salamata wa-hiya bihi ḥafiyyah, wa-arḍaʿat qablahu Ḥamzata lladhī ḥumida fī nuṣrati d-dīni surāh.",
+        "en": "His mother nursed him, may Allah send prayers and peace upon him, for several days. Then he was nursed by Thuwaybah al-Aslamiyyah, whom Abu Lahab set free when she came to him at the time of his birth, peace and prayers be upon him, bearing the glad tidings. She nursed him, may Allah send prayers and peace upon him, together with her son Masruh and Abu Salamah, and she cared for him devotedly. Before him, she had nursed Hamzah, whose noble efforts in supporting the religion were praised."
+      },
+      {
+        "ar": "وَكَانَ صَلَّى اللّٰهُ تَعَالَى عَلَيْهِ وَسَلَّمَ يَبْعَثُ إِلَيْهَا مِنَ الْمَدِينَةِ بِصِلَةٍ وَكِسْوَةٍ هِيَ بِهَا حَرِيَّةْ ۞ إِلَى أَنْ أَوْرَدَ هَيْكَلَهَا رَائِدُ الْمَنُونِ الضَّرِيحَ وَوَارَاهْ ۞ قِيلَ عَلٰى دِينِ قَوْمِهَا الْفِئَةِ الْجَاهِلِيَّةْ ۞ وَقِيلَ أَسْلَمَتْ ۞ أَثْبَتَ الْخِلَافَ ابْنُ مَنْدَهَ وَحَكَاهْ",
+        "tr": "Wa-kāna ṣalla Llāhu taʿālā ʿalayhi wa-sallama yabʿathu ilayhā mina l-Madīnati bi-ṣilatin wa-kiswatin hiya bihā ḥariyyah, ilā an awrada haykalahā rā'idu l-manūni ḍ-ḍarīḥa wa-wārāh, qīla ʿalā dīni qawmiha l-fi'ati l-jāhiliyyah, wa-qīla aslamat, athbata l-khilāfa-bnu Mandaha wa-ḥakāh.",
+        "en": "And he, may Allah Most High send prayers and peace upon him, would send her gifts and clothing from Madinah, as she was deserving of such kindness, until the herald of death brought her body to the grave and concealed it therein. It is said that she remained upon the religion of her people, the people of the Age of Ignorance, and it is also said that she embraced Islam. Ibn Mandah recorded and related this difference of opinion."
+      },
+      {
+        "ar": "ثُمَّ أَرْضَعَتْهُ صَلَّى اللّٰهُ عَلَيْهِ وَسَلَّمَ الْفَتَاةُ حَلِيمَةُ السَّعْدِيَّةْ ۞ وَكَانَ قَدْ رَدَّ كُلٌّ مِنَ الْقَوْمِ ثَدْيَهَا لِفَقْرِهَا وَأَبَاهْ ۞ فَأَخْصَبَ عَيْشُهَا بَعْدَ الْمَحْلِ قَبْلَ الْعَشِيَّةْ",
+        "tr": "Thumma arḍaʿat-hu ṣalla Llāhu ʿalayhi wa-sallama l-fatātu Ḥalīmatu s-Saʿdiyyah, wa-kāna qad radda kullun mina l-qawmi thadyahā li-faqrihā wa-abāh, fa-akhṣaba ʿayshuhā baʿda l-maḥli qabla l-ʿashiyyah.",
+        "en": "Then the young woman Halimah al-Sadiyyah nursed him, may Allah send prayers and peace upon him. Everyone among the people had rejected her breast because of her poverty and refused it, but her life became prosperous after hardship before the evening had even arrived."
+      },
+      {
+        "ar": "وَدَرَّ ثَدْيَاهَا بِدُرِّ دَرٍّ لَبَنَهُ الْيَمِينُ مِنْهُمَا وَأَلْبَنَ الْآخَرُ أَخَاهْ ۞ وَأَصْبَحَتْ بَعْدَ الْهُزَالِ وَالْفَقْرِ وَالْهُوَالِ غَنِيَّةْ ۞ وَسَمِنَتِ الشَّارِفُ لَدَيْهَا وَالشِّيَاهْ ۞ وَانْجَابَ عَنْ جَانِبِهَا كُلُّ مُلِمَّةٍ وَرَزِيَّةْ ۞ وَطَرَّزَ السَّعْدُ بُرْدَ عَيْشِهَا الْهَنِيِّ وَوَشَاهْ",
+        "tr": "Wa-darra thadyāhā bi-durri darrin labanahu l-yamīnu minhumā wa-albana l-ākharu akhāh, wa-aṣbaḥat baʿda l-huzāli wa-l-faqri wa-l-huwāli ghaniyyah, wa-saminati sh-shārifu ladayhā wa-sh-shiyāh, wa-njāba ʿan jānibihā kullu mulimmatin wa-raziyyah, wa-ṭarraza s-saʿdu burda ʿayshihā l-haniyyi wa-washāh.",
+        "en": "Her breasts flowed abundantly with milk, the right one giving its milk to him and the other giving milk to his foster brother. After emaciation, poverty, and hardship, she became prosperous, and the old she-camel and the sheep in her care grew fat. Every hardship and affliction withdrew from her side, and happiness embroidered and adorned the garment of her pleasant life."
+      },
+      {
+        "ar": "عَطِّرِ اللّٰهُمَّ قَبْرَهُ الْكَرِيمَ بِعَرْفٍ شَذِيٍّ مِنْ صَلَاةٍ وَتَسْلِيمٍ\nاللّٰهُمَّ صَلِّ وَسَلِّمْ وَبَارِكْ عَلَيْهِ",
+        "tr": "ʿAṭṭiri Llāhumma qabrahu l-karīma bi-ʿarfin shadhiyyin min ṣalātin wa-taslīmin.\nAllāhumma ṣalli wa-sallim wa-bārik ʿalayhi.",
+        "en": "O Allah, perfume his noble grave with a fragrant scent of prayers and peace.\nO Allah, send prayers, peace, and blessings upon him."
+      }
+    ]
+  },
+  {
+    "titleArabic": "الصِّبَا",
+    "titleEnglish": "The Prophet's Upbringing ﷺ",
+    "verses": [
+      {
+        "ar": "وَكَانَ صَلَّى اللّٰهُ تَعَالَى عَلَيْهِ وَسَلَّمَ يَشِبُّ فِي الْيَوْمِ شَبَابَ الصَّبِيِّ فِي الشَّهْرِ بِعِنَايَةٍ رَبَّانِيَّةْ ۞ فَقَامَ عَلٰى قَدَمَيْهِ فِي ثَلَاثٍ وَمَشَى فِي خَمْسٍ وَقَوِيَتْ فِي تِسْعٍ مِنَ الشُّهُورِ بِفَصِيحِ النُّطْقِ قُوَاهْ ۞ وَشَقَّ الْمَلَكَانِ صَدْرَهُ الشَّرِيفَ لَدَيْهَا وَأَخْرَجَا مِنْهُ عَلَقَةً دَمَوِيَّةْ",
+        "tr": "Wa-kāna ṣalla Llāhu taʿālā ʿalayhi wa-sallama yashibbu fī l-yawmi shabāba ṣ-ṣabiyyi fī sh-shahri bi-ʿināyatin rabbāniyyah, fa-qāma ʿalā qadamayhi fī thalāthin wa-mashā fī khamsin wa-qawiyat fī tisʿin mina sh-shuhūri bi-faṣīḥi n-nuṭqi quwāh, wa-shaqqa l-malakāni ṣadrahu sh-sharīfa ladayhā wa-akhrajā minhu ʿalaqatan damawiyyah.",
+        "en": "He, may Allah Most High send prayers and peace upon him, would grow in a single day as much as a child would grow in a month, through Divine Care. He stood upon his feet at three months, walked at five months, and by nine months his strength had developed such that he spoke with clear and eloquent speech. The two angels then opened his noble chest while he was with her and removed from it a clot of blood."
+      },
+      {
+        "ar": "وَأَزَالَا مِنْهُ حَظَّ الشَّيْطَانِ وَبِالثَّلْجِ غَسَلَاهْ ۞ وَمَلَآهُ حِكْمَةً وَمَعَانِيَ إِيمَانِيَّةْ ۞ ثُمَّ خَاطَاهُ وَبِخَاتَمِ النُّبُوَّةِ خَتَمَاهْ ۞ وَوَزَنَاهُ فَرَجَحَ بِأَلْفٍ مِنْ أُمَّتِهِ الْخَيْرِيَّةْ ۞ وَنَشَأَ صَلَّى اللّٰهُ تَعَالَى عَلَيْهِ وَسَلَّمَ عَلٰى أَكْمَلِ الْأَوْصَافِ مِنْ حَالِ صِبَاهْ",
+        "tr": "Wa-azālā minhu ḥaẓẓa sh-shayṭāni wa-bi-th-thalji ghasalāh, wa-mala'āhu ḥikmatan wa-maʿāniya īmāniyyah, thumma khāṭāhu wa-bi-khātami n-nubuwwati khatamāh, wa-wazanāhu fa-rajaḥa bi-alfin min ummatihi l-khayriyyah, wa-nasha'a ṣalla Llāhu taʿālā ʿalayhi wa-sallama ʿalā akmali l-awṣāfi min ḥāli ṣibāh.",
+        "en": "They removed from him all that by which Satan could claim a share, washed him with snow, filled him with wisdom and the meanings of faith, then stitched him and sealed him with the Seal of Prophethood. They weighed him, and he outweighed a thousand members of his blessed community. He, may Allah Most High send prayers and peace upon him, grew up possessing the most perfect qualities from the days of his childhood."
+      },
+      {
+        "ar": "ثُمَّ رَدَّتْهُ إِلَى أُمِّهِ صَلَّى اللّٰهُ تَعَالَى عَلَيْهِ وَسَلَّمَ وَهِيَ بِهِ غَيْرُ سَخِيَّةْ ۞ حَذَرًا مِنْ أَنْ يُصَابَ بِمُصَابِ حَادِثٍ تَخْشَاهْ ۞ وَوَفَدَتْ عَلَيْهِ حَلِيمَةُ فِي أَيَّامِ خَدِيجَةَ السَّيِّدَةِ الْمَرْضِيَّةْ ۞ فَحَبَاهَا مِنْ حِبَائِهِ الْوَافِرِ بِحَيَاهْ ۞ وَقَدِمَتْ عَلَيْهِ يَوْمَ حُنَيْنٍ فَقَامَ إِلَيْهَا وَأَخَذَتْهُ الْأَرْيَحِيَّةْ",
+        "tr": "Thumma raddat-hu ilā ummihi ṣalla Llāhu taʿālā ʿalayhi wa-sallama wa-hiya bihi ghayru sakhiyyah, ḥadharan min an yuṣāba bi-muṣābi ḥādithin takhshāh, wa-wafadat ʿalayhi Ḥalīmatu fī ayyāmi Khadījata s-sayyidati l-marḍiyyah, fa-ḥabāhā min ḥibā'ihi l-wāfiri bi-ḥayāh, wa-qadimat ʿalayhi yawma Ḥunaynin fa-qāma ilayhā wa-akhadhat-hu l-aryaḥiyyah.",
+        "en": "Then Halimah returned him, may Allah Most High send prayers and peace upon him, to his mother, though she was unwilling to part with him, fearing that some misfortune she dreaded might befall him. Halimah later came to visit him during the lifetime of the esteemed Lady Khadijah, and he showered her with gifts from his abundant generosity. She also came to him on the day of Hunayn, and he rose to receive her, moved by warm-hearted generosity."
+      },
+      {
+        "ar": "وَبَسَطَ لَهَا مِنْ رِدَائِهِ الشَّرِيفِ بِسَاطَ بِرِّهِ وَنَدَاهْ ۞ وَالصَّحِيحُ أَنَّهَا أَسْلَمَتْ مَعَ زَوْجِهَا وَالْبَنِينَ وَالذُّرِّيَّةْ ۞ وَقَدْ عَدَّهُمْ فِي الصَّحَابَةِ جَمْعٌ مِنْ ثِقَاتِ الرُّوَاةْ",
+        "tr": "Wa-basaṭa lahā min ridā'ihi sh-sharīfi bisāṭa birrihi wa-nadāh, wa-ṣ-ṣaḥīḥu annahā aslamat maʿa zawjihā wa-l-banīna wa-dh-dhurriyyah, wa-qad ʿaddahum fī ṣ-ṣaḥābati jamʿun min thiqāti r-ruwāh.",
+        "en": "And he spread out his noble cloak for her as a carpet of his kindness and generosity. The soundest view is that she embraced Islam along with her husband, her children, and her descendants, and a number of trustworthy narrators counted them among the Companions."
+      },
+      {
+        "ar": "عَطِّرِ اللّٰهُمَّ قَبْرَهُ الْكَرِيمَ بِعَرْفٍ شَذِيٍّ مِنْ صَلَاةٍ وَتَسْلِيمٍ\nاللّٰهُمَّ صَلِّ وَسَلِّمْ وَبَارِكْ عَلَيْهِ",
+        "tr": "ʿAṭṭiri Llāhumma qabrahu l-karīma bi-ʿarfin shadhiyyin min ṣalātin wa-taslīmin.\nAllāhumma ṣalli wa-sallim wa-bārik ʿalayhi.",
+        "en": "O Allah, perfume his noble grave with a fragrant scent of prayers and peace.\nO Allah, send prayers, peace, and blessings upon him."
+      }
+    ]
+  },
+  {
+    "titleArabic": "أُمُّهُ آمِنَةُ",
+    "titleEnglish": "The Passing of His Blessed Mother ﷺ",
+    "verses": [
+      {
+        "ar": "وَلَمَّا بَلَغَ صَلَّى اللّٰهُ تَعَالَى عَلَيْهِ وَسَلَّمَ أَرْبَعَ سِنِينَ خَرَجَتْ بِهِ أُمُّهُ إِلَى الْمَدِينَةِ النَّبَوِيَّةْ ۞ ثُمَّ عَادَتْ فَوَافَتْهَا بِالْأَبْوَاءِ أَوْ بِشِعْبِ الْحَجُونِ الْوَفَاةْ ۞ فَحَمَلَتْهُ حَاضِنَتُهُ أُمُّ أَيْمَنَ الْحَبَشِيَّةْ ۞ الَّتِي زَوَّجَهَا بَعْدُ مِنْ زَيْدِ بْنِ حَارِثَةَ مَوْلَاهْ",
+        "tr": "Wa-lammā balagha ṣalla Llāhu taʿālā ʿalayhi wa-sallama arbaʿa sinīna kharajat bihi ummuhu ilā l-Madīnati n-Nabawiyyah, thumma ʿādat fa-wāfat-hā bi-l-Abwā'i aw bi-shiʿbi l-Ḥajūni l-wafāh, fa-ḥamalat-hu ḥāḍinatuhu Ummu Aymana l-Ḥabashiyyah, allatī zawwajahā baʿdu min Zaydi-bni Ḥārithata mawlāh.",
+        "en": "When he, may Allah Most High send prayers and peace upon him, reached four years of age, his mother took him to al-Madinah al-Nabawiyyah. Then, on her return, death overtook her at al-Abwa, or, according to another account, in the valley of al-Hajun. His nurse, Umm Ayman the Abyssinian, then took him into her care. He later married her to his freedman, Zayd ibn Harithah."
+      },
+      {
+        "ar": "وَأَدْخَلَتْهُ عَلٰى جَدِّهِ عَبْدِ الْمُطَّلِبِ فَضَمَّهُ إِلَيْهِ وَرَقَّ لَهُ وَأَعْلَى رُقِيَّهْ ۞ وَقَالَ إِنَّ لِابْنِي هَذَا لَشَأْنًا عَظِيمًا فَبَخٍ بَخٍ لِمَنْ وَقَّرَهُ وَوَالَاهْ ۞ وَلَمْ تَشْكُ فِي صِبَاهُ جُوعًا وَلَا عَطَشًا قَطُّ نَفْسُهُ الْأَبِيَّةْ ۞ وَكَثِيرًا مَا غَدَا فَاغْتَذَى بِمَاءِ زَمْزَمَ فَأَشْبَعَهُ وَأَرْوَاهْ",
+        "tr": "Wa-adkhalat-hu ʿalā jaddihi ʿAbdi l-Muṭṭalibi fa-ḍammahu ilayhi wa-raqqa lahu wa-aʿlā ruqiyyah, wa-qāla inna li-bnī hādhā la-sha'nan ʿaẓīman fa-bakhin bakhin li-man waqqarahu wa-wālāh, wa-lam tashku fī ṣibāhu jūʿan wa-lā ʿaṭashan qaṭṭu nafsuhu l-abiyyah, wa-kathīran mā ghadā fa-ghtadhā bi-mā'i Zamzama fa-ashbaʿahu wa-arwāh.",
+        "en": "And she brought him to his grandfather Abd al-Muttalib, who embraced him, showed him tenderness, and held him in the highest regard. He said, “Indeed, this son of mine shall have a momentous destiny. How blessed, how blessed is the one who honours him and is devoted to him.” During his childhood, his noble soul never complained of hunger or thirst. Often, he would begin his day by taking nourishment from the water of Zamzam, and it would satisfy his hunger and quench his thirst."
+      },
+      {
+        "ar": "وَلَمَّا أُنِيخَتْ بِفِنَاءِ جَدِّهِ عَبْدِ الْمُطَّلِبِ مَطَايَا الْمَنِيَّةْ ۞ كَفَلَهُ عَمُّهُ أَبُو طَالِبٍ شَقِيقُ أَبِيهِ عَبْدِ اللّٰهْ ۞ فَقَامَ بِكَفَالَتِهِ بِعَزْمٍ قَوِيٍّ وَهِمَّةٍ وَحَمِيَّةْ ۞ وَقَدَّمَهُ عَلٰى النَّفْسِ وَالْبَنِينَ وَرَبَّاهْ",
+        "tr": "Wa-lammā unīkhat bi-finā'i jaddihi ʿAbdi l-Muṭṭalibi maṭāya l-maniyyah, kafalahu ʿammuhu Abū Ṭālibin shaqīqu abīhi ʿAbdi Llāh, fa-qāma bi-kafālatihi bi-ʿazmin qawiyyin wa-himmatin wa-ḥamiyyah, wa-qaddamahu ʿalā n-nafsi wa-l-banīna wa-rabbāh.",
+        "en": "When the steeds of death knelt at the dwelling of his grandfather Abd al-Muttalib, his uncle Abu Talib, the full brother of his father Abd Allah, took him into his care. He cared for him with firm resolve, determination, and protective devotion, placing him before himself and his own children and raising him."
+      },
+      {
+        "ar": "وَلَمَّا بَلَغَ اثْنَتَيْ عَشْرَةَ سَنَةً رَحَلَ بِهِ عَمُّهُ إِلَى الْبِلَادِ الشَّامِيَّةْ ۞ وَعَرَفَهُ الرَّاهِبُ بَحِيرَا بِمَا حَازَهُ مِنْ وَصْفِ النُّبُوَّةِ وَحَوَاهْ ۞ وَقَالَ: إِنِّي أَرَاهُ سَيِّدَ الْعَالَمِينَ وَرَسُولَ اللّٰهِ وَنَبِيَّهْ ۞ وَقَدْ سَجَدَ لَهُ الشَّجَرُ وَالْحَجَرُ وَلَا يَسْجُدَانِ إِلَّا لِنَبِيٍّ أَوَّاهْ ۞ وَإِنَّا لَنَجِدُ نَعْتَهُ فِي الْكُتُبِ الْقَدِيمَةِ السَّمَاوِيَّةْ",
+        "tr": "Wa-lammā balagha-thnatay ʿashrata sanatan raḥala bihi ʿammuhu ilā l-bilādi sh-Shāmiyyah, wa-ʿarafahu r-rāhibu Baḥīrā bi-mā ḥāzahu min waṣfi n-nubuwwati wa-ḥawāh, wa-qāla: innī arāhu sayyida l-ʿālamīna wa-rasūla Llāhi wa-nabiyyah, wa-qad sajada lahu sh-shajaru wa-l-ḥajaru wa-lā yasjudāni illā li-nabiyyin awwāh, wa-innā lanajidu naʿtahu fī l-kutubi l-qadīmati s-samāwiyyah.",
+        "en": "When he reached twelve years of age, his uncle journeyed with him to the lands of al-Sham, and the monk Bahira recognised him by the signs of Prophethood that he possessed and embodied, and said, “Indeed, I see him as the Master of the Worlds, the Messenger of Allah, and His Prophet. The trees and stones have prostrated before him, and they do not prostrate except before a deeply devout prophet. Indeed, we find his description in the ancient heavenly scriptures.”"
+      },
+      {
+        "ar": "وَبَيْنَ كَتِفَيْهِ خَاتَمُ النُّبُوَّةِ قَدْ عَمَّهُ النُّورُ وَعَلَاهْ ۞ وَأَمَرَ عَمَّهُ بِرَدِّهِ إِلَى مَكَّةَ تَخَوُّفًا عَلَيْهِ مِنْ أَهْلِ دِينِ الْيَهُودِيَّةْ ۞ فَرَجَعَ بِهِ وَلَمْ يُجَاوِزْ مِنَ الشَّامِ الْمُقَدَّسِ بُصْرَاهْ",
+        "tr": "Wa-bayna katifayhi khātamu n-nubuwwati qad ʿammahu n-nūru wa-ʿalāh, wa-amara ʿammahu bi-raddihi ilā Makkata takhawwufan ʿalayhi min ahli dīni l-yahūdiyyah, fa-rajaʿa bihi wa-lam yujāwiz mina sh-Shāmi l-muqaddasi Buṣrāh.",
+        "en": "And between his shoulders was the Seal of Prophethood, enveloped and covered by light. Fearing for him from the followers of Judaism, the monk instructed his uncle to return him to Makkah. So he returned with him and did not proceed beyond Busra into the blessed lands of al-Sham."
+      },
+      {
+        "ar": "عَطِّرِ اللّٰهُمَّ قَبْرَهُ الْكَرِيمَ بِعَرْفٍ شَذِيٍّ مِنْ صَلَاةٍ وَتَسْلِيمٍ\nاللّٰهُمَّ صَلِّ وَسَلِّمْ وَبَارِكْ عَلَيْهِ",
+        "tr": "ʿAṭṭiri Llāhumma qabrahu l-karīma bi-ʿarfin shadhiyyin min ṣalātin wa-taslīmin.\nAllāhumma ṣalli wa-sallim wa-bārik ʿalayhi.",
+        "en": "O Allah, perfume his noble grave with a fragrant scent of prayers and peace.\nO Allah, send prayers, peace, and blessings upon him."
+      }
+    ]
+  },
+  {
+    "titleArabic": "الشَّبَابُ وَالتِّجَارَةُ",
+    "titleEnglish": "The Prophet's Early Adulthood ﷺ",
+    "verses": [
+      {
+        "ar": "وَلَمَّا بَلَغَ صَلَّى اللّٰهُ تَعَالَى عَلَيْهِ وَسَلَّمَ خَمْسًا وَعِشْرِينَ سَنَةً سَافَرَ إِلَى بُصْرَى فِي تِجَارَةٍ لِخَدِيجَةَ الْغَنِيَّةْ ۞ وَمَعَهُ غُلَامُهَا مَيْسَرَةُ يَخْدِمُهُ عَلَيْهِ الصَّلَاةُ وَالسَّلَامُ وَيَقُومُ بِمَا عَنَاهْ ۞ وَنَزَلَ تَحْتَ شَجَرَةٍ لَدَى صَوْمَعَةِ نُسْطُورَ رَاهِبِ النَّصْرَانِيَّةْ",
+        "tr": "Wa-lammā balagha ṣalla Llāhu taʿālā ʿalayhi wa-sallama khamsan wa-ʿishrīna sanatan sāfara ilā Buṣrā fī tijāratin li-Khadījata l-ghaniyyah, wa-maʿahu ghulāmuhā Maysaratu yakhdimuhu ʿalayhi ṣ-ṣalātu wa-s-salāmu wa-yaqūmu bi-mā ʿanāh, wa-nazala taḥta shajaratin ladā ṣawmaʿati Nusṭūra rāhibi n-naṣrāniyyah.",
+        "en": "When he, may Allah Most High send prayers and peace upon him, reached twenty-five years of age, he travelled to Busra on a trading journey for the wealthy Khadijah. Accompanying him was her servant Maysarah, who served him, prayers and peace be upon him, and attended to his needs. He stopped beneath a tree near the hermitage of Nustur, a Christian monk."
+      },
+      {
+        "ar": "فَعَرَفَهُ الرَّاهِبُ إِذْ مَالَ إِلَيْهِ ظِلُّهَا الْوَارِفُ وَآوَاهْ ۞ وَقَالَ: مَا نَزَلَ تَحْتَ هَذِهِ الشَّجَرَةِ قَطُّ إِلَّا نَبِيٌّ ذُو صِفَاتٍ نَقِيَّةْ ۞ وَرَسُولٌ قَدْ خَصَّهُ اللّٰهُ تَعَالَى بِالْفَضَائِلِ وَحَبَاهْ ۞ ثُمَّ قَالَ لِمَيْسَرَةَ : أَفِي عَيْنَيْهِ حُمْرَةٌ؟ اسْتِظْهَارًا لِلْعَلَامَةِ الْخَفِيَّةْ ۞ فَأَجَابَهُ بِنَعَمْ فَحَقَّ لَدَيْهِ مَا ظَنَّهُ فِيهِ وَتَوَخَّاهْ",
+        "tr": "Fa-ʿarafahu r-rāhibu idh māla ilayhi ẓilluha l-wārifu wa-āwāh, wa-qāla: mā nazala taḥta hādhihi sh-shajarati qaṭṭu illā nabiyyun dhū ṣifātin naqiyyah, wa-rasūlun qad khaṣṣahu Llāhu taʿālā bi-l-faḍā'ili wa-ḥabāh, thumma qāla li-Maysarata: afī ʿaynayhi ḥumratun, istiẓhāran li-l-ʿalāmati l-khafiyyah, fa-ajābahu bi-naʿam fa-ḥaqqa ladayhi mā ẓannahu fīhi wa-tawakhkhāh.",
+        "en": "The monk recognised him when the tree’s ample shade inclined towards him and sheltered him, and said, “None has ever rested beneath this tree except a Prophet of pure qualities and a Messenger whom Allah Most High has specially endowed and favoured with virtues.” Then he asked Maysarah, “Is there redness in his eyes?”, seeking to confirm the hidden sign. Maysarah replied, “Yes,” and thus what he had suspected and sought to confirm about him was established in his mind."
+      },
+      {
+        "ar": "وَقَالَ لِمَيْسَرَةَ: لَا تُفَارِقْهُ وَكُنْ مَعَهُ بِصِدْقِ عَزْمٍ وَحُسْنِ طَوِيَّةْ ۞ فَإِنَّهُ مِمَّنْ أَكْرَمَهُ اللّٰهُ تَعَالَى بِالنُّبُوَّةِ وَاجْتَبَاهْ ۞ ثُمَّ عَادَ إِلَى مَكَّةَ فَرَأَتْهُ خَدِيجَةُ مُقْبِلًا وَهِيَ بَيْنَ نِسْوَةٍ فِي عُلِّيَّةْ ۞ وَمَلَكَانِ عَلٰى رَأْسِهِ الشَّرِيفِ مِنْ وَهَجِ الشَّمْسِ قَدْ أَظَلَّاهْ",
+        "tr": "Wa-qāla li-Maysarata: lā tufāriqhu wa-kun maʿahu bi-ṣidqi ʿazmin wa-ḥusni ṭawiyyah, fa-innahu mimman akramahu Llāhu taʿālā bi-n-nubuwwati wa-jtabāh, thumma ʿāda ilā Makkata fara'athu Khadījatu muqbilan wa-hiya bayna niswatin fī ʿulliyyah, wa-malakāni ʿalā ra'sihi sh-sharīfi min wahaji sh-shamsi qad aẓallāh.",
+        "en": "And he said to Maysarah, “Do not leave him, and remain with him with sincere resolve and a good heart, for he is among those whom Allah Most High has honoured with Prophethood and chosen.” Then he returned to Makkah, and Khadijah saw him approaching while she was among a group of women in an upper chamber, with two angels shading his noble head from the blazing heat of the sun."
+      },
+      {
+        "ar": "وَأَخْبَرَهَا مَيْسَرَةُ بِأَنَّهُ رَأَى ذَلِكَ فِي السَّفَرِ كُلِّهِ وَبِمَا قَالَهُ الرَّاهِبُ وَأَوْدَعَهُ لَدَيْهِ مِنَ الْوَصِيَّةْ ۞ وَضَاعَفَ اللّٰهُ فِي تِلْكَ التِّجَارَةِ رِبْحَهَا وَنَمَّاهْ ۞ فَبَانَ لِخَدِيجَةَ بِمَا رَأَتْ وَمَا سَمِعَتْ أَنَّهُ رَسُولُ اللّٰهِ تَعَالَى إِلَى الْبَرِيَّةْ ۞ الَّذِي خَصَّهُ اللّٰهُ تَعَالَى بِقُرْبِهِ وَاصْطَفَاهْ",
+        "tr": "Wa-akhbarahā Maysaratu bi-annahu ra'ā dhālika fī s-safari kullihi wa-bi-mā qālahu r-rāhibu wa-awdaʿahu ladayhi mina l-waṣiyyah, wa-ḍāʿafa Llāhu fī tilka t-tijārati ribḥahā wa-nammāh, fa-bāna li-Khadījata bi-mā ra'at wa-mā samiʿat annahu rasūlu Llāhi taʿālā ilā l-bariyyah, alladhī khaṣṣahu Llāhu taʿālā bi-qurbihi wa-ṣ-ṭafāh.",
+        "en": "And Maysarah told her that he had witnessed this throughout the entire journey, and informed her of what the monk had said and the counsel he had entrusted to him concerning him. Allah Most High doubled the profit of that trade and caused it to increase. From what Khadijah had seen and heard, it became clear to her that he was the Messenger of Allah Most High to all creation, whom Allah Most High had specially favoured with nearness to Himself and chosen."
+      },
+      {
+        "ar": "فَخَطَبَتْهُ لِنَفْسِهَا الزَّكِيَّةْ ۞ لِتَشُمَّ مِنَ الْإِيمَانِ بِهِ طِيبَ رَيَّاهْ ۞ فَأَخْبَرَ صَلَّى اللّٰهُ عَلَيْهِ وَسَلَّمَ أَعْمَامَهُ بِمَا دَعَتْهُ إِلَيْهِ هَذِهِ الْبَرَّةُ التَّقِيَّةْ ۞ فَرَغِبُوا فِيهَا لِفَضْلٍ وَدِينٍ وَجَمَالٍ وَمَالٍ وَحَسَبٍ وَنَسَبٍ كُلٌّ مِنَ الْقَوْمِ يَهْوَاهْ ۞ وَخَطَبَ أَبُو طَالِبٍ وَأَثْنَى عَلَيْهِ صَلَّى اللّٰهُ تَعَالَى عَلَيْهِ وَسَلَّمَ بَعْدَ أَنْ حَمِدَ اللّٰهَ بِمَحَامِدَ سَنِيَّةْ",
+        "tr": "Fa-khaṭabat-hu li-nafsiha z-zakiyyah, li-tashumma mina l-īmāni bihi ṭība rayyāh, fa-akhbara ṣalla Llāhu ʿalayhi wa-sallama aʿmāmahu bi-mā daʿat-hu ilayhi hādhihi l-barratu t-taqiyyah, fa-raghibū fīhā li-faḍlin wa-dīnin wa-jamālin wa-mālin wa-ḥasabin wa-nasabin kullun mina l-qawmi yahwāh, wa-khaṭaba Abū Ṭālibin wa-athnā ʿalayhi ṣalla Llāhu taʿālā ʿalayhi wa-sallama baʿda an ḥamida Llāha bi-maḥāmida saniyyah.",
+        "en": "So she sought him in marriage for her pure self, that she might breathe the sweet fragrance of faith in him. He, may Allah send prayers and peace upon him, then informed his uncles of what this righteous and God-fearing woman had invited him to. They desired her for her virtue, religion, beauty, wealth, standing, and lineage, qualities that everyone among the people would desire. Abu Talib then delivered the marriage address and praised him, may Allah Most High send prayers and peace upon him, after praising Allah with sublime praises."
+      },
+      {
+        "ar": "وَقَالَ هُوَ وَاللّٰهِ لَهُ نَبَأٌ عَظِيمٌ يُحْمَدُ فِيهِ مَسْرَاهْ ۞ فَزَوَّجَهَا مِنْهُ عَلَيْهِ الصَّلَاةُ وَالسَّلَامُ أَبُوهَا وَقِيلَ عَمُّهَا وَقِيلَ: أَخُوهَا لِسَابِقِ سَعَادَتِهَا الْأَزَلِيَّةْ ۞ وَأَوْلَدَهَا كُلَّ أَوْلَادِهِ إِلَّا الَّذِي بِاسْمِ الْخَلِيلِ سَمَّاهْ",
+        "tr": "Wa-qāla huwa wa-Llāhi lahu naba'un ʿaẓīmun yuḥmadu fīhi masrāh, fa-zawwajahā minhu ʿalayhi ṣ-ṣalātu wa-s-salāmu abūhā wa-qīla ʿammuhā wa-qīla akhūhā li-sābiqi saʿādatiha l-azaliyyah, wa-awladahā kulla awlādihi illa lladhī bi-smi l-khalīli sammāh.",
+        "en": "And he said, “By Allah, he shall have a momentous destiny, and his course shall be praised therein.” Her father then gave her in marriage to him, prayers and peace be upon him, though it is also said that it was her uncle, and it is said that it was her brother, on account of the eternal happiness that had been decreed for her. She bore him all of his children except the one whom he named after the Friend of Allah, Ibrahim."
+      },
+      {
+        "ar": "عَطِّرِ اللّٰهُمَّ قَبْرَهُ الْكَرِيمَ بِعَرْفٍ شَذِيٍّ مِنْ صَلَاةٍ وَتَسْلِيمٍ\nاللّٰهُمَّ صَلِّ وَسَلِّمْ وَبَارِكْ عَلَيْهِ",
+        "tr": "ʿAṭṭiri Llāhumma qabrahu l-karīma bi-ʿarfin shadhiyyin min ṣalātin wa-taslīmin.\nAllāhumma ṣalli wa-sallim wa-bārik ʿalayhi.",
+        "en": "O Allah, perfume his noble grave with a fragrant scent of prayers and peace.\nO Allah, send prayers, peace, and blessings upon him."
+      }
+    ]
+  },
+  {
+    "titleArabic": "رَفْعُ الْحَجَرِ الْأَسْوَدِ",
+    "titleEnglish": "The Raising of the Black Stone",
+    "verses": [
+      {
+        "ar": "وَلَمَّا بَلَغَ صَلَّى اللّٰهُ تَعَالَى عَلَيْهِ وَسَلَّمَ خَمْسًا وَثَلَاثِينَ سَنَةً بَنَتْ قُرَيْشٌ الْكَعْبَةَ لِانْصِدَاعِهَا بِالسُّيُولِ الْأَبْطَحِيَّةْ ۞ وَتَنَازَعُوا فِي رَفْعِ الْحَجَرِ الْأَسْوَدِ فَكُلٌّ أَرَادَ رَفْعَهُ وَرَجَاهْ ۞ وَعَظُمَ الْقِيلُ وَالْقَالُ وَتَحَالَفُوا عَلٰى الْقِتَالِ وَقَوِيَتِ الْعَصَبِيَّةْ",
+        "tr": "Wa-lammā balagha ṣalla Llāhu taʿālā ʿalayhi wa-sallama khamsan wa-thalāthīna sanatan banat Qurayshun l-kaʿbata li-n-ṣidāʿihā bi-s-suyūli l-abṭaḥiyyah, wa-tanāzaʿū fī rafʿi l-ḥajari l-aswadi fa-kullun arāda rafʿahu wa-rajāh, wa-ʿaẓuma l-qīlu wa-l-qālu wa-taḥālafū ʿalā l-qitāli wa-qawiyati l-ʿaṣabiyyah.",
+        "en": "When he, may Allah Most High send prayers and peace upon him, reached thirty-five years of age, Quraysh rebuilt the Ka'bah after it had been damaged by the floods of al-Abtah. They disputed over the raising of the Black Stone, each group desiring and hoping to have the honour of raising it. The dispute and contention grew intense, and they pledged themselves to fight as tribal rivalry became ever stronger."
+      },
+      {
+        "ar": "ثُمَّ تَدَاعُوا إِلَى الْإِنْصَافِ وَفَوَّضُوا الْأَمْرَ إِلَى ذِي رَأْيٍ صَائِبٍ وَأَنَاةْ ۞ فَحَكَمَ بِتَحْكِيمِ أَوَّلِ دَاخِلٍ مِنْ بَابِ السَّدَنَةِ الشَّيْبِيَّةْ ۞ فَكَانَ النَّبِيُّ صَلَّى اللّٰهُ تَعَالَى عَلَيْهِ وَسَلَّمَ أَوَّلَ دَاخِلٍ فَقَالُوا: هَذَا الْأَمِينُ وَكُلُّنَا نَقْبَلُهُ وَنَرْضَاهْ ۞ فَأَخْبَرُوهُ بِأَنَّهُمْ رَضُوهُ أَنْ يَكُونَ صَاحِبَ الْحُكْمِ فِي هَذَا الْمُلِمِّ وَوَلِيَّهْ",
+        "tr": "Thumma tadāʿū ilā l-inṣāfi wa-fawwaḍū l-amra ilā dhī ra'yin ṣā'ibin wa-anāh, fa-ḥakama bi-taḥkīmi awwali dākhilin min bābi s-sadanati sh-Shaybiyyah, fa-kāna n-nabiyyu ṣalla Llāhu taʿālā ʿalayhi wa-sallama awwala dākhilin fa-qālū: hādhā l-amīnu wa-kullunā naqbaluhu wa-narḍāh, fa-akhbarūhu bi-annahum raḍūhu an yakūna ṣāḥiba l-ḥukmi fī hādhā l-mulimmi wa-waliyyah.",
+        "en": "Then they called one another to fairness and entrusted the matter to a man of sound judgement and deliberation, who ruled that the first person to enter through the gate of the Banu Shaybah should be appointed as arbiter. The Prophet, may Allah Most High send prayers and peace upon him, was the first to enter, so they said, “This is al-Amin, the Trustworthy One, and we all accept him and are pleased with him.” They then informed him that they had agreed to accept him as the judge and the one entrusted with resolving this difficult matter."
+      },
+      {
+        "ar": "فَوَضَعَ الْحَجَرَ فِي ثَوْبٍ ثُمَّ أَمَرَ أَنْ تَرْفَعَهُ الْقَبَائِلُ جَمِيعًا إِلَى مُرْتَقَاهْ ۞ فَرَفَعُوهُ إِلَى مَقَرِّهِ مِنْ رُكْنِ هَاتِيكَ الْبَنِيَّةْ ۞ وَوَضَعَهُ صَلَّى اللّٰهُ تَعَالَى عَلَيْهِ وَسَلَّمَ بِيَدِهِ الشَّرِيفَةِ فِي مَوْضِعِهِ الْآنَ وَبَنَاهْ",
+        "tr": "Fa-waḍaʿa l-ḥajara fī thawbin thumma amara an tarfaʿahu l-qabā'ilu jamīʿan ilā murtaqāh, fa-rafaʿūhu ilā maqarrihi min rukni hātīka l-baniyyah, wa-waḍaʿahu ṣalla Llāhu taʿālā ʿalayhi wa-sallama bi-yadihi sh-sharīfati fī mawḍiʿihi l-āna wa-banāh.",
+        "en": "He placed the Black Stone in a cloth, then instructed all the tribes to raise it together to its appointed height. They raised it to its place in the corner of that Sacred House, and he, may Allah Most High send prayers and peace upon him, placed it with his noble hand in the position where it remains today and set it firmly in place."
+      },
+      {
+        "ar": "عَطِّرِ اللّٰهُمَّ قَبْرَهُ الْكَرِيمَ بِعَرْفٍ شَذِيٍّ مِنْ صَلَاةٍ وَتَسْلِيمٍ\nاللّٰهُمَّ صَلِّ وَسَلِّمْ وَبَارِكْ عَلَيْهِ",
+        "tr": "ʿAṭṭiri Llāhumma qabrahu l-karīma bi-ʿarfin shadhiyyin min ṣalātin wa-taslīmin.\nAllāhumma ṣalli wa-sallim wa-bārik ʿalayhi.",
+        "en": "O Allah, perfume his noble grave with a fragrant scent of prayers and peace.\nO Allah, send prayers, peace, and blessings upon him."
+      }
+    ]
+  },
+  {
+    "titleArabic": "الْبِعْثَةُ",
+    "titleEnglish": "The Beginning of Revelation",
+    "verses": [
+      {
+        "ar": "وَلَمَّا كَمُلَ لَهُ صَلَّى اللّٰهُ تَعَالَى عَلَيْهِ وَسَلَّمَ أَرْبَعُونَ سَنَةً عَلٰى أَوْفَقِ الْأَقْوَالِ لِذَوِي الْعَالِمِيَّةْ ۞ بَعَثَهُ اللّٰهُ تَعَالَى لِلْعَالَمِينَ بَشِيرًا وَنَذِيرًا فَعَمَّهُمْ بِرُحْمَاهْ ۞ وَبُدِئَ إِلَى تَمَامِ سِتَّةِ أَشْهُرٍ بِالرُّؤْيَا الصَّادِقَةِ الْجَلِيَّةْ ۞ فَكَانَ لَا يَرَى رُؤْيًا إِلَّا جَاءَتْ مِثْلَ فَلَقِ صُبْحٍ أَضَاءَ سَنَاهْ",
+        "tr": "Wa-lammā kamula lahu ṣalla Llāhu taʿālā ʿalayhi wa-sallama arbaʿūna sanatan ʿalā awfaqi l-aqwāli li-dhawi l-ʿālimiyyah, baʿathahu Llāhu taʿālā li-l-ʿālamīna bashīran wa-nadhīran fa-ʿammahum bi-ruḥmāh, wa-budi'a ilā tamāmi sittati ash-hurin bi-r-ru'ya ṣ-ṣādiqati l-jaliyyah, fa-kāna lā yarā ru'yan illā jā'at mithla falaqi ṣubḥin aḍā'a sanāh.",
+        "en": "When he, may Allah Most High send prayers and peace upon him, reached forty years of age, according to the most reliable of the opinions held by the learned, Allah Most High sent him to all the worlds as a bearer of glad tidings and a warner, encompassing them with His mercy through him. He was first given clear and truthful dreams for a period of six months, and he would see no dream except that it came to pass like the breaking of dawn, radiant with light."
+      },
+      {
+        "ar": "وَإِنَّمَا ابْتُدِئَ بِالرُّؤْيَا تَمْرِينًا لِلْقُوَّةِ الْبَشَرِيَّةْ ۞ لِئَلَّا يَفْجَأَهُ الْمَلَكُ بِصَرِيحِ النُّبُوَّةِ فَلَا تَقْوَاهُ قُوَاهْ ۞ وَحُبِّبَ إِلَيْهِ الْخَلَاءُ فَكَانَ يَتَعَبَّدُ بِحِرَاءٍ اللَّيَالِيَ الْعَدَدِيَّةْ ۞ إِلَى أَنْ أَتَاهُ فِيهِ صَرِيحُ الْحَقِّ وَوَافَاهْ ۞ وَذَلِكَ فِي يَوْمِ الِاثْنَيْنِ لِسَبْعَ عَشْرَةَ لَيْلَةً خَلَتْ مِنْ شَهْرِ اللَّيْلَةِ الْقَدْرِيَّةْ ۞ وَثَمَّ أَقْوَالٌ لِسَبْعٍ أَوْ لِأَرْبَعٍ وَعِشْرِينَ مِنْهُ أَوْ لِثَمَانٍ خَلَتْ مِنْ شَهْرِ مَوْلِدِهِ الَّذِي بَدَا فِيهِ بَدْرُ مُحَيَّاهْ",
+        "tr": "Wa-innama-btudi'a bi-r-ru'yā tamrīnan li-l-quwwati l-bashariyyah, li-'allā yafja'ahu l-malaku bi-ṣarīḥi n-nubuwwati fa-lā taqwāhu quwāh, wa-ḥubbiba ilayhi l-khalā'u fa-kāna yataʿabbadu bi-Ḥirā'in l-layāliya l-ʿadadiyyah, ilā an atāhu fīhi ṣarīḥu l-ḥaqqi wa-wāfāh, wa-dhālika fī yawmi l-Ithnayni li-sabʿa ʿashrata laylatan khalat min shahri l-laylati l-qadriyyah, wa-thamma aqwālun li-sabʿin aw li-arbaʿin wa-ʿishrīna minhu aw li-thamānin khalat min shahri mawlidihi lladhī badā fīhi badru muḥayyāh.",
+        "en": "And he was first given truthful dreams as a preparation for his human faculties, so that the angel would not suddenly come to him with the manifest reality of Prophethood while his faculties were unable to bear it. Solitude was made beloved to him, and he would worship at Hira for a number of nights, until the manifest Truth came to him there. This occurred on a Monday, when seventeen nights had passed of the month of the Night of Decree. There are also other opinions that it occurred after seven nights had passed, or after twenty-four nights of that month, or after eight nights had passed of the month of his birth, in which the full moon of his countenance first appeared."
+      },
+      {
+        "ar": "فَقَالَ لَهُ اقْرَأْ ۞ فَأَبَى فَغَطَّهُ غَطَّةً قَوِيَّةْ ۞ ثُمَّ قَالَ لَهُ: اقْرَأْ ۞ فَأَبَى فَغَطَّهُ غَطَّةً ثَانِيَةً حَتَّى بَلَغَ مِنْهُ الْجَهْدَ وَغَطَّاهْ ۞ ثُمَّ قَالَ لَهُ اقْرَأْ فَأَبَى فَغَطَّهُ ثَالِثَةً لِيَتَوَجَّهَ إِلَى مَا سَيُلْقَى إِلَيْهِ بِجَمْعِيَّةْ ۞ وَيُقَابِلَهُ بِجِدٍّ وَاجْتِهَادٍ وَيَتَلَقَّاهْ ۞ ثُمَّ فَتَرَ الْوَحْيُ ثَلَاثَ سِنِينَ أَوْ ثَلَاثِينَ شَهْرًا لِيَشْتَاقَ إِلَى انْتِشَاقِ هَاتِيكَ النَّفَحَاتِ الشَّذِيَّةْ",
+        "tr": "Fa-qāla lahu iqra' fa-abā fa-ghaṭṭahu ghaṭṭatan qawiyyah, thumma qāla lahu iqra' fa-abā fa-ghaṭṭahu ghaṭṭatan thāniyatan ḥattā balagha minhu l-jahda wa-ghaṭṭāh, thumma qāla lahu iqra' fa-abā fa-ghaṭṭahu thālithatan li-yatawajjaha ilā mā sayulqā ilayhi bi-jamʿiyyah, wa-yuqābilahu bi-jiddin wa-jtihādin wa-yatalaqqāh, thumma fatara l-waḥyu thalātha sinīna aw thalāthīna shahran li-yashtāqa ila-n-tishāqi hātīka n-nafaḥāti sh-shadhiyyah.",
+        "en": "Then he said to him, “Read.” He declined, so the angel pressed him with a powerful embrace. Then he said to him, “Read.” He declined again, so the angel pressed him a second time until he reached the limit of his endurance. Then he said to him, “Read.” He declined, so the angel pressed him a third time, so that he might turn with complete concentration towards what was about to be imparted to him, receive it with earnestness and utmost effort, and take it in. Revelation then ceased for three years, or according to another opinion, thirty months, so that he might yearn to breathe in those fragrant breezes once again."
+      },
+      {
+        "ar": "ثُمَّ أُنْزِلَتْ عَلَيْهِ ﴿يَا أَيُّهَا الْمُدَّثِّرُ﴾ فَجَاءَهُ جِبْرِيلُ بِهَا وَنَادَاهْ ۞ فَكَانَ لِنُبُوَّتِهِ فِي تَقَدُّمِ ﴿اقْرَأْ بِاسْمِ رَبِّكَ﴾ شَاهِدٌ عَلٰى أَنَّ لَهَا السَّابِقِيَّةْ ۞ وَالتَّقَدُّمَ عَلٰى رِسَالَتِهِ بِالْبِشَارَةِ وَالنِّذَارَةِ لِمَنْ دَعَاهْ",
+        "tr": "Thumma unzilat ʿalayhi ﴾Yā ayyuha l-muddaththir﴿ fa-jā'ahu Jibrīlu bihā wa-nādāh, fa-kāna li-nubuwwatihi fī taqaddumi ﴾Iqra' bi-smi Rabbika﴿ shāhidun ʿalā anna lahā s-sābiqiyyah, wa-t-taqadduma ʿalā risālatihi bi-l-bishārati wa-n-nidhārati li-man daʿāh.",
+        "en": "Then there was revealed to him, “O you who are wrapped up” (74:1), and Jibril came to him with it and called upon him. The preceding revelation of “Read in the name of your Lord” (96:1) was evidence that his Prophethood came first, preceding his Messengership through which he was charged with giving glad tidings and warning those whom he called."
+      },
+      {
+        "ar": "عَطِّرِ اللّٰهُمَّ قَبْرَهُ الْكَرِيمَ بِعَرْفٍ شَذِيٍّ مِنْ صَلَاةٍ وَتَسْلِيمٍ\nاللّٰهُمَّ صَلِّ وَسَلِّمْ وَبَارِكْ عَلَيْهِ",
+        "tr": "ʿAṭṭiri Llāhumma qabrahu l-karīma bi-ʿarfin shadhiyyin min ṣalātin wa-taslīmin.\nAllāhumma ṣalli wa-sallim wa-bārik ʿalayhi.",
+        "en": "O Allah, perfume his noble grave with a fragrant scent of prayers and peace.\nO Allah, send prayers, peace, and blessings upon him."
+      }
+    ]
+  },
+  {
+    "titleArabic": "أَوَّلُ الْمُؤْمِنِينَ",
+    "titleEnglish": "The First Believers",
+    "verses": [
+      {
+        "ar": "وَأَوَّلُ مَنْ آمَنَ بِهِ مِنَ الرِّجَالِ أَبُو بَكْرٍ صَاحِبُ الْغَارِ وَالصِّدِّيقِيَّةْ ۞ وَمِنَ الصِّبْيَانِ عَلِيٌّ وَمِنَ النِّسَاءِ خَدِيجَةُ الَّتِي ثَبَّتَ اللّٰهُ بِهَا قَلْبَهُ وَوَقَاهْ ۞ وَمِنَ الْمَوَالِي: زَيْدُ بْنُ حَارِثَةَ وَمِنَ الْأَرِقَّاءِ بِلَالٌ الَّذِي عَذَّبَهُ فِي اللّٰهِ أُمَيَّةْ ۞ وَأَوْلَاهُ مَوْلَاهُ أَبُو بَكْرٍ مِنَ الْعِتْقِ مَا أَوْلَاهْ",
+        "tr": "Wa-awwalu man āmana bihi mina r-rijāli Abū Bakrin ṣāḥibu l-ghāri wa-ṣ-ṣiddīqiyyah, wa-mina ṣ-ṣibyāni ʿAliyyun wa-mina n-nisā'i Khadījatu llatī thabbata Llāhu bihā qalbahu wa-waqāh, wa-mina l-mawālī Zaydu-bnu Ḥārithata wa-mina l-ariqqā'i Bilālun lladhī ʿadhdhabahu fī Llāhi Umayyah, wa-awlāhu mawlāhu Abū Bakrin mina l-ʿitqi mā awlāh.",
+        "en": "The first to believe in him among the men was Abu Bakr, the Companion of the Cave and the possessor of supreme truthfulness, among the young was Ali, and among the women was Khadijah, through whom Allah strengthened his heart and protected him. Among the freedmen was Zayd ibn Harithah, and among the slaves was Bilal, whom Umayyah tortured because of his faith in Allah, whereupon his master Abu Bakr bestowed upon him the great favour of emancipation."
+      },
+      {
+        "ar": "ثُمَّ أَسْلَمَ عُثْمَانُ وَسَعْدٌ وَسَعِيدٌ وَطَلْحَةُ وَابْنُ عَوْفٍ وَالزُّبَيْرُ بْنُ الْعَوَّامِ ابْنُ الْعَمَّةِ صَفِيَّةْ ۞ وَغَيْرُهُمْ مِمَّنْ أَنْهَلَهُ الصِّدِّيقُ بِرَحِيقِ التَّصْدِيقِ وَسَقَاهْ ۞ وَمَا زَالَتْ عِبَادَتُهُ صَلَّى اللّٰهُ تَعَالَى عَلَيْهِ وَسَلَّمَ مَعَ أَصْحَابِهِ مَخْفِيَّةْ ۞ حَتَّى أُنْزِلَ عَلَيْهِ ﴿فَاصْدَعْ بِمَا تُؤْمَرُ﴾ فَجَهَرَ بِدُعَاءِ الْخَلْقِ إِلَى اللّٰهْ",
+        "tr": "Thumma aslama ʿUthmānu wa-Saʿdun wa-Saʿīdun wa-Ṭalḥatu wa-bnu ʿAwfin wa-z-Zubayru bnu l-ʿAwwāmi bnu l-ʿammati Ṣafiyyah, wa-ghayruhum mimman anhalahu ṣ-Ṣiddīqu bi-raḥīqi t-taṣdīqi wa-saqāh, wa-mā zālat ʿibādatuhu ṣalla Llāhu taʿālā ʿalayhi wa-sallama maʿa aṣḥābihi makhfiyyah, ḥattā unzila ʿalayhi ﴾fa-ṣdaʿ bi-mā tu'mar﴿ fa-jahara bi-duʿā'i l-khalqi ilā Llāh.",
+        "en": "Then Uthman, Sad, Said, Talhah, Abd al-Rahman ibn Awf, and al-Zubayr ibn al-Awwam, the son of his paternal aunt Safiyyah, embraced Islam, along with others whom al-Siddiq gave to drink from the pure nectar of belief. His worship, may Allah Most High send prayers and peace upon him, together with his Companions remained concealed until there was revealed to him, “So proclaim openly what you are commanded” (15:94), whereupon he openly called the people to Allah."
+      },
+      {
+        "ar": "وَلَمْ يَبْعُدْ مِنْهُ قَوْمُهُ حَتَّى عَابَ آلِهَتَهُمْ وَأَمَرَ بِرَفْضِ مَا سِوَى الْوَحْدَانِيَّةْ ۞ فَتَجَرَّؤُوا عَلٰى مُبَارَزَتِهِ بِالْعَدَاوَةِ وَأَذَاهْ ۞ وَاشْتَدَّ عَلٰى الْمُسْلِمِينَ الْبَلَاءُ فَهَاجَرُوا فِي سَنَةِ خَمْسٍ إِلَى النَّاحِيَةِ النَّجَاشِيَّةْ ۞ وَحَدِبَ عَلَيْهِ عَمُّهُ أَبُو طَالِبٍ فَهَابَهُ كُلٌّ مِنَ الْقَوْمِ وَتَحَامَاهْ",
+        "tr": "Wa-lam yabʿud minhu qawmuhu ḥattā ʿāba ālihatahum wa-amara bi-rafḍi mā siwa l-waḥdāniyyah, fa-tajarra'ū ʿalā mubārazatihi bi-l-ʿadāwati wa-adhāh, wa-sh-tadda ʿalā l-muslimīna l-balā'u fa-hājarū fī sanati khamsin ilā n-nāḥiyati n-Najāshiyyah, wa-ḥadiba ʿalayhi ʿammuhu Abū Ṭālibin fa-hābahu kullun mina l-qawmi wa-taḥāmāh.",
+        "en": "His people did not distance themselves from him until he condemned their gods and commanded them to reject everything besides Divine Oneness. Then they dared to confront him with hostility and harm. The persecution of the Muslims grew severe, so in the fifth year they migrated towards the land of al-Najashi. His uncle Abu Talib showed him tender care and protection, and everyone among the people feared him and kept their distance from him."
+      },
+      {
+        "ar": "وَفُرِضَ عَلَيْهِ قِيَامُ بَعْضِ السَّاعَاتِ اللَّيْلِيَّةْ ۞ ثُمَّ نُسِخَ بِقَوْلِهِ تَعَالَى ﴿فَاقْرَؤُوا مَا تَيَسَّرَ مِنْهُ وَأَقِيمُوا الصَّلَاةْ﴾ ۞ وَفُرِضَ عَلَيْهِ رَكْعَتَانِ بِالْغَدَاةِ وَرَكْعَتَانِ بِالْعَشِيَّةْ ۞ ثُمَّ نُسِخَ بِإِيجَابِ الصَّلَوَاتِ الْخَمْسِ فِي لَيْلَةِ مَسْرَاهْ",
+        "tr": "Wa-furiḍa ʿalayhi qiyāmu baʿḍi s-sāʿāti l-layliyyah, thumma nusikha bi-qawlihi taʿālā ﴾fa-qra'ū mā tayassara minhu wa-aqīmū ṣ-ṣalāh﴿, wa-furiḍa ʿalayhi rakʿatāni bi-l-ghadāti wa-rakʿatāni bi-l-ʿashiyyah, thumma nusikha bi-ījābi ṣ-ṣalawāti l-khamsi fī laylati masrāh.",
+        "en": "Standing in prayer for a portion of the night was made obligatory upon him. Then this was abrogated by the words of Allah Most High, “So recite what is easy from it and establish the prayer” (73:20). Two units of prayer in the morning and two units in the evening were then made obligatory upon him. This was subsequently abrogated by the obligation of the five daily prayers on the night of his Night Journey."
+      },
+      {
+        "ar": "وَمَاتَ أَبُو طَالِبٍ فِي نِصْفِ شَوَّالٍ مِنْ عَاشِرِ الْبِعْثَةِ وَعَظُمَتْ بِمَوْتِهِ الرَّزِيَّةْ ۞ وَتَلَتْهُ خَدِيجَةُ بَعْدَ ثَلَاثَةِ أَيَّامٍ وَشَدَّ الْبَلَاءُ عَلٰى الْمُسْلِمِينَ عُرَاهْ ۞ وَأَوْقَعَتْ قُرَيْشٌ بِهِ صَلَّى اللّٰهُ تَعَالَى عَلَيْهِ وَسَلَّمَ كُلَّ أَذِيَّةْ ۞ وَأَمَّ الطَّائِفَ يَدْعُو ثَقِيفًا فَلَمْ يُحْسِنُوا بِالْإِجَابَةِ قِرَاهْ ۞ وَأَغْرَوْا بِهِ السُّفَهَاءَ وَالْعَبِيدَ فَسَبُّوهُ بِأَلْسِنَةٍ بَذِيَّةْ",
+        "tr": "Wa-māta Abū Ṭālibin fī niṣfi shawwālin min ʿāshiri l-biʿthati wa-ʿaẓumat bi-mawtihi r-raziyyah. Wa-talat-hu Khadījatu baʿda thalāthati ayyāmin wa-shadda l-balā'u ʿalā l-muslimīna ʿurāh, wa-awqaʿat Qurayshun bihi ṣalla Llāhu taʿālā ʿalayhi wa-sallama kulla adhiyyah, wa-amma ṭ-Ṭā'ifa yadʿū Thaqīfan fa-lam yuḥsinū bi-l-ijābati qirāh, wa-aghraw bihi s-sufahā'a wa-l-ʿabīda fa-sabbūhu bi-alsinatin badhiyyah.",
+        "en": "Abu Talib passed away in the middle of Shawwal, in the tenth year of the Prophetic mission, and his death was a great calamity. Khadijah followed him three days later, and the trials upon the Muslims grew severe. Quraysh inflicted every kind of harm upon him, may Allah Most High send prayers and peace upon him. He then headed for Taif to call Thaqif, but they offered him no gracious response. Instead, they incited their foolish ones and slaves against him, and they reviled him with foul tongues."
+      },
+      {
+        "ar": "وَرَمَوْهُ بِالْحِجَارَةِ حَتَّى خُضِّبَتْ بِالدِّمَاءِ نَعْلَاهْ ۞ ثُمَّ عَادَ إِلَى مَكَّةَ حَزِينًا فَسَأَلَهُ مَلَكُ الْجِبَالِ فِي إِهْلَاكِ أَهْلِهَا ذَوِي الْعَصَبِيَّةْ ۞ فَقَالَ: إِنِّي أَرْجُو أَنْ يُخْرِجَ اللّٰهُ مِنْ أَصْلَابِهِمْ مَنْ يَتَوَلَّاهْ",
+        "tr": "Wa-ramawhu bi-l-ḥijārati ḥattā khuḍḍibat bi-d-dimā'i naʿlāh, thumma ʿāda ilā Makkata ḥazīnan fa-sa'alahu malaku l-jibāli fī ihlāki ahlihā dhawī l-ʿaṣabiyyah, fa-qāla: innī arjū an yukhrija Llāhu min aṣlābihim man yatawallāh.",
+        "en": "And they pelted him with stones until his sandals were stained with blood. Then he returned to Makkah sorrowful, and the Angel of the Mountains asked him concerning the destruction of its fanatical people. But he said, “Indeed, I hope that Allah will bring forth from their descendants those who will turn to Him.”"
+      },
+      {
+        "ar": "عَطِّرِ اللّٰهُمَّ قَبْرَهُ الْكَرِيمَ بِعَرْفٍ شَذِيٍّ مِنْ صَلَاةٍ وَتَسْلِيمٍ\nاللّٰهُمَّ صَلِّ وَسَلِّمْ وَبَارِكْ عَلَيْهِ",
+        "tr": "ʿAṭṭiri Llāhumma qabrahu l-karīma bi-ʿarfin shadhiyyin min ṣalātin wa-taslīmin.\nAllāhumma ṣalli wa-sallim wa-bārik ʿalayhi.",
+        "en": "O Allah, perfume his noble grave with a fragrant scent of prayers and peace.\nO Allah, send prayers, peace, and blessings upon him."
+      }
+    ]
+  },
+  {
+    "titleArabic": "الْإِسْرَاءُ وَالْمِعْرَاجُ",
+    "titleEnglish": "The Night Journey and Ascension (Isra and Mi'raj)",
+    "verses": [
+      {
+        "ar": "ثُمَّ أُسْرِيَ بِرُوحِهِ وَجَسَدِهِ يَقَظَةً مِنَ الْمَسْجِدِ الْحَرَامِ إِلَى الْمَسْجِدِ الْأَقْصَى وَرِحَابِهِ الْقُدْسِيَّةْ ۞ وَعُرِجَ بِهِ إِلَى السَّمَاوَاتِ فَرَأَى آدَمَ فِي الْأُولَى وَقَدْ جَلَّلَهُ الْوَقَارُ وَعَلَاهْ ۞ وَرَأَى فِي الثَّانِيَةِ عِيسَى ابْنَ مَرْيَمَ الْبَتُولِ الْبَرَّةِ التَّقِيَّةْ",
+        "tr": "Thumma usriya bi-rūḥihi wa-jasadihi yaqaẓatan mina l-Masjidi l-Ḥarāmi ilā l-Masjidi l-Aqṣā wa-riḥābihi l-qudsiyyah, wa-ʿurija bihi ilā s-samāwāti fa-ra'ā Ādama fī l-ūlā wa-qad jallalahu l-waqāru wa-ʿalāh, wa-ra'ā fī th-thāniyati ʿĪsa-bna Maryama l-batūli l-barrati t-taqiyyah.",
+        "en": "Then he was taken by night, in body and spirit while awake, from al-Masjid al-Haram to al-Masjid al-Aqsa and its sacred precincts. He was then raised through the heavens, where in the first heaven he saw Adam, clothed and encompassed in dignity. And in the second heaven he saw Isa, son of Maryam, the chaste, righteous, and God-fearing woman."
+      },
+      {
+        "ar": "وَابْنَ خَالَتِهِ يَحْيَى الَّذِي أُوتِيَ الْحُكْمَ فِي حَالِ صِبَاهْ ۞ وَرَأَى فِي الثَّالِثَةِ يُوسُفَ الصِّدِّيقَ بِصُورَتِهِ الْجَمَالِيَّةْ ۞ وَفِي الرَّابِعَةِ إِدْرِيسَ الَّذِي رَفَعَ اللّٰهُ مَكَانَهُ وَأَعْلَاهْ ۞ وَفِي الْخَامِسَةِ هَارُونَ الْمُحَبَّبَ فِي الْأُمَّةِ الْإِسْرَائِيلِيَّةْ ۞ وَفِي السَّادِسَةِ مُوسَى الَّذِي كَلَّمَهُ اللّٰهُ وَنَاجَاهْ",
+        "tr": "Wa-bna khālatihi Yaḥya lladhī ūtiya l-ḥukma fī ḥāli ṣibāh, wa-ra’ā fī th-thālithati Yūsufa ṣ-Ṣiddīqa bi-ṣūratihi l-jamāliyyah, wa-fī r-rābiʿati Idrīsa lladhī rafaʿa Llāhu makānahu wa-aʿlāh, wa-fī l-khāmisati Hārūna l-muḥabbaba fī l-ummati l-Isrā'īliyyah, wa-fī s-sādisati Mūsa lladhī kallamahu Llāhu wa-nājāh.",
+        "en": "And with him was his maternal cousin Yahya, who was granted wisdom while still a child. In the third heaven, he saw Yusuf al-Siddiq in his beautiful form, and in the fourth, Idris, whose station Allah raised and exalted. In the fifth, he saw Harun, beloved among the Children of Israel, and in the sixth, Musa, whom Allah spoke to and communed with privately."
+      },
+      {
+        "ar": "وَفِي السَّابِعَةِ إِبْرَاهِيمَ الَّذِي جَاءَ رَبَّهُ بِسَلَامَةِ الْقَلْبِ وَالطَّوِيَّةْ ۞ وَحَفِظَهُ مِنْ نَارِ نَمْرُودَ وَعَافَاهْ ۞ ثُمَّ رُفِعَ إِلَى سِدْرَةِ الْمُنْتَهَى إِلَى أَنْ سَمِعَ صَرِيفَ الْأَقْلَامِ بِالْأُمُورِ الْمَقْضِيَّةْ ۞ إِلَى مَقَامِ الْمُكَافَحَةِ الَّذِي قَرَّبَهُ اللّٰهُ فِيهِ وَأَدْنَاهْ ۞ وَأَمَاطَ لَهُ حُجُبَ الْأَنْوَارِ الْجَلَالِيَّةْ",
+        "tr": "Wa-fī s-sābiʿati Ibrāhīma lladhī jā'a Rabbahu bi-salāmati l-qalbi wa ṭ-ṭawiyyah, wa-ḥafiẓahu min nāri Namrūda wa-ʿāfāh, thumma rufiʿa ilā Sidrati l-Muntahā ilā an samiʿa ṣarīfa l-aqlāmi bi-l-umūri l-maqḍiyyah, ilā maqāmi l-mukāfaḥati lladhī qarrabahu Llāhu fīhi wa-adnāh, wa-amāṭa lahu ḥujuba l-anwāri l-jalāliyyah.",
+        "en": "And in the seventh heaven, he saw Ibrahim, who came to his Lord with a sound heart and pure inner disposition, and whom Allah preserved from the fire of Namrud and kept safe. Then he was raised to Sidrat al-Muntaha, until he heard the scratching of the pens recording the matters already decreed. He was then raised to the station of direct encounter, where Allah brought him near and drew him close, and removed for him the veils of majestic lights."
+      },
+      {
+        "ar": "وَأَرَاهُ بِعَيْنَيْ رَأْسِهِ مِنْ حَضْرَةِ الرُّبُوبِيَّةِ مَا أَرَاهْ ۞ وَبَسَطَ لَهُ بُسُطَ الْإِدْلَالِ فِي الْمَجَالِي الذَّاتِيَّةْ ۞ وَفَرَضَ عَلَيْهِ وَعَلٰى أُمَّتِهِ خَمْسِينَ صَلَاةً ۞ ثُمَّ انْهَلَّ سَحَابُ الْفَضْلِ فَرُدَّتْ إِلَى خَمْسٍ عَمَلِيَّةْ ۞ وَلَهَا أَجْرُ الْخَمْسِينَ كَمَا شَاءَهُ فِي الْأَزَلِ وَقَضَاهْ",
+        "tr": "Wa-arāhu bi-ʿaynay ra'sihi min ḥaḍrati r-rubūbiyyati mā arāh, wa-basaṭa lahu busuṭa l-idlāli fī l-majālī dh-dhātiyyah, wa-faraḍa ʿalayhi wa-ʿalā ummatihi khamsīna ṣalātan, thumma nhalla saḥābu l-faḍli fa-ruddat ilā khamsin ʿamaliyyah, wa-lahā ajru l-khamsīna kamā shā'ahu fī l-azali wa-qaḍāh.",
+        "en": "And with his own eyes, he was shown from the Presence of Lordship what he was shown. The carpets of intimate favour were spread out for him amid the manifestations of the Divine Essence. And fifty prayers were made obligatory upon him and his community. Then the cloud of Divine Grace poured forth, and they were reduced to five in practice, while retaining the reward of fifty, just as He had willed and decreed in eternity."
+      },
+      {
+        "ar": "ثُمَّ عَادَ فِي لَيْلَتِهِ بِالْمَوَاهِبِ اللَّدُنِّيَّةْ ۞ فَصَدَّقَهُ الصِّدِّيقُ بِمَسْرَاهْ ۞ وَكُلُّ ذِي عَقْلٍ وَرَوِيَّةْ ۞ وَكَذَّبَتْهُ قُرَيْشٌ وَارْتَدَّ مَنْ أَضَلَّهُ الشَّيْطَانُ وَأَغْوَاهْ",
+        "tr": "Thumma ʿāda fī laylatihi bi-l-mawāhibi l-ladunniyyah fa-ṣaddaqahu ṣ-Ṣiddīqu bi-masrāh, wa-kullu dhī ʿaqlin wa-rawiyyah, wa-ka-dhdhabathu Qurayshun wa-rtadda man aḍallahu sh-shayṭānu wa-aghwāh.",
+        "en": "Then he returned that same night bearing divinely bestowed gifts. Al-Siddiq believed him concerning his Night Journey, as did every person of intellect and sound judgement. Quraysh denied him, while those whom Satan had led astray and beguiled apostatised."
+      },
+      {
+        "ar": "عَطِّرِ اللّٰهُمَّ قَبْرَهُ الْكَرِيمَ بِعَرْفٍ شَذِيٍّ مِنْ صَلَاةٍ وَتَسْلِيمٍ\nاللّٰهُمَّ صَلِّ وَسَلِّمْ وَبَارِكْ عَلَيْهِ",
+        "tr": "ʿAṭṭiri Llāhumma qabrahu l-karīma bi-ʿarfin shadhiyyin min ṣalātin wa-taslīmin.\nAllāhumma ṣalli wa-sallim wa-bārik ʿalayhi.",
+        "en": "O Allah, perfume his noble grave with a fragrant scent of prayers and peace.\nO Allah, send prayers, peace, and blessings upon him."
+      }
+    ]
+  },
+  {
+    "titleArabic": "الْهِجْرَةُ",
+    "titleEnglish": "The Ansar and the Pledge of Allegiance",
+    "verses": [
+      {
+        "ar": "ثُمَّ عَرَضَ نَفْسَهُ عَلٰى الْقَبَائِلِ بِأَنَّهُ رَسُولُ اللّٰهِ فِي الْأَيَّامِ الْمَوْسِمِيَّةْ ۞ فَآمَنَ بِهِ سِتَّةٌ مِنَ الْأَنْصَارِ اخْتَصَّهُمُ اللّٰهُ تَعَالَى بِرِضَاهْ ۞ وَحَجَّ مِنْهُمْ فِي الْقَابِلِ اثْنَا عَشَرَ رَجُلًا وَبَايَعُوهُ بَيْعَةً حَقِّيَّةْ ۞ ثُمَّ انْصَرَفُوا فَظَهَرَ الْإِسْلَامُ بِالْمَدِينَةِ فَكَانَتْ مَعْقِلَهُ وَمَأْوَاهْ",
+        "tr": "Thumma ʿaraḍa nafsahu ʿalā l-qabā'ili bi-annahu rasūlu Llāhi fī l-ayyāmi l-mawsimiyyah, fa-āmana bihi sittatun mina l-Anṣāri ikhtaṣṣahumu Llāhu taʿālā bi-riḍāh, wa-ḥajja minhum fī l-qābili thnā ʿashara rajulan wa-bāyaʿūhu bayʿatan ḥaqqiyyah, thumma-n-ṣarafū fa-ẓahara l-Islāmu bi-l-Madīnati fa-kānat maʿqilahu wa-ma'wāh.",
+        "en": "Then, during the days of the pilgrimage season, he presented himself to the tribes, declaring that he was the Messenger of Allah. Six men from the Ansar believed in him, whom Allah Most High specially favoured with His pleasure. The following year, twelve men from among them came for Hajj and gave him a true pledge of allegiance. Then they returned, and Islam spread in al-Madinah, which became its stronghold and refuge."
+      },
+      {
+        "ar": "وَقَدِمَ عَلَيْهِ فِي الْعَامِ الثَّالِثِ سَبْعُونَ وَخَمْسَةٌ أَوْ وَثَلَاثَةٌ وَامْرَأَتَانِ مِنَ الْقَبَائِلِ الْأَوْسِيَّةِ وَالْخَزْرَجِيَّةْ ۞ فَبَايَعُوهُ وَأَمَّرَ عَلَيْهِمُ اثْنَيْ عَشَرَ نَقِيبًا جَحَاجِحَةً سَرَاةْ ۞ فَهَاجَرَ إِلَيْهِمْ مِنْ مَكَّةَ ذَوُو الْمِلَّةِ الْإِسْلَامِيَّةْ ۞ وَفَارَقُوا الْأَوْطَانَ رَغْبَةً فِيمَا أُعِدَّ لِمَنْ هَجَرَ الْكُفْرَ وَنَاوَاهْ",
+        "tr": "Wa-qadima ʿalayhi fī l-ʿāmi th-thālithi sabʿūna wa-khamsatun aw wa-thalāthatun wa-mra'atāni mina l-qabā'ili l-Awsiyyati wa-l-Khazrajiyyah, fa-bāyaʿūhu wa-ammara ʿalayhimu thnay ʿashara naqīban jaḥājiḥatan sarāh, fa-hājara ilayhim min Makkata dhawu l-millati l-Islāmiyyah, wa-fāraqu l-awṭāna raghbatan fīmā uʿidda li-man hajara l-kufra wa-nāwāh.",
+        "en": "And in the third year, seventy-five, or according to another account seventy-three, together with two women from the tribes of Aws and Khazraj, came to him and pledged allegiance to him. He appointed over them twelve leaders, noble chiefs of high standing. Then the people of the Islamic faith migrated from Makkah to join them, leaving their homelands behind out of longing for what had been prepared for those who forsook disbelief and opposed it."
+      },
+      {
+        "ar": "وَخَافَتْ قُرَيْشٌ أَنْ يَلْحَقَ صَلَّى اللّٰهُ تَعَالَى عَلَيْهِ وَسَلَّمَ بِأَصْحَابِهِ عَلٰى الْفَوْرِيَّةْ ۞ فَائْتَمَرُوا بِقَتْلِهِ فَحَفِظَهُ اللّٰهُ تَعَالَى مِنْ كَيْدِهِمْ وَنَجَّاهْ",
+        "tr": "Wa-khāfat Qurayshun an yalḥaqa ṣalla Llāhu taʿālā ʿalayhi wa-sallama bi-aṣḥābihi ʿalā l-fawriyyah, fa-'tamarū bi-qatlihi fa-ḥafiẓahu Llāhu taʿālā min kaydihim wa-najjāh.",
+        "en": "Quraysh feared that he, may Allah Most High send prayers and peace upon him, would immediately join his companions, so they conspired to kill him. But Allah Most High protected him from their plot and delivered him safely."
+      },
+      {
+        "ar": "وَقَدْ أُذِنَ لَهُ فِي الْهِجْرَةِ فَرَقَبَهُ الْمُشْرِكُونَ لِيُورِدُوهُ بِزَعْمِهِمْ حِيَاضَ الْمَنِيَّةْ ۞ فَخَرَجَ عَلَيْهِمْ وَنَثَرَ عَلٰى رُؤُوسِهِمُ التُّرَابَ وَحَثَاهْ ۞ وَأَمَّ غَارَ ثَوْرٍ وَفَازَ الصِّدِّيقُ بِالْمَعِيَّةْ ۞ وَأَقَامَا فِيهِ ثَلَاثًا تَحْمِي الْحَمَائِمُ وَالْعَنَاكِبُ حِمَاهْ ۞ ثُمَّ خَرَجَا مِنْهُ لَيْلَةَ الِاثْنَيْنِ وَهُوَ صَلَّى اللّٰهُ تَعَالَى عَلَيْهِ وَسَلَّمَ عَلٰى خَيْرِ مَطِيَّةْ",
+        "tr": "Wa-qad udhina lahu fī l-hijrati fa-raqabahu l-mushrikūna li-yūridūhu bi-zaʿmihim ḥiyāḍa l-maniyyah. Fa-kharaja ʿalayhim wa-nathara ʿalā ru'ūsihimu t-turāba wa-ḥathāh, wa-amma ghāra Thawrin wa-fāza ṣ-Ṣiddīqu bi-l-maʿiyyah, wa-aqāmā fīhi thalāthan taḥmi l-ḥamā'imu wa-l-ʿanākibu ḥimāh, thumma kharajā minhu laylata l-ithnayni wa-huwa ṣalla Llāhu taʿālā ʿalayhi wa-sallama ʿalā khayri maṭiyyah.",
+        "en": "Permission was then granted to him, may Allah Most High send prayers and peace upon him, to migrate, and the idolaters watched for him, intending, as they supposed, to bring him to the pools of death. But he went forth among them, scattering dust upon their heads. He made his way to the Cave of Thawr, and al-Siddiq attained the honour of accompanying him. They remained there for three nights, while the doves and spiders protected their refuge. Then they departed from it on Monday night, with him, may Allah Most High send prayers and peace upon him, riding the finest of mounts."
+      },
+      {
+        "ar": "وَتَعَرَّضَ لَهُ سُرَاقَةُ فَابْتَهَلَ فِيهِ إِلَى اللّٰهِ تَعَالَى وَدَعَاهْ ۞ فَسَاخَتْ قَوَائِمُ يَعْبُوبِهِ فِي الْأَرْضِ الصُّلْبَةِ الْقَوِيَّةْ ۞ وَسَأَلَهُ الْأَمَانَ فَمَنَحَهُ إِيَّاهْ",
+        "tr": "Wa-taʿarraḍa lahu Surāqatu fa-btahala fīhi ilā Llāhi taʿālā wa-daʿāh, fa-sākhat qawā'imu yaʿbūbihi fī l-arḍi ṣ-ṣulbati l-qawiyyah, wa-sa'alahu l-amāna fa-manaḥahu iyyāh.",
+        "en": "Suraqah pursued him, so the Prophet, may Allah Most High send prayers and peace upon him, supplicated to Allah against him, and the legs of Suraqah’s horse sank into the hard, solid ground. Suraqah then asked him for safety, and he granted it to him."
+      },
+      {
+        "ar": "عَطِّرِ اللّٰهُمَّ قَبْرَهُ الْكَرِيمَ بِعَرْفٍ شَذِيٍّ مِنْ صَلَاةٍ وَتَسْلِيمٍ\nاللّٰهُمَّ صَلِّ وَسَلِّمْ وَبَارِكْ عَلَيْهِ",
+        "tr": "ʿAṭṭiri Llāhumma qabrahu l-karīma bi-ʿarfin shadhiyyin min ṣalātin wa-taslīmin.\nAllāhumma ṣalli wa-sallim wa-bārik ʿalayhi.",
+        "en": "O Allah, perfume his noble grave with a fragrant scent of prayers and peace.\nO Allah, send prayers, peace, and blessings upon him."
+      }
+    ]
+  },
+  {
+    "titleArabic": "أُمُّ مَعْبَدٍ",
+    "titleEnglish": "Umm Ma'bad and Abu Ma'bad",
+    "verses": [
+      {
+        "ar": "ثُمَّ مَرَّ بِقُدَيْدٍ عَلٰى أُمِّ مَعْبَدٍ الْخُزَاعِيَّةْ ۞ وَأَرَادَ ابْتِيَاعَ لَحْمٍ أَوْ لَبَنٍ مِنْهَا فَلَمْ يَكُنْ شَيْءٌ مِنْ ذَلِكَ خِبَاؤُهَا قَدْ حَوَاهْ ۞ فَنَظَرَ إِلَى شَاةٍ فِي الْبَيْتِ خَلَّفَهَا الْجَهْدُ عَنِ الرَّعِيَّةْ ۞ فَاسْتَأْذَنَهَا فِي حَلْبِهَا فَأَذِنَتْ وَقَالَتْ لَوْ كَانَ بِهَا حَلْبٌ لَأَصَبْنَاهْ ۞ فَمَسَحَ الضَّرْعَ مِنْهَا وَدَعَا اللّٰهَ مَوْلَاهُ وَوَلِيَّهْ",
+        "tr": "Thumma marra bi-Qudaydin ʿalā Ummi Maʿbadin l-Khuzāʿiyyah, wa-arāda-btiyāʿa laḥmin aw labanin minhā fa-lam yakun shay'un min dhālika khibā'uhā qad ḥawāh, fa-naẓara ilā shātin fī l-bayti khallafaha l-jahdu ʿani r-raʿiyyah, fa-s-ta'dhanahā fī ḥalbihā fa-adhinat wa-qālat law kāna bihā ḥalbun la-aṣabnāh, fa-masaḥa ḍ-ḍarʿa minhā wa-daʿā Llāha mawlāhu wa-waliyyah.",
+        "en": "Then, passing through Qudayd, he came upon Umm Ma'bad al-Khuza'iyyah and wished to purchase some meat or milk from her, but her tent contained none of either. He then noticed a ewe by the tent that weakness had kept behind from the grazing flock. He asked her permission to milk it, and she consented, saying, “Had there been any milk in it, we would have found it.” He then stroked its udder and supplicated to Allah, his Lord and Protector."
+      },
+      {
+        "ar": "فَدَرَّتْ فَحَلَبَ وَسَقَى كُلًّا مِنَ الْقَوْمِ وَأَرْوَاهْ ۞ ثُمَّ حَلَبَ وَمَلَأَ الْإِنَاءَ وَغَادَرَهُ لَدَيْهَا آيَةً جَلِيَّةْ ۞ فَجَاءَ أَبُو مَعْبَدٍ وَرَأَى اللَّبَنَ فَذَهَبَ بِهِ الْعَجَبُ إِلَى أَقْصَاهْ ۞ وَقَالَ أَنَّى لَكِ هَذَا وَلَا حَلُوبَ فِي الْبَيْتِ تَبِضُّ بِقَطْرَةٍ لَبَنِيَّةْ ۞ فَقَالَتْ مَرَّ بِنَا رَجُلٌ مُبَارَكٌ كَذَا وَكَذَا جُثْمَانُهُ وَمَعْنَاهْ ۞ فَقَالَ لَهَا هَذَا صَاحِبُ قُرَيْشٍ وَأَقْسَمَ بِكُلِّ أَلِيَّةْ ۞ بِأَنَّهُ لَوْ رَآهُ لَآمَنَ بِهِ وَاتَّبَعَهُ وَأَدْنَاهْ",
+        "tr": "Fa-darrat fa-ḥalaba wa-saqā kullan mina l-qawmi wa-arwāh, thumma ḥalaba wa-mala'a l-inā'a wa-ghādarahu ladayhā āyatan jaliyyah, fa-jā'a Abū Maʿbadin wa-ra'ā l-labana fa-dhahaba bihi l-ʿajabu ilā aqṣāh, wa-qāla annā laki hādhā wa-lā ḥalūba fī l-bayti tabiḍḍu bi-qaṭratin labaniyyah, fa-qālat marra bi-nā rajulun mubārakun kadhā wa-kadhā juthmānuhu wa-maʿnāh. Fa-qāla lahā hādhā ṣāḥibu Qurayshin wa-aqsama bi-kulli aliyyah, bi-annahu law ra'āhu la-āmana bihi wa-ttabaʿahu wa-adnāh.",
+        "en": "And its milk flowed abundantly, so he milked it and gave everyone among the group to drink until their thirst was quenched. Then he milked it again, filled the vessel, and left it with her as a manifest sign. And when Abu Ma'bad returned and saw the milk, his astonishment reached its utmost. He said, “Where did you get this when there is no milk-giving animal in the tent that could yield even a single drop of milk?” She replied, “A blessed man passed by us,” and proceeded to describe his physical appearance and his qualities. He said to her, “This is the man of Quraysh,” and swore with every solemn oath that, had he seen him, he would have believed in him, followed him, and drawn him close."
+      },
+      {
+        "ar": "وَقَدِمَ صَلَّى اللّٰهُ تَعَالَى عَلَيْهِ وَسَلَّمَ الْمَدِينَةَ يَوْمَ الِاثْنَيْنِ ثَانِيَ عَشَرَ رَبِيعٍ الْأَوَّلِ وَأَشْرَقَتْ بِهِ أَرْجَاؤُهَا الزَّكِيَّةْ ۞ وَتَلَقَّاهُ الْأَنْصَارُ وَنَزَلَ بِقُبَاءَ وَأَسَّسَ مَسْجِدَهَا عَلٰى تَقْوَاهْ",
+        "tr": "Wa-qadima ṣalla Llāhu taʿālā ʿalayhi wa-sallama l-Madīnata yawma l-ithnayni thāniya ʿashara rabīʿin l-awwali wa-ashraqat bihi arjā'uha z-zakiyyah, wa-talaqqāhu l-Anṣāru wa-nazala bi-Qubā'a wa-assasa masjidahā ʿalā taqwāh.",
+        "en": "The Prophet, may Allah Most High send prayers and peace upon him, arrived in al-Madinah on Monday, the twelfth of Rabi al-Awwal, and its pure horizons were illuminated by his presence. And the Ansar welcomed him, and he settled in Quba, where he founded its mosque upon piety."
+      },
+      {
+        "ar": "عَطِّرِ اللّٰهُمَّ قَبْرَهُ الْكَرِيمَ بِعَرْفٍ شَذِيٍّ مِنْ صَلَاةٍ وَتَسْلِيمٍ\nاللّٰهُمَّ صَلِّ وَسَلِّمْ وَبَارِكْ عَلَيْهِ",
+        "tr": "ʿAṭṭiri Llāhumma qabrahu l-karīma bi-ʿarfin shadhiyyin min ṣalātin wa-taslīmin.\nAllāhumma ṣalli wa-sallim wa-bārik ʿalayhi.",
+        "en": "O Allah, perfume his noble grave with a fragrant scent of prayers and peace.\nO Allah, send prayers, peace, and blessings upon him."
+      }
+    ]
+  },
+  {
+    "titleArabic": "الشَّمَائِلُ الشَّرِيفَةُ",
+    "titleEnglish": "The Noble Qualities of the Prophet ﷺ",
+    "verses": [
+      {
+        "ar": "وَكَانَ صَلَّى اللّٰهُ تَعَالَى عَلَيْهِ وَسَلَّمَ أَكْمَلَ النَّاسِ خَلْقًا وَخُلُقًا ذَا ذَاتٍ وَصِفَاتٍ سَنِيَّةْ ۞ مَرْبُوعَ الْقَامَةِ أَبْيَضَ اللَّوْنِ مُشْرَبًا بِحُمْرَةٍ وَاسِعَ الْعَيْنَيْنِ أَكْحَلَهُمَا أَهْدَبَ الْأَشْفَارِ قَدْ مُنِحَ الزَّجَجَ حَاجِبَاهْ ۞ مُفَلَّجَ الْأَسْنَانِ وَاسِعَ الْفَمِ حَسَنَهُ وَاسِعَ الْجَبِينِ ذَا جَبْهَةٍ هِلَالِيَّةْ",
+        "tr": "Wa-kāna ṣalla Llāhu taʿālā ʿalayhi wa-sallama akmala n-nāsi khalqan wa-khuluqan dhā dhātin wa-ṣifātin saniyyah, marbūʿa l-qāmati abyaḍa l-lawni mushraban bi-ḥumratin wāsiʿa l-ʿaynayni akḥalahumā ahdaba l-ashfāri qad muniḥa z-zajaja ḥājibāh, mufallaja l-asnāni wāsiʿa l-fami ḥasanahu wāsiʿa l-jabīni dhā jabhatin hilāliyyah.",
+        "en": "He, may Allah Most High send prayers and peace upon him, was the most perfect of all people in form and character, possessing a noble being and sublime attributes. He was of medium stature, fair in complexion with a tinge of redness, with wide eyes that appeared naturally lined with kohl, long eyelashes, and fine, arched eyebrows. His teeth were slightly spaced, his mouth broad and handsome, and his forehead wide and crescent-shaped."
+      },
+      {
+        "ar": "سَهْلَ الْخَدَّيْنِ يُرَى فِي أَنْفِهِ بَعْضُ احْدِيدَابٍ حَسَنَ الْعِرْنِيْنِ أَقْنَاهْ ۞ بَعِيدَ مَا بَيْنَ الْمَنْكِبَيْنِ سَبْطَ الْكَفَّيْنِ ضَخْمَ الْكَرَادِيسِ قَلِيلَ لَحْمِ الْعَقِبِ كَثَّ اللِّحْيَةِ عَظِيمَ الرَّأْسِ شَعْرُهُ إِلَى الشَّحْمَةِ الْأُذُنِيَّةْ ۞ وَبَيْنَ كَتِفَيْهِ خَاتَمُ النُّبُوَّةِ قَدْ عَمَّهُ النُّورُ وَعَلَاهْ",
+        "tr": "Sahla l-khaddayni yurā fī anfihi baʿḍu ḥdīdābin ḥasana l-ʿirnīni aqnāh, baʿīda mā bayna l-mankibayni sabṭa l-kaffayni ḍakhma l-karādīsi qalīla laḥmi l-ʿaqibi kaththa l-liḥyati ʿaẓīma r-ra'si shaʿruhu ilā sh-shaḥmati l-udhuniyyah, wa-bayna katifayhi khātamu n-nubuwwati qad ʿammahu n-nūru wa-ʿalāh.",
+        "en": "His cheeks were smooth, and a slight curve could be seen in his nose, which was handsome and aquiline. His shoulders were broad, his palms smooth, his joints large, and there was little flesh upon his heels. His beard was full, his head large, and his hair reached his earlobes. And between his shoulders was the Seal of Prophethood, encompassed and covered by light."
+      },
+      {
+        "ar": "وَعَرَقُهُ كَاللُّؤْلُؤِ وَعَرْفُهُ أَطْيَبُ مِنَ النَّفَحَاتِ الْمِسْكِيَّةْ ۞ وَيَتَكَفَّأُ فِي مِشْيَتِهِ كَأَنَّمَا يَنْحَطُّ مِنْ صَبَبٍ ارْتَقَاهْ ۞ وَكَانَ يُصَافِحُ الْمُصَافِحَ بِيَدِهِ الشَّرِيفَةِ فَيَجِدُ مِنْهَا سَائِرَ الْيَوْمِ رَائِحَةً عَبْهَرِيَّةْ",
+        "tr": "Wa-ʿaraquhu ka-l-lu'lu'i wa-ʿarfuhu aṭyabu mina n-nafaḥāti l-miskiyyah, wa-yatakaffa'u fī mishyatihi ka-annamā yanḥaṭṭu min ṣababin irtaqāh, wa-kāna yuṣāfiḥu l-muṣāfiḥa bi-yadihi sh-sharīfati fa-yajidu minhā sā'ira l-yawmi rā'iḥatan ʿabhariyyah.",
+        "en": "His perspiration was like pearls, and his fragrance was sweeter than musky breezes. And when he walked, he moved with a forward-leaning stride, as though descending from a height. And when he shook someone’s hand with his noble hand, that person would find its exquisite fragrance lingering throughout the rest of the day."
+      },
+      {
+        "ar": "وَيَضَعُهَا عَلٰى رَأْسِ الصَّبِيِّ فَيُعْرَفُ مَسُّهُ لَهُ مِنْ بَيْنِ الصِّبْيَةِ وَيُدْرَاهْ ۞ يَتَلَأْلَأُ وَجْهُهُ الشَّرِيفُ تَلَأْلُؤَ الْقَمَرِ فِي اللَّيْلَةِ الْبَدْرِيَّةْ ۞ يَقُولُ نَاعِتُهُ لَمْ أَرَ قَبْلَهُ وَلَا بَعْدَهُ مِثْلَهُ وَلَا بَشَرٌ يَرَاهْ",
+        "tr": "Wa-yaḍaʿuhā ʿalā ra'si ṣ-ṣabiyyi fa-yuʿrafu massuhu lahu min bayni ṣ-ṣibyati wa-yudrāh, yatala'la'u wajhuhu sh-sharīfu tala'lu'a l-qamari fī l-laylati l-badriyyah, yaqūlu nāʿituhu lam ara qablahu wa-lā baʿdahu mithlahu wa-lā basharun yarāh.",
+        "en": "And when he placed his noble hand upon a child’s head, the child could be distinguished from among the other children by the fragrance left by his touch. His noble face shone with the radiance of the moon on a full-moon night. And one who described him said, “I have never seen anyone like him, before him or after him, nor will any human being ever see his like.”"
+      },
+      {
+        "ar": "عَطِّرِ اللّٰهُمَّ قَبْرَهُ الْكَرِيمَ بِعَرْفٍ شَذِيٍّ مِنْ صَلَاةٍ وَتَسْلِيمٍ\nاللّٰهُمَّ صَلِّ وَسَلِّمْ وَبَارِكْ عَلَيْهِ",
+        "tr": "ʿAṭṭiri Llāhumma qabrahu l-karīma bi-ʿarfin shadhiyyin min ṣalātin wa-taslīmin.\nAllāhumma ṣalli wa-sallim wa-bārik ʿalayhi.",
+        "en": "O Allah, perfume his noble grave with a fragrant scent of prayers and peace.\nO Allah, send prayers, peace, and blessings upon him."
+      }
+    ]
+  },
+  {
+    "titleArabic": "الْأَخْلَاقُ الشَّرِيفَةُ",
+    "titleEnglish": "The Character and Conduct of the Prophet ﷺ",
+    "verses": [
+      {
+        "ar": "وَكَانَ صَلَّى اللّٰهُ تَعَالَى عَلَيْهِ وَسَلَّمَ شَدِيدَ الْحَيَاءِ وَالتَّوَاضُعِ يَخْصِفُ نَعْلَهُ وَيَرْقَعُ ثَوْبَهُ وَيَحْلُبُ شَاتَهُ وَيَسِيرُ فِي خِدْمَةِ أَهْلِهِ بِسِيرَةٍ سَرِيَّةْ ۞ وَيُحِبُّ الْفُقَرَاءَ وَالْمَسَاكِينَ وَيَجْلِسُ مَعَهُمْ وَيَعُودُ مَرْضَاهُمْ وَيُشَيِّعُ جَنَائِزَهُمْ وَلَا يَحْقِرُ فَقِيرًا أَدْقَعَهُ الْفَقْرُ وَأَشْوَاهْ",
+        "tr": "Wa-kāna ṣalla Llāhu taʿālā ʿalayhi wa-sallama shadīda l-ḥayā'i wa-t-tawāḍuʿi yakhṣifu naʿlahu wa-yarqaʿu thawbahu wa-yaḥlubu shātahu wa-yasīru fī khidmati ahlihi bi-sīratin sariyyah, wa-yuḥibbu l-fuqarā'a wa-l-masākīna wa-yajlisu maʿahum wa-yaʿūdu marḍāhum wa-yushayyiʿu janā'izahum wa-lā yaḥqiru faqīran adqaʿahu l-faqru wa-ashwāh.",
+        "en": "He, may Allah Most High send prayers and peace upon him, was exceedingly modest and humble. He mended his own sandals, patched his garments, milked his ewe, and served his family in a noble manner. And he loved the poor and needy, sat with them, visited their sick, accompanied their funeral processions, and never looked down upon a poor person whom poverty had reduced to extreme hardship and destitution."
+      },
+      {
+        "ar": "وَيَقْبَلُ الْمَعْذِرَةَ وَلَا يُقَابِلُ أَحَدًا بِمَا يَكْرَهُ وَيَمْشِي مَعَ الْأَرْمَلَةِ وَذَوِي الْعُبُودِيَّةْ ۞ وَلَا يَهَابُ الْمُلُوكَ وَيَغْضَبُ لِلّٰهِ وَيَرْضَى لِرِضَاهْ ۞ وَيَمْشِي خَلْفَ أَصْحَابِهِ وَيَقُولُ: خَلُّوا ظَهْرِي لِلْمَلَائِكَةِ الرُّوحَانِيَّةْ ۞ وَيَرْكَبُ الْبَعِيرَ وَالْفَرَسَ وَالْبَغْلَةَ وَحِمَارًا بَعْضُ الْمُلُوكِ إِلَيْهِ أَهْدَاهْ",
+        "tr": "Wa-yaqbalu l-maʿdhirata wa-lā yuqābilu aḥadan bi-mā yakrahu wa-yamshī maʿa l-armalati wa-dhawi l-ʿubūdiyyah, wa-lā yahābu l-mulūka wa-yaghḍabu li-Llāhi wa-yarḍā li-riḍāh, wa-yamshī khalfa aṣḥābihi wa-yaqūlu khallū ẓahrī li-l-malā'ikati r-rūḥāniyyah, wa-yarkabu l-baʿīra wa-l-farasa wa-l-baghlata wa-ḥimāran baʿḍu l-mulūki ilayhi ahdāh.",
+        "en": "And he accepted excuses, never confronted anyone with what they disliked, and walked alongside widows and those in servitude. And he feared no kings, became angry for Allah’s sake, and was pleased with what pleased Him. And he walked behind his companions and would say, “Leave the space behind me for the spiritual angels.” And he rode camels, horses and mules, as well as a donkey that one of the kings had gifted to him."
+      },
+      {
+        "ar": "وَيَعْصِبُ عَلٰى بَطْنِهِ الْحَجَرَ مِنَ الْجُوعِ وَقَدْ أُوتِيَ مَفَاتِيحَ الْخَزَائِنِ الْأَرْضِيَّةْ ۞ وَرَاوَدَتْهُ الْجِبَالُ بِأَنْ تَكُونَ لَهُ ذَهَبًا فَأَبَاهْ ۞ وَكَانَ صَلَّى اللّٰهُ تَعَالَى عَلَيْهِ وَسَلَّمَ يُقِلُّ اللَّغْوَ وَيَبْدَأُ مَنْ لَقِيَهُ بِالسَّلَامِ وَيُطِيلُ الصَّلَاةَ وَيَقْصُرُ الْخُطَبَ الْجُمُعِيَّةْ",
+        "tr": "Wa-yaʿṣibu ʿalā baṭnihi l-ḥajara mina l-jūʿi wa-qad ūtiya mafātīḥa l-khazā'ini l-arḍiyyah, wa-rāwadat-hu l-jibālu bi-an takūna lahu dhahaban fa-abāh, wa-kāna ṣalla Llāhu taʿālā ʿalayhi wa-sallama yuqillu l-laghwa wa-yabda'u man laqiyahu bi-s-salāmi wa-yuṭīlu ṣ-ṣalāta wa-yaqṣuru l-khuṭaba l-jumuʿiyyah.",
+        "en": "And he would bind a stone against his stomach out of hunger, though he had been given the keys to the treasures of the earth. And the mountains offered to become gold for him, but he refused. And he, may Allah Most High send prayers and peace upon him, refrained from idle speech, was the first to greet those he met with peace, prolonged the prayer, and kept the Friday sermons brief."
+      },
+      {
+        "ar": "وَيَتَأَلَّفُ أَهْلَ الشَّرَفِ وَيُكْرِمُ أَهْلَ الْفَضْلِ وَيَمْزَحُ وَلَا يَقُولُ إِلَّا حَقًّا يُحِبُّهُ اللّٰهُ تَعَالَى وَيَرْضَاهْ ۞ وَهَاهُنَا وَقَفَ بِنَا جَوَادُ الْمَقَالِ عَنِ الطِّرَادِ فِي الْحَلْبَةِ الْبَيَانِيَّةْ ۞ وَبَلَغَ ظَاعِنُ الْإِمْلَاءِ فِي فَدَافِدِ الْإِيضَاحِ مُنْتَهَاهْ",
+        "tr": "Wa-yata'allafu ahla sh-sharafi wa-yukrimu ahla l-faḍli wa-yamzaḥu wa-lā yaqūlu illā ḥaqqan yuḥibbuhu Llāhu taʿālā wa-yarḍāh, wa-hāhunā waqafa bi-nā jawādu l-maqāli ʿani ṭ-ṭirādi fī l-ḥalbati l-bayāniyyah, wa-balagha ẓāʿinu l-imlā'i fī fadāfidi l-īḍāḥi muntahāh.",
+        "en": "And he would win the hearts of people of honour, show respect to people of virtue, and joke without ever speaking anything but the truth that Allah Most High loves and is pleased with. And here the steed of discourse comes to a halt, unable to race any further in the arena of eloquence, and the traveller of composition has reached the end of his journey through the vast expanses of exposition."
+      },
+      {
+        "ar": "عَطِّرِ اللّٰهُمَّ قَبْرَهُ الْكَرِيمَ بِعَرْفٍ شَذِيٍّ مِنْ صَلَاةٍ وَتَسْلِيمٍ\nاللّٰهُمَّ صَلِّ وَسَلِّمْ وَبَارِكْ عَلَيْهِ",
+        "tr": "ʿAṭṭiri Llāhumma qabrahu l-karīma bi-ʿarfin shadhiyyin min ṣalātin wa-taslīmin.\nAllāhumma ṣalli wa-sallim wa-bārik ʿalayhi.",
+        "en": "O Allah, perfume his noble grave with a fragrant scent of prayers and peace.\nO Allah, send prayers, peace, and blessings upon him."
+      }
+    ]
+  },
+  {
+    "titleArabic": "الدُّعَاءُ",
+    "titleEnglish": "The Concluding Supplication",
+    "verses": [
+      {
+        "ar": "اللّٰهُمَّ يَا بَاسِطَ الْيَدَيْنِ بِالْعَطِيَّةْ ۞ يَا مَنْ إِذَا رُفِعَتْ إِلَيْهِ أَكُفُّ الْعَبْدِ كَفَاهْ ۞ يَا مَنْ تَنَزَّهَ فِي ذَاتِهِ وَصِفَاتِهِ الْأَحَدِيَّةْ ۞ عَنْ أَنْ يَكُونَ لَهُ فِيهَا نَظَائِرُ وَأَشْبَاهْ ۞ يَا مَنْ تَفَرَّدَ بِالْبَقَاءِ وَالْقِدَمِ وَالْأَزَلِيَّةْ ۞ يَا مَنْ لَا يُرْجَى غَيْرُهُ وَلَا يُعَوَّلُ عَلٰى سِوَاهْ",
+        "tr": "Allāhumma yā bāsiṭa l-yadayni bi-l-ʿaṭiyyah, yā man idhā rufiʿat ilayhi akuffu l-ʿabdi kafāh, yā man tanazzaha fī dhātihi wa-ṣifātihi l-aḥadiyyah, ʿan an yakūna lahu fīhā naẓā'iru wa-ashbāh, yā man tafarrada bi-l-baqā'i wa-l-qidami wa-l-azaliyyah, yā man lā yurjā ghayruhu wa-lā yuʿawwalu ʿalā siwāh.",
+        "en": "O Allah, O You who extend both hands in giving, O You who, when the slave raises his hands to You, suffice him. O You who, in Your Essence and Attributes of Oneness, are exalted beyond all likeness and comparison. O You who alone possess everlastingness, beginninglessness, and eternality. O You besides whom none is hoped in and upon none besides whom reliance is placed."
+      },
+      {
+        "ar": "يَا مَنِ اسْتَنَدَ الْأَنَامُ إِلَى قُدْرَتِهِ الْقَيُّومِيَّةْ ۞ وَأَرْشَدَ بِفَضْلِهِ مَنِ اسْتَرْشَدَهُ وَاسْتَهْدَاهْ ۞ نَسْأَلُكَ بِأَنْوَارِكَ الْقُدْسِيَّةِ ۞ الَّتِي أَزَاحَتْ مِنْ ظُلُمَاتِ الشَّكِّ دُجَاهْ ۞ وَنَتَوَسَّلُ إِلَيْكَ بِشَرَفِ الذَّاتِ الْمُحَمَّدِيَّةْ ۞ وَمَنْ هُوَ آخِرُ الْأَنْبِيَاءِ بِصُورَتِهِ وَأَوَّلُهُمْ بِمَعْنَاهْ ۞ وَبِآلِهِ كَوَاكِبِ أَمْنِ الْبَرِيَّةْ ۞ وَسَفِينَةِ السَّلَامَةِ وَالنَّجَاةْ",
+        "tr": "Yā mani-stanada l-anāmu ilā qudratihi l-qayyūmiyyah, wa-arshada bi-faḍlihi mani-starshadahu wa-s-tahdāh, nas'aluka bi-anwārika l-qudsiyyah, allatī azāḥat min ẓulumāti sh-shakki dujāh, wa-natawassalu ilayka bi-sharafi dh-dhāti l-Muḥammadiyyah, wa-man huwa ākhiru l-anbiyā'i bi-ṣūratihi wa-awwaluhum bi-maʿnāh, wa-bi-ālihi kawākibi amni l-bariyyah, wa-safīnati s-salāmati wa-n-najāh.",
+        "en": "O You upon whose sustaining power all creation depends, and who by Your grace guide those who seek guidance and direction from You. We ask You by Your sacred lights, which dispelled the deep darkness of doubt, and we seek a means of approach to You through the honour of the Muhammadan Essence, he who is the last of the prophets in outward form and the first of them in meaning, and through his family, the stars of safety for creation and the ship of safety and salvation."
+      },
+      {
+        "ar": "وَبِأَصْحَابِهِ أُولِي الْهِدَايَةِ وَالْأَفْضَلِيَّةْ ۞ الَّذِينَ بَذَلُوا نُفُوسَهُمْ لِلّٰهِ يَبْتَغُونَ فَضْلًا مِنَ اللّٰهْ ۞ وَبِحَمَلَةِ شَرِيعَتِهِ أُولِي الْمَنَاقِبِ وَالْخُصُوصِيَّةْ ۞ الَّذِينَ اسْتَبْشَرُوا بِنِعْمَةٍ وَفَضْلٍ مِنَ اللّٰهْ ۞ أَنْ تُوَفِّقَنَا فِي الْأَقْوَالِ وَالْأَعْمَالِ لِإِخْلَاصِ النِّيَّةْ",
+        "tr": "Wa-bi-aṣḥābihi ūli l-hidāyati wa-l-afḍaliyyah, alladhīna badhalū nufūsahum li-Llāhi yabtaghūna faḍlan mina Llāh, wa-bi-ḥamalati sharīʿatihi ūli l-manāqibi wa-l-khuṣūṣiyyah, alladhīna-s-tabsharū bi-niʿmatin wa-faḍlin mina Llāh, an tuwaffiqanā fī l-aqwāli wa-l-aʿmāli li-ikhlāṣi n-niyyah.",
+        "en": "And through his Companions, possessors of guidance and excellence, who devoted themselves to Allah, seeking bounty from Allah, and through the bearers of his Sacred Law, possessors of virtues and distinction, who rejoiced in blessing and bounty from Allah, we ask You to grant us success in making our intentions sincere in all our words and deeds."
+      },
+      {
+        "ar": "وَتُنْجِحَ لِكُلٍّ مِنَ الْحَاضِرِينَ مَطْلَبَهُ وَمُنَاهْ ۞ وَتُخَلِّصَنَا مِنْ أَسْرِ الشَّهَوَاتِ وَالْأَدْوَاءِ الْقَلْبِيَّةْ ۞ وَتُحَقِّقَ لَنَا مِنَ الْآمَالِ مَا بِكَ ظَنَنَّاهْ ۞ وَتَكْفِيَنَا كُلَّ مُدْلَهِمَّةٍ وَبَلِيَّةْ ۞ وَلَا تَجْعَلْنَا مِمَّنْ أَهْوَاهُ هَوَاهْ ۞ وَتُدْنِيَ لَنَا مِنْ حُسْنِ الْيَقِينِ قُطُوفًا دَانِيَةً جَنِيَّةْ ۞ وَتَمْحُوَ عَنَّا كُلَّ ذَنْبٍ جَنَيْنَاهْ",
+        "tr": "Wa-tunjiḥa li-kullin mina l-ḥāḍirīna maṭlabahu wa-munāh, wa-tukhalliṣanā min asri sh-shahawāti wa-l-adwā'i l-qalbiyyah, wa-tuḥaqqiqa lanā mina l-āmāli mā bika ẓanannāh, wa-takfiyanā kulla mudlahimmatin wa-baliyyah, wa-lā tajʿalnā mimman ahwāhu hawāh, wa-tudniya lanā min ḥusni l-yaqīni quṭūfan dāniyatan janiyyah, wa-tamḥuwa ʿannā kulla dhanbin janaynāh.",
+        "en": "And fulfil for each of those present his request and desire, and free us from the bondage of passions and the diseases of the heart. And fulfil for us the hopes we have placed in You, and suffice us against every overwhelming adversity and calamity. And do not make us among those whom their own desires have led astray. And bring within our reach the ripe and abundant fruits of true certainty, and erase from us every sin we have committed."
+      },
+      {
+        "ar": "وَتَسْتُرَ لِكُلٍّ مِنَّا عَيْبَهُ وَعَجْزَهُ وَحَصْرَهُ وَعِيَّهْ ۞ وَتُسَهِّلَ لَنَا مِنْ صَالِحِ الْأَعْمَالِ مَا عَزَّ ذُرَاهْ ۞ اللّٰهُمَّ إِنَّكَ جَعَلْتَ لِكُلِّ سَائِلٍ مَقَامًا وَمَزِيَّةْ ۞ وَلِكُلِّ رَاجٍ مَا أَمَّلَهُ فِيكَ وَرَجَاهْ ۞ وَقَدْ سَأَلْنَاكَ رَاجِينَ مَوَاهِبَكَ اللَّدُنِّيَّةْ ۞ فَحَقِّقْ لَنَا مَا مِنْكَ رَجَوْنَاهْ ۞ وَتَعُمَّ جَمْعَنَا هَذَا مِنْ خَزَائِنِ مِنَحِكَ السَّنِيَّةْ",
+        "tr": "Wa-tastura li-kullin minnā ʿaybahu wa-ʿajzahu wa-ḥaṣrahu wa-ʿiyyah wa-tusahhila lanā min ṣāliḥi l-aʿmāli mā ʿazza dhurāh, Allāhumma innaka jaʿalta li-kulli sā'ilin maqāman wa-maziyyah wa-li-kulli rājin mā ammalahu fīka wa-rajāh wa-qad sa'alnāka rājīna mawāhibaka l-ladunniyyah, fa-ḥaqqiq lanā mā minka rajawnāh wa-taʿumma jamʿanā hādhā min khazā'ini minaḥika s-saniyyah.",
+        "en": "And conceal for each of us his faults, his weakness, his inability, and his inarticulateness, and make easy for us those righteous deeds whose heights are difficult to attain. O Allah, You have appointed for every seeker a station and distinction, and for everyone who hopes in You that which he hopes for and seeks from You. And we have asked You, hoping for Your divine gifts, so fulfil for us what we have hoped for from You, and encompass this gathering of ours with the treasures of Your sublime gifts."
+      },
+      {
+        "ar": "بِرَحْمَةٍ وَمَغْفِرَةٍ وَتُدِيمَ عَمَّنْ سِوَاكَ غِنَاهْ ۞ اللّٰهُمَّ آمِنِ الرَّوْعَاتِ وَأَصْلِحِ الرُّعَاةَ وَالرَّعِيَّةْ ۞ وَأَعْظِمِ الْأَجْرَ لِمَنْ جَعَلَ هَذَا الْخَيْرَ فِي هَذَا الْيَوْمِ وَأَجْرَاهْ ۞ اللّٰهُمَّ اجْعَلْ هَذِهِ الْبَلْدَةَ وَسَائِرَ بِلَادِ الْإِسْلَامِ آمِنَةً رَخِيَّةْ ۞ وَاسْقِنَا غَيْثًا يَعُمُّ انْسِيَابُ سَيْبِهِ السَّبْسَبَ وَرُبَاهْ",
+        "tr": "Bi-raḥmatin wa-maghfiratin wa-tudīma ʿamman siwāka ghināh, Allāhumma āmini r-rawʿāti wa-aṣliḥi r-ruʿāta wa-r-raʿiyyah, wa-aʿẓimi l-ajra li-man jaʿala hādhā l-khayra fī hādhā l-yawmi wa-ajrāh, Allāhumma-jʿal hādhihi l-baldata wa-sā'ira bilādi al-Islāmi āminatan rakhiyyah, wa-s-qinā ghaythan yaʿummu nsiyābu saybihi s-sabsaba wa-rubāh.",
+        "en": "With mercy and forgiveness, and grant us lasting independence from all besides You. O Allah, grant safety from all fears, and set right the leaders and the people. And magnify the reward of the one who caused this good to take place on this day and brought it about. O Allah, make this land and all the lands of Islam secure and prosperous, and grant us abundant rain whose flowing bounty spreads across the plains and their hills."
+      },
+      {
+        "ar": "وَاغْفِرْ لِنَاسِخِ هَذِهِ الْبُرُودِ الْمُحَبَّرَةِ الْمَوْلِدِيَّةْ ۞ جَعْفَرِ مَنْ إِلَى بَرْزَنْجَ نِسْبَتُهُ وَمُنْتَمَاهْ ۞ وَحَقِّقْ لَهُ الْفَوْزَ بِقُرْبِكَ وَالرَّجَاءَ وَالْأُمْنِيَّةْ ۞ وَاجْعَلْ مَعَ الْمُقَرَّبِينَ مَقِيلَهُ وَسُكْنَاهْ ۞ وَاسْتُرْ لَهُ عَيْبَهُ وَعَجْزَهُ وَحَصْرَهُ وَعِيَّهْ",
+        "tr": "Wa-ghfir li-nāsikhi hādhihi l-burūdi l-muḥabbarati l-mawlidiyyah, Jaʿfari man ilā Barzanja nisbatuhu wa-muntamāh, wa-ḥaqqiq lahu l-fawza bi-qurbika wa-r-rajā'a wa-l-umniyyah, wa-jʿal maʿa l-muqarrabīna maqīlahu wa-suknāh, wa-s-tur lahu ʿaybahu wa-ʿajzahu wa-ḥaṣrahu wa-ʿiyyah.",
+        "en": "And forgive the author of this beautifully adorned Mawlid, Ja'far, whose origin and affiliation are traced to Barzanj. Grant him the triumph of nearness to You and the fulfilment of his hopes and aspirations. Make his resting place and abode among those brought near to You. Conceal his faults, his weakness, his limitations, and his inability to express himself."
+      },
+      {
+        "ar": "وَلِكَاتِبِهَا وَقَارِئِهَا وَمَنْ أَصَاخَ إِلَيْهَا سَمْعَهُ وَأَصْغَاهْ ۞ اللّٰهُمَّ صَلِّ وَسَلِّمْ وَبَارِكْ عَلٰى أَوَّلِ قَابِلٍ لِلتَّجَلِّي مِنَ الْحَقِيقَةِ الْكُلِّيَّةْ ۞ وَعَلٰى آلِهِ وَصَحْبِهِ وَمَنْ نَصَرَهُ وَوَالَاهْ ۞ مَا شُنِّفَتِ الْآذَانُ مِنْ وَصْفِهِ الدُّرِّيِّ بِأَقْرَاطٍ جَوْهَرِيَّةْ ۞ وَتَحَلَّتْ صُدُورُ الْمَحَافِلِ الْمُنِيفَةِ بِعُقُودِ حُلَاهْ",
+        "tr": "Wa-li-kātibihā wa-qāri'ihā wa-man aṣākha ilayhā samʿahu wa-aṣghāh, Allāhumma ṣalli wa-sallim wa-bārik ʿalā awwali qābilin li-t-tajallī mina l-ḥaqīqati l-kulliyyah, wa-ʿalā ālihi wa-ṣaḥbihi wa-man naṣarahu wa-wālāh, mā shunnifati l-ādhānu min waṣfihi d-durriyyi bi-aqrāṭin jawhariyyah, wa-taḥallat ṣudūru l-maḥāfili l-munīfati bi-ʿuqūdi ḥulāh.",
+        "en": "And forgive its writer, its reader, and whoever lends his ear to it and listens attentively. O Allah, send prayers, peace, and blessings upon the first to receive the manifestation from the Universal Reality, and upon his family, his Companions, and all who supported him and showed him loyalty, for as long as ears are adorned with jewelled earrings fashioned from his pearl-like description, and the foremost places of noble gatherings are adorned with necklaces of his beautiful qualities."
+      },
+      {
+        "ar": "وَأَفْضَلُ الصَّلَاةِ وَأَتَمُّ التَّسْلِيمِ عَلٰى سَيِّدِنَا وَمَوْلَانَا مُحَمَّدٍ خَاتَمِ الْأَنْبِيَاءِ وَالْمُرْسَلِينَ ۞ وَعَلٰى آلِهِ وَصَحْبِهِ أَجْمَعِينَ ۞ ﴿سُبْحَانَ رَبِّكَ رَبِّ الْعِزَّةِ عَمَّا يَصِفُونَ ۞ وَسَلَامٌ عَلٰى الْمُرْسَلِينَ ۞ وَالْحَمْدُ لِلّٰهِ رَبِّ الْعَالَمِينَ﴾",
+        "tr": "Wa-afḍalu ṣ-ṣalāti wa-atammu t-taslīmi ʿalā sayyidinā wa-mawlānā Muḥammadin khātami l-anbiyā'i wa-l-mursalīna, wa-ʿalā ālihi wa-ṣaḥbihi ajmaʿīna, ﴾subḥāna Rabbika Rabbi l-ʿizzati ʿammā yaṣifūna, wa-salāmun ʿalā l-mursalīna wa-l-ḥamdu li-Llāhi Rabbi l-ʿālamīn.﴿",
+        "en": "And the finest prayers and most complete peace be upon our master and patron Muhammad, the Seal of the Prophets and Messengers, and upon all his family and Companions. “Glory be to your Lord, the Lord of Might, far above what they ascribe to Him. Peace be upon the Messengers. And all praise belongs to Allah, Lord of the Worlds.” (37:180–182)"
+      }
+    ]
+  }
+  ];
 
 /* The mawlid texts, gathered under one hub tab so more can be added
    without crowding the tab bar. */
@@ -11078,7 +11776,7 @@ const MAWLID_COLLECTIONS = [
 
 /* Bumped with sw.js on every release. Shown small at the foot of the home page
    so you can tell at a glance which build a given phone is actually running. */
-const APP_VERSION = 'v71';
+const APP_VERSION = 'v72';
 /* Where the home-page feedback button sends corrections. Change to your address. */
 const FEEDBACK_EMAIL = 'zayd.boon@gmail.com';
 
