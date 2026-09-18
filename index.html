@@ -26,7 +26,7 @@
      script, where nothing that reads the page without running it can see
      it — so "which version is actually live?" could only be answered from
      a phone. Keep the two in step when bumping. -->
-<meta name="app-version" content="v73">
+<meta name="app-version" content="v74">
 <!-- YouTube's embedded player refuses to configure itself unless the host page
      sends a Referer (Error 153 / embedder.identity.missing.referrer). This is
      the browser default in most cases, but a standalone PWA or a WebView may
@@ -11781,7 +11781,7 @@ const MAWLID_COLLECTIONS = [
 
 /* Bumped with sw.js on every release. Shown small at the foot of the home page
    so you can tell at a glance which build a given phone is actually running. */
-const APP_VERSION = 'v73';
+const APP_VERSION = 'v74';
 /* Where the home-page feedback button sends corrections. Change to your address. */
 const FEEDBACK_EMAIL = 'zayd.boon@gmail.com';
 
@@ -13887,7 +13887,7 @@ function myClientId(){
    while leading from fighting the new leader when it wakes up. */
 const session = { role:null, code:null, client:null, channel:null, paused:false, status:'',
                   lastNav:null, leaderAt:null, id:myClientId(), term:0, leaderless:false, claiming:false, probing:false, probeHeard:false, connecting:null,
-                  leaderPending:false, presentTimer:null, lastWhereReply:0 };
+                  presentTimer:null, lastWhereReply:0 };
 let claimState = { term:0, ids:[], timer:null };
 
 /* A short history of what the session machinery actually did. The faults left
@@ -14073,7 +14073,7 @@ function connectSession(code, role, opts){
         setSessionStatus('Following the leader.');
         return;
       }
-      if(session.role === 'follower' && (session.leaderless || session.leaderPending)){
+      if(session.role === 'follower' && session.leaderless){
         clearLeaderPending('Following the leader.');
       }
     });
@@ -14083,7 +14083,10 @@ function connectSession(code, role, opts){
     channel.on('broadcast', { event: 'present' }, () => {
       if(session.presentTimer){ clearTimeout(session.presentTimer); session.presentTimer = null; }
       if(session.probing) session.probeHeard = true;
-      if(session.leaderPending) clearLeaderPending('Following the leader.');
+      /* A 'present' only vouches that the room is occupied. It deliberately
+         does not clear `leaderless` — the flag it used to clear was never set,
+         so this handler has never touched leader state, and making it do so
+         now would be a live-session behaviour change, not a cleanup. */
     });
     channel.on('broadcast', { event: 'lead' }, ({ payload }) => {
       if(session.probing) session.probeHeard = true;
@@ -14180,7 +14183,7 @@ function connectSession(code, role, opts){
                  person into a new session waited on a leader who did not
                  exist. The watchdog stays armed either way, so a late beat
                  still pulls this device quietly back to following. */
-              session.role = 'follower'; session.leaderPending = false;
+              session.role = 'follower';
               session.leaderless = true;
               stopBeating(); startWatchingLeader();
               setSessionStatus("No one is leading here yet — take the lead when you're ready.");
@@ -14241,7 +14244,7 @@ function leaveSession(){
   try { if(session.channel) session.channel.unsubscribe(); } catch(e){}
   try { if(session.client) session.client.removeAllChannels(); } catch(e){}
   if(session.presentTimer){ clearTimeout(session.presentTimer); session.presentTimer = null; }
-  session.leaderPending = false; session.lastWhereReply = 0;
+  session.lastWhereReply = 0;
   session.role = null; session.code = null; session.channel = null;
   session.client = null; session.paused = false; session.lastNav = null;
   session.term = 0; session.leaderless = false; session.claiming = false; session.leaderAt = null;
@@ -14617,9 +14620,10 @@ const LEADER_PENDING_MS = 9000;  /* keep listening this long before opening the 
 
 function noteLeaderAlive(){ session.lastBeat = Date.now(); }
 
-/* A leader turned up (or a peer vouched for one) while we were still unsure. */
+/* A leader turned up while this device was still marked leaderless. Named for
+   a `leaderPending` flag that no longer exists — nothing ever set it, so it
+   was removed; this is now reached only down the leaderless path. */
 function clearLeaderPending(msg){
-  session.leaderPending = false;
   session.leaderless = false;
   noteLeaderAlive();
   stopBeating(); startWatchingLeader();
@@ -15341,15 +15345,6 @@ function sessionPanel(){
       <button class="session-btn quiet" onclick="leaveSession()">End session</button>
     </div>`;
   }
-  if(session.role === 'follower' && session.leaderPending){
-    return `<div class="session-panel">
-      <div class="session-code">${session.code}</div>
-      <p>Looking for the leader…</p>
-      <p class="session-hint">If someone is already leading, your screen will start following in a moment. Only take the mic if nothing happens.</p>
-      ${note}
-      <button class="session-btn quiet" onclick="leaveSession()">Leave session</button>
-    </div>`;
-  }
   if(session.role === 'follower' && session.leaderless){
     return `<div class="session-panel">
       <div class="session-code">${session.code}</div>
@@ -15562,74 +15557,6 @@ function openDalail(n){
   onNavigated('d', n);
 }
 
-/* Safety net: after the leaves are painted, any page whose text actually
-   overflows its fixed height (the character estimate can't know exact Arabic
-   widths) has its trailing content moved onto a fresh leaf, so nothing is
-   ever clipped. Runs until every page fits, then renumbers the folios. */
-function msReflowOverflow(){
-  const book = document.getElementById('ms-book');
-  if(!book) return;
-  let guard = 0;
-  let moved = true;
-  while(moved && guard++ < 200){
-    moved = false;
-    const sheets = Array.from(book.children);
-    for(let si = 0; si < sheets.length; si++){
-      const sheet = sheets[si];
-      const page = sheet.querySelector('.ms-page');
-      const text = sheet.querySelector('.ms-text');
-      if(!page || !text) continue;
-      if(page.classList.contains('ms-closing')) continue; // closing leaf centres, never clips
-      const room = page.clientHeight - parseFloat(getComputedStyle(page).paddingBottom) - 6;
-      if(text.scrollHeight <= page.clientHeight - 12) continue; // fits
-
-      /* Collect the direct child nodes of ms-text (verse spans + rosette spans). */
-      const nodes = Array.from(text.childNodes);
-      /* Find the first node whose bottom exceeds the usable room. */
-      const textTop = text.getBoundingClientRect().top;
-      let cutAt = -1;
-      for(let k = 0; k < nodes.length; k++){
-        const nd = nodes[k];
-        if(nd.nodeType !== 1) continue;
-        const b = nd.getBoundingClientRect().bottom - textTop;
-        if(b > room){ cutAt = k; break; }
-      }
-      if(cutAt <= 0) continue; // can't improve (single huge node handled below)
-
-      /* Move nodes from cutAt onward into a new sheet after this one. */
-      const newSheet = sheet.cloneNode(false);
-      const newPage = document.createElement('div');
-      newPage.className = 'ms-page';
-      const newRun = sheet.querySelector('.ms-runhead').cloneNode(true);
-      const newText = document.createElement('div');
-      newText.className = 'ms-text';
-      for(let k = nodes.length - 1; k >= cutAt; k--){
-        newText.insertBefore(nodes[k], newText.firstChild);
-      }
-      newPage.appendChild(newText);
-      const folioNum = document.createElement('div');
-      folioNum.className = 'ms-folio';
-      newPage.appendChild(folioNum);
-      newSheet.appendChild(newRun);
-      newSheet.appendChild(newPage);
-      book.insertBefore(newSheet, sheet.nextSibling);
-      moved = true;
-      break; // restart the scan from the top
-    }
-  }
-  /* Renumber all folio labels 1..N and rebuild the dot strip. */
-  const sheets = Array.from(book.children);
-  sheets.forEach((s, i) => {
-    const fol = s.querySelector('.ms-folio');
-    if(fol) fol.textContent = i + 1;
-  });
-  const dotWrap = document.querySelector('.ms-dots');
-  if(dotWrap){
-    dotWrap.innerHTML = sheets.map((s, i) =>
-      `<button class="ms-dot${i === 0 ? ' on' : ''}" data-pg="${i}" onclick="msGoTo(${i})" aria-label="Page ${i + 1}"></button>`).join('');
-  }
-  if(typeof msSyncDots === 'function') msSyncDots();
-}
 
 /* Book Version sizing — one page size for the whole chapter, text filling each
    page, at a size that is actually readable.
