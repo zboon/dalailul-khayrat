@@ -26,7 +26,7 @@
      script, where nothing that reads the page without running it can see
      it — so "which version is actually live?" could only be answered from
      a phone. Keep the two in step when bumping. -->
-<meta name="app-version" content="v72">
+<meta name="app-version" content="v73">
 <!-- YouTube's embedded player refuses to configure itself unless the host page
      sends a Referer (Error 153 / embedder.identity.missing.referrer). This is
      the browser default in most cases, but a standalone PWA or a WebView may
@@ -751,6 +751,10 @@
   }
   .qtune:active{background:var(--paper-edge)}
   button.qtune{ width:100%; font-family:inherit; cursor:pointer; }
+  /* The Book Version's reciter is offered from the opening leaf only: it lives
+     above #ms-book rather than inside a sheet, so turning the page does not
+     carry it away and msSyncDots has to hide it. */
+  .ms-tune.off{ display:none }
 
   /* ── The docked reciter ──────────────────────────────────────────
      Fixed to the foot of the window and attached to <body>, outside #app —
@@ -906,6 +910,7 @@
   html.immersive .controls,
   html.immersive .qnote,
   html.immersive .ms-hint,
+  html.immersive .ms-tune,
   html.immersive .scrollbar,
   html.immersive footer,
   html.immersive .build-tag{ display:none !important }
@@ -11776,7 +11781,7 @@ const MAWLID_COLLECTIONS = [
 
 /* Bumped with sw.js on every release. Shown small at the foot of the home page
    so you can tell at a glance which build a given phone is actually running. */
-const APP_VERSION = 'v72';
+const APP_VERSION = 'v73';
 /* Where the home-page feedback button sends corrections. Change to your address. */
 const FEEDBACK_EMAIL = 'zayd.boon@gmail.com';
 
@@ -15933,6 +15938,10 @@ function manuscriptPages(q, kind, idx){
     `<button class="ms-dot${i === 0 ? ' on' : ''}" data-pg="${i}" onclick="msGoTo(${i})"
              aria-label="${two ? 'Pages ' + (i + 1) + '\u2013' + (i + 2) : 'Page ' + (i + 1)}"></button>`).join('');
   return `${noteBlock(q.note)}
+    ${(q.video || q.video2) ? `<div class="ms-tune" id="ms-tune">
+      ${q.video ? `<button class="qtune" onclick="openPlayerFor('${kind}',${idx},1)">▶ ${(kind === 'd' || kind === 'l') ? 'Listen to this ḥizb' : 'Listen to the tune'}</button>` : ''}
+      ${q.video2 ? `<button class="qtune" onclick="openPlayerFor('${kind}',${idx},2)">▶ Listen — alternate version</button>` : ''}
+    </div>` : ''}
     <p class="ms-hint">Turn the leaf right to left · tap a phrase to mark your place</p>
     ${MS_DEFS}
     <div class="ms-book${two ? ' spread' : ''}" id="ms-book" onscroll="msSyncDots()">${expandedFolios.map(sheet).join('')}</div>
@@ -15976,6 +15985,11 @@ function msSyncDots(){
   const n = book ? book.children.length : 0;
   const cur = msCurrentPage();
   [].forEach.call(document.querySelectorAll('.ms-dot'), (d, i) => d.classList.toggle('on', i === cur));
+  /* Offered from the first leaf only. Toggled here, not in the page-change
+     branch below: that one is skipped when the leaf has not changed, which
+     would leave the button wrong on the first paint after opening a piece. */
+  const tune = document.getElementById('ms-tune');
+  if(tune) tune.classList.toggle('off', cur !== 0);
   msFloatPosition();
   /* Two sets now — the floating pair and the pair by the dots — so keep them
      in step rather than only the first one found. */
