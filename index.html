@@ -15684,11 +15684,14 @@ function msAutoFit(){
   H = Math.max(H, immersive ? window.innerHeight - playerHeight()
                             : Math.min(window.innerHeight * 0.72, leafW * 1.5));
 
-  leaves.forEach((o, i) => {
+  leaves.forEach(o => {
     o.p.style.minHeight = '0px';   // the fitted height is the height
     o.p.style.height = H + 'px';
-    const isClosing = (i === leaves.length - 1) && leaves.length > 1;
-    const MIN = o.base * 0.6, MAX = (isClosing || shortLeaf(o)) ? o.base : o.base * 1.9;
+  });
+
+  /* Fit one leaf's text to the shared height, never above the cap it is given. */
+  const fit = (o, MAX) => {
+    const MIN = o.base * 0.6;
     /* The space still free between the foot of the text and the foot of the
        page's content box, read from what the browser actually laid out. Working
        from the rendered geometry avoids having to add up padding, borders and
@@ -15717,6 +15720,25 @@ function msAutoFit(){
       if(room() < 0){ o.t.style.fontSize = size + 'px'; break; }
       size = next;
     }
+    return size;
+  };
+
+  /* A short leaf, and the closing leaf, must not balloon to fill the paper the
+     book deliberately leaves empty. They used to be capped at o.base to stop
+     that — but o.base is the CSS reading size, not the size the chapter is
+     actually set at, and in full screen the other leaves grow with the taller
+     page while these stayed put. That is what made Friday's last leaf render
+     SMALLER than every other page when maximised, marooned in a field of blank
+     paper. Cap them at what the full leaves settled on instead: still no
+     ballooning, but never smaller than the rest of the chapter either. */
+  const held = (o, i) => shortLeaf(o) || ((i === leaves.length - 1) && leaves.length > 1);
+  const settled = [];
+  leaves.forEach((o, i) => { if(!held(o, i)) settled.push(fit(o, o.base * 1.9)); });
+  const typical = settled.length
+    ? settled.slice().sort((a, b) => a - b)[Math.floor(settled.length / 2)]
+    : null;
+  leaves.forEach((o, i) => {
+    if(held(o, i)) fit(o, typical == null ? o.base : Math.max(o.base, typical));
   });
 }
 /* Fit once the leaves are painted, and again once the Arabic webfont has
