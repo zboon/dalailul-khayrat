@@ -2462,6 +2462,31 @@ function saveTextScale(){
   } catch(e){}
 }
 
+/* ── Transliteration and Translation ────────────────────────────
+   **Both off for a reader who has never chosen**, on the owner's call — the
+   page opens as the Arabic alone, the way the book reads, and either column
+   is one tap away. They used to default on, which is why the first screen of
+   every chapter arrived three deep.
+
+   Once either is turned on it stays on, across sessions. Written ONLY from
+   `toggle` and `toggleEn`, the reader's own chips — the same discipline the
+   size and `dlk-view` follow. Nothing else assigns showTr or showEn today;
+   in particular a live session does NOT sync them, so a follower keeps their
+   own columns, and nothing a leader does should start rewriting them. */
+const COLS_KEY = 'dlk-cols';
+
+function loadCols(which){
+  try {
+    const v = JSON.parse(localStorage.getItem(COLS_KEY));
+    return !!(v && v[which]);
+  } catch(e){ return false; }
+}
+function saveCols(){
+  try {
+    localStorage.setItem(COLS_KEY, JSON.stringify({ tr: state.showTr, en: state.showEn }));
+  } catch(e){}
+}
+
 /* Which of the two readers opens. Book is the standard view — an unset
    preference means Book — and Study is the alternative, but whichever one was
    last chosen is what you come back to, so leaving the app in Study does not
@@ -2772,7 +2797,7 @@ function resumeCard(){
     </div>`;
 }
 
-const state = { showTr: true, showEn: true, arScale: loadTextScale('ar'), latinScale: loadTextScale('latin'), msZoom: 1, query: '', tab: 'home', burdahChapter: null, favs: loadFavs() , pageView:loadViewPref(), immersive:false};
+const state = { showTr: loadCols('tr'), showEn: loadCols('en'), arScale: loadTextScale('ar'), latinScale: loadTextScale('latin'), msZoom: 1, query: '', tab: 'home', burdahChapter: null, favs: loadFavs() , pageView:loadViewPref(), immersive:false};
 
 /* The content arrays, keyed by the same letters as OPENERS. */
 function arrayOf(kind){
@@ -15830,7 +15855,7 @@ function reopen(kind, i){
   try { fn(i); }
   finally { suppressNavSignals = prev; }
 }
-function toggle(kind,i){ state.showTr = !state.showTr; reopen(kind,i); }
+function toggle(kind,i){ state.showTr = !state.showTr; saveCols(); reopen(kind,i); }
 /* The piece set as it was printed: ivory leaves, ruled borders, a titled
    cartouche and the rosettes between phrases — but real text, so it can be
    selected, searched and marked, and costs nothing to download. */
@@ -16967,7 +16992,7 @@ function setPageView(on, kind, idx){
   afterViewScroll(kind, idx, keepVerse);
 }
 
-function toggleEn(kind,i){ state.showEn = !state.showEn; reopen(kind,i); }
+function toggleEn(kind,i){ state.showEn = !state.showEn; saveCols(); reopen(kind,i); }
 /* Text size. A slider each for the Arabic and the Latin, on the owner's ask;
    it replaced four −/+ chips that took most of the controls row and needed
    several taps to cross the range.
