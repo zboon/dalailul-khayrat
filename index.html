@@ -26,7 +26,7 @@
      script, where nothing that reads the page without running it can see
      it — so "which version is actually live?" could only be answered from
      a phone. Keep the two in step when bumping. -->
-<meta name="app-version" content="v79">
+<meta name="app-version" content="v80">
 <!-- YouTube's embedded player refuses to configure itself unless the host page
      sends a Referer (Error 153 / embedder.identity.missing.referrer). This is
      the browser default in most cases, but a standalone PWA or a WebView may
@@ -655,6 +655,49 @@
      opacity alone made it unreadable on the dark background. */
   .chip.off{opacity:.85;border-color:var(--ink-soft);color:var(--ink-soft)}
   .chip.size{border-color:var(--paper-edge);background:var(--card)}
+
+  /* Text size: one slider per script, replacing four −/+ chips. The glyph at
+     each end says which script and which way is bigger. ض rather than the
+     أ these used to carry — at chip size its hamza is too small to see, so
+     the Arabic control read as a bare stroke and looked like the Latin one. */
+  /* The sliders take a line of their own rather than wrapping one at a time
+     into whatever gap the toggles leave: side by side they read as a pair and
+     the row stops reflowing as chapter titles change its earlier chips. */
+  .size-row{flex-basis:100%;display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center}
+  .size-slider{
+    display:inline-flex;align-items:center;gap:.4rem;
+    padding:.2rem .7rem;border-radius:999px;
+    border:1.5px solid var(--paper-edge);background:var(--card);
+  }
+  .size-slider .sz-gl{color:var(--ink-soft);line-height:1;user-select:none;-webkit-user-select:none}
+  .size-slider .sz-ar{font-family:'UthmanicHafs','Amiri',serif}
+  .size-slider .sz-la{font-family:'Crimson Pro',serif}
+  .size-slider .sz-sm{font-size:.78rem}
+  .size-slider .sz-lg{font-size:1.18rem}
+  .size-slider input[type=range]{
+    -webkit-appearance:none;appearance:none;
+    width:5rem;height:1.5rem;margin:0;background:transparent;
+  }
+  .size-slider input[type=range]:focus-visible{
+    outline:2px solid var(--gold);outline-offset:2px;border-radius:999px;
+  }
+  /* Track and thumb are spelled out once per engine on purpose: a selector
+     list mixing -webkit- and -moz- pseudo-elements is dropped whole by both. */
+  .size-slider input[type=range]::-webkit-slider-runnable-track{
+    height:3px;border-radius:999px;background:var(--paper-edge);
+  }
+  .size-slider input[type=range]::-moz-range-track{
+    height:3px;border-radius:999px;background:var(--paper-edge);
+  }
+  .size-slider input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;appearance:none;
+    width:1.05rem;height:1.05rem;border-radius:50%;
+    background:var(--gold);border:none;margin-top:-.43rem;
+  }
+  .size-slider input[type=range]::-moz-range-thumb{
+    width:1.05rem;height:1.05rem;border-radius:50%;
+    background:var(--gold);border:none;
+  }
 
   .verses{max-width:640px;margin:0 auto;padding:1.2rem 1.1rem calc(env(safe-area-inset-bottom,0px) + 7rem)}
   /* Book Version: trim the trailing space so the reader can't scroll far past a
@@ -11825,7 +11868,7 @@ const MAWLID_COLLECTIONS = [
 
 /* Bumped with sw.js on every release. Shown small at the foot of the home page
    so you can tell at a glance which build a given phone is actually running. */
-const APP_VERSION = 'v79';
+const APP_VERSION = 'v80';
 /* Where the home-page feedback button sends corrections. Change to your address. */
 const FEEDBACK_EMAIL = 'zayd.boon@gmail.com';
 
@@ -15501,12 +15544,10 @@ function readerHTML(q, backOnclick, kind, idx){
       ${pageView ? '' : `
       ${q.latin ? '' : `<button class="chip ${state.showTr?'':'off'}" onclick="toggle(${controlsTarget})">Transliteration</button>`}
       <button class="chip ${state.showEn?'':'off'}" onclick="toggleEn(${controlsTarget})">Translation</button>`}
-      ${pageView
-        ? ''
-        : q.latin ? '' : `<button class="chip size" onclick="scaleAr(-1,${controlsTarget})" aria-label="Smaller Arabic">أ−</button>
-      <button class="chip size" onclick="scaleAr(1,${controlsTarget})" aria-label="Larger Arabic">أ+</button>`}
-      ${pageView ? '' : `<button class="chip size" onclick="scaleLatin(-1,${controlsTarget})" aria-label="Smaller Latin text">a−</button>
-      <button class="chip size" onclick="scaleLatin(1,${controlsTarget})" aria-label="Larger Latin text">a+</button>`}
+      ${pageView ? '' : `<div class="size-row">
+        ${q.latin ? '' : sizeSlider('ar', state.arScale)}
+        ${sizeSlider('latin', state.latinScale)}
+      </div>`}
     </div>`}
     <main class="verses${pageView ? ' ms-view' : ''}">
       ${pageView ? manuscriptPages(q, kind, idx) : empty ? placeholder(q.titleEnglish) : `
@@ -15541,8 +15582,7 @@ function readerHTML(q, backOnclick, kind, idx){
 }
 
 function openQasida(i){
-  document.documentElement.style.setProperty('--ar-size', (1.9*state.arScale)+'rem');
-  document.documentElement.style.setProperty('--latin-scale', state.latinScale);
+  applyTextScale();
   app.innerHTML = readerHTML(QASIDAS[i], 'renderIndex()', 'q', i);
   queueMsAutoFit();
   window.scrollTo(0,0);
@@ -15551,8 +15591,7 @@ function openQasida(i){
 
 function openBurdah(n){
   state.burdahChapter = n;
-  document.documentElement.style.setProperty('--ar-size', (1.9*state.arScale)+'rem');
-  document.documentElement.style.setProperty('--latin-scale', state.latinScale);
+  applyTextScale();
   app.innerHTML = readerHTML(BURDAH_CHAPTERS[n], "selectTab('burdah')", 'b', n);
   queueMsAutoFit();
   window.scrollTo(0,0);
@@ -15560,8 +15599,7 @@ function openBurdah(n){
 }
 
 function openNasheed(n){
-  document.documentElement.style.setProperty('--ar-size', (1.9*state.arScale)+'rem');
-  document.documentElement.style.setProperty('--latin-scale', state.latinScale);
+  applyTextScale();
   app.innerHTML = readerHTML(NASHEED_CHAPTERS[n], "selectTab('nasheeds')", 'n', n);
   queueMsAutoFit();
   window.scrollTo(0,0);
@@ -15569,8 +15607,7 @@ function openNasheed(n){
 }
 
 function openLitany(n){
-  document.documentElement.style.setProperty('--ar-size', (1.9*state.arScale)+'rem');
-  document.documentElement.style.setProperty('--latin-scale', state.latinScale);
+  applyTextScale();
   app.innerHTML = readerHTML(LITANY_CHAPTERS[n], "selectTab('" + (isAzamDay(n) ? 'azam' : isIstighfarDay(n) ? 'istighfar' : 'litanies') + "')", 'l', n);
   queueMsAutoFit();
   window.scrollTo(0,0);
@@ -15578,8 +15615,7 @@ function openLitany(n){
 }
 
 function openDiya(n){
-  document.documentElement.style.setProperty('--ar-size', (1.9*state.arScale)+'rem');
-  document.documentElement.style.setProperty('--latin-scale', state.latinScale);
+  applyTextScale();
   app.innerHTML = readerHTML(DIYA_CHAPTERS[n], "selectTab('diya')", 'y', n);
   queueMsAutoFit();
   window.scrollTo(0,0);
@@ -15587,8 +15623,7 @@ function openDiya(n){
 }
 
 function openBarzanji(n){
-  document.documentElement.style.setProperty('--ar-size', (1.9*state.arScale)+'rem');
-  document.documentElement.style.setProperty('--latin-scale', state.latinScale);
+  applyTextScale();
   app.innerHTML = readerHTML(BARZANJI_CHAPTERS[n], "selectTab('barzanji')", 'z', n);
   queueMsAutoFit();
   window.scrollTo(0,0);
@@ -15596,8 +15631,7 @@ function openBarzanji(n){
 }
 
 function openDalail(n){
-  document.documentElement.style.setProperty('--ar-size', (1.9*state.arScale)+'rem');
-  document.documentElement.style.setProperty('--latin-scale', state.latinScale);
+  applyTextScale();
   document.documentElement.style.setProperty('--ms-zoom', state.msZoom);
   app.innerHTML = readerHTML(DALAIL_CHAPTERS[n], "selectTab('dalail')", 'd', n);
   queueMsAutoFit();
@@ -15734,8 +15768,7 @@ window.addEventListener('resize', () => {
 });
 
 function openSirah(n){
-  document.documentElement.style.setProperty('--ar-size', (1.9*state.arScale)+'rem');
-  document.documentElement.style.setProperty('--latin-scale', state.latinScale);
+  applyTextScale();
   app.innerHTML = readerHTML(SIRAH_CHAPTERS[n], "selectTab('mawlid')", 's', n);
   queueMsAutoFit();
   window.scrollTo(0,0);
@@ -15743,8 +15776,7 @@ function openSirah(n){
 }
 
 function openIlahi(n){
-  document.documentElement.style.setProperty('--ar-size', (1.9*state.arScale)+'rem');
-  document.documentElement.style.setProperty('--latin-scale', state.latinScale);
+  applyTextScale();
   app.innerHTML = readerHTML(ILAHI_CHAPTERS[n], "selectTab('ilahis')", 'i', n);
   queueMsAutoFit();
   window.scrollTo(0,0);
@@ -16902,9 +16934,50 @@ function setPageView(on, kind, idx){
 }
 
 function toggleEn(kind,i){ state.showEn = !state.showEn; reopen(kind,i); }
-function scaleAr(dir,kind,i){
-  state.arScale = Math.min(1.6, Math.max(0.7, state.arScale + dir*0.1));
-  reopen(kind,i);
+/* Text size. A slider each for the Arabic and the Latin, on the owner's ask;
+   it replaced four −/+ chips that took most of the controls row and needed
+   several taps to cross the range.
+
+   Dragging sets the two CSS variables and deliberately does NOT reopen the
+   reader, which is what the old chips did. The size lives entirely in
+   --ar-size and --latin-scale, so a re-render buys nothing and costs the
+   scroll position — on an `input` event, once per pixel of travel, that read
+   as the page fighting the finger.
+
+   The end glyphs are the whole label: small on the left, large on the right,
+   which reads the same way round whichever script it governs. The Arabic one
+   is ض and not أ — the owner could not tell the hamza apart from a bare
+   alif at this size, and ض is both unmistakable and the letter the language
+   names itself by.
+
+   Percent rather than the underlying multiplier so a screen reader announces
+   something meaningful, and so the step is a whole number. */
+function sizeSlider(which, scale){
+  const ar = which === 'ar';
+  const glyph = ar ? 'ض' : 'a';
+  const label = ar ? 'Arabic text size' : 'Latin text size';
+  const cls   = ar ? 'sz-ar' : 'sz-la';
+  const min   = ar ? 70 : 80, max = ar ? 160 : 180;
+  return `<label class="size-slider" title="${label}">
+      <span class="sz-gl ${cls} sz-sm" aria-hidden="true">${glyph}</span>
+      <input type="range" min="${min}" max="${max}" step="5"
+        value="${Math.round(scale * 100)}" aria-label="${label}"
+        oninput="setTextScale('${which}', this.value)">
+      <span class="sz-gl ${cls} sz-lg" aria-hidden="true">${glyph}</span>
+    </label>`;
+}
+
+/* The one place the two size variables are written. Every opener called this
+   pair of lines verbatim, which is how they are guaranteed to stay in step. */
+function applyTextScale(){
+  document.documentElement.style.setProperty('--ar-size', (1.9 * state.arScale) + 'rem');
+  document.documentElement.style.setProperty('--latin-scale', state.latinScale);
+}
+
+function setTextScale(which, pct){
+  const v = Math.max(0.5, Math.min(2, (+pct || 100) / 100));
+  if(which === 'ar') state.arScale = v; else state.latinScale = v;
+  applyTextScale();
 }
 /* Book Version zoom: scales the whole leaf — text, borders and page together —
    so line breaks and page fills never change, only the size on screen. */
@@ -16915,11 +16988,6 @@ function msZoomStep(dir){
      without spilling past its border. */
   queueMsAutoFit();
 }
-function scaleLatin(dir,kind,i){
-  state.latinScale = Math.min(1.8, Math.max(0.8, state.latinScale + dir*0.1));
-  reopen(kind,i);
-}
-
 /* ── Back, and coming back ───────────────────────────────────────
    The manifest is display:standalone, so on Android there is no browser
    chrome and Back is the system gesture. The app pushed no history of its
