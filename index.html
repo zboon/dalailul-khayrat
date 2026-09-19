@@ -2428,6 +2428,40 @@ function saveFavs(){
   try { localStorage.setItem(FAV_KEY, JSON.stringify(state.favs)); } catch(e){}
 }
 
+/* ── Text size ──────────────────────────────────────
+   Remembered across sessions on the owner's ask, so someone who needs large
+   Arabic sets it once rather than on every open.
+
+   The limits live here because three places need them and they must agree:
+   the slider's own min/max, the clamp when a value comes back from storage,
+   and the clamp in setTextScale. A stored value outside them would otherwise
+   put the thumb off the end of its track.
+
+   Written ONLY from setTextScale, the slider's own handler — the same
+   discipline the Dalāʾil fork's view preference follows. Nothing else
+   assigns state.arScale or state.latinScale, and nothing else should start:
+   a size arriving from a live session or a restored screen must not quietly
+   rewrite how the app opens afterwards. */
+const SIZE_KEY = 'dlk-size';
+const SIZE_LIMITS = { ar: [0.7, 1.6], latin: [0.8, 1.8] };
+
+function clampSize(which, v){
+  const [lo, hi] = SIZE_LIMITS[which];
+  v = +v;
+  return isFinite(v) ? Math.min(hi, Math.max(lo, v)) : 1;
+}
+function loadTextScale(which){
+  try {
+    const v = JSON.parse(localStorage.getItem(SIZE_KEY));
+    return (v && v[which] != null) ? clampSize(which, v[which]) : 1;
+  } catch(e){ return 1; }
+}
+function saveTextScale(){
+  try {
+    localStorage.setItem(SIZE_KEY, JSON.stringify({ ar: state.arScale, latin: state.latinScale }));
+  } catch(e){}
+}
+
 /* Which of the two readers opens. Book is the standard view — an unset
    preference means Book — and Study is the alternative, but whichever one was
    last chosen is what you come back to, so leaving the app in Study does not
@@ -2738,7 +2772,7 @@ function resumeCard(){
     </div>`;
 }
 
-const state = { showTr: true, showEn: true, arScale: 1, latinScale: 1, msZoom: 1, query: '', tab: 'home', burdahChapter: null, favs: loadFavs() , pageView:loadViewPref(), immersive:false};
+const state = { showTr: true, showEn: true, arScale: loadTextScale('ar'), latinScale: loadTextScale('latin'), msZoom: 1, query: '', tab: 'home', burdahChapter: null, favs: loadFavs() , pageView:loadViewPref(), immersive:false};
 
 /* The content arrays, keyed by the same letters as OPENERS. */
 function arrayOf(kind){
@@ -16957,7 +16991,8 @@ function sizeSlider(which, scale){
   const glyph = ar ? 'ض' : 'a';
   const label = ar ? 'Arabic text size' : 'Latin text size';
   const cls   = ar ? 'sz-ar' : 'sz-la';
-  const min   = ar ? 70 : 80, max = ar ? 160 : 180;
+  const [lo, hi] = SIZE_LIMITS[which];
+  const min = Math.round(lo * 100), max = Math.round(hi * 100);
   return `<label class="size-slider" title="${label}">
       <span class="sz-gl ${cls} sz-sm" aria-hidden="true">${glyph}</span>
       <input type="range" min="${min}" max="${max}" step="5"
@@ -16975,9 +17010,10 @@ function applyTextScale(){
 }
 
 function setTextScale(which, pct){
-  const v = Math.max(0.5, Math.min(2, (+pct || 100) / 100));
+  const v = clampSize(which, (+pct || 100) / 100);
   if(which === 'ar') state.arScale = v; else state.latinScale = v;
   applyTextScale();
+  saveTextScale();
 }
 /* Book Version zoom: scales the whole leaf — text, borders and page together —
    so line breaks and page fills never change, only the size on screen. */
