@@ -26,7 +26,7 @@
      script, where nothing that reads the page without running it can see
      it — so "which version is actually live?" could only be answered from
      a phone. Keep the two in step when bumping. -->
-<meta name="app-version" content="v76">
+<meta name="app-version" content="v77">
 <!-- YouTube's embedded player refuses to configure itself unless the host page
      sends a Referer (Error 153 / embedder.identity.missing.referrer). This is
      the browser default in most cases, but a standalone PWA or a WebView may
@@ -756,6 +756,30 @@
      carry it away and msSyncDots has to hide it. */
   .ms-tune.off{ display:none }
 
+  /* Previous / Next chapter, at the foot of a reader in both views, so a
+     mawlid can be read straight through without going back to the index.
+     Laid out left-to-right — these are worded buttons, not the leaf arrows,
+     which point the way an Arabic book turns. */
+  .chap-nav{
+    display:flex; gap:.6rem; align-items:stretch;
+    max-width:var(--read-w,46rem); margin:1.6rem auto .4rem; padding:0 .2rem;
+  }
+  .chap-nav button{
+    flex:1 1 0; min-width:0; display:flex; flex-direction:column; gap:.15rem;
+    background:var(--card); border:1.5px solid var(--gold); color:var(--green);
+    border-radius:14px; padding:.55rem .8rem; font-family:inherit; cursor:pointer;
+    text-align:left;
+  }
+  .chap-nav button.chap-next{ text-align:right; }
+  .chap-nav button:active{ background:var(--paper-edge) }
+  .chap-nav .chap-dir{ font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; opacity:.7 }
+  .chap-nav .chap-name{
+    font-weight:700; font-size:.92rem; line-height:1.25;
+    overflow:hidden; text-overflow:ellipsis; display:-webkit-box;
+    -webkit-line-clamp:2; -webkit-box-orient:vertical;
+  }
+  .chap-nav .chap-gap{ flex:1 1 0 }
+
   /* ── The docked reciter ──────────────────────────────────────────
      Fixed to the foot of the window and attached to <body>, outside #app —
      the same trick the session banner uses — so re-rendering the reader never
@@ -911,6 +935,7 @@
   html.immersive .qnote,
   html.immersive .ms-hint,
   html.immersive .ms-tune,
+  html.immersive .chap-nav,
   html.immersive .scrollbar,
   html.immersive footer,
   html.immersive .build-tag{ display:none !important }
@@ -11800,7 +11825,7 @@ const MAWLID_COLLECTIONS = [
 
 /* Bumped with sw.js on every release. Shown small at the foot of the home page
    so you can tell at a glance which build a given phone is actually running. */
-const APP_VERSION = 'v76';
+const APP_VERSION = 'v77';
 /* Where the home-page feedback button sends corrections. Change to your address. */
 const FEEDBACK_EMAIL = 'zayd.boon@gmail.com';
 
@@ -15510,6 +15535,7 @@ function readerHTML(q, backOnclick, kind, idx){
           ${v.tr ? `<div class="v-tr ${state.showTr?'':'hide'}">${v.tr.replaceAll('\n','<br>')}</div>` : ''}`}
           ${v.en ? `<div class="v-en ${state.showEn?'':'hide'}">${v.en.replaceAll('\n','<br>')}</div>` : ''}
         </article>`).join('')}`}
+      ${chapterNav(kind, idx)}
     </main>
 `;
 }
@@ -16573,18 +16599,41 @@ if(SPREAD_MQ.addEventListener) SPREAD_MQ.addEventListener('change', () => {
    next section instead of dead-ending. Set by readerHTML. */
 let msPiece = null;
 
-function nextPiece(){
-  if(!msPiece) return null;
-  /* Skip chapters that carry no verses yet. Unfilled scaffolds (the litany
-     title slots and the not-yet-built daily portions) are hidden from every
-     index, so walking the reader into them from the last leaf would strand
-     it on a run of blank placeholders. */
-  const a = arrayOf(msPiece.kind);
+/* The chapter dir steps to, skipping any that carry no verses yet. Unfilled
+   scaffolds (the litany title slots, the not-yet-built daily portions) are
+   hidden from every index, so stepping into one would strand the reader on a
+   run of blank placeholders. Takes kind/idx rather than reading msPiece,
+   because readerHTML needs it while building a page — before msPiece has been
+   set for that piece. */
+function neighbourPiece(kind, idx, dir){
+  const a = arrayOf(kind);
   if(!a) return null;
-  for(let n = msPiece.idx + 1; n < a.length; n++){
-    if(a[n] && a[n].verses && a[n].verses.length) return { kind: msPiece.kind, idx: n };
+  for(let n = idx + dir; n >= 0 && n < a.length; n += dir){
+    if(a[n] && a[n].verses && a[n].verses.length) return { kind, idx: n };
   }
   return null;
+}
+function nextPiece(){
+  return msPiece ? neighbourPiece(msPiece.kind, msPiece.idx, 1) : null;
+}
+
+/* Rendered at the foot of both readers. In the Book Version it sits under the
+   leaves, so it is reachable from any leaf rather than only the last one; the
+   next arrow already carries forward from the last leaf and still does. */
+function chapterNav(kind, idx){
+  const pv = neighbourPiece(kind, idx, -1), nx = neighbourPiece(kind, idx, 1);
+  if(!pv && !nx) return '';
+  const btn = (o, dir, label) => {
+    const piece = arrayOf(o.kind)[o.idx];
+    return `<button class="chap-${dir}" onclick="${openFnOf(o.kind)}(${o.idx})"
+      aria-label="${label} chapter: ${attrEsc(displayTitle(piece))}">
+      <span class="chap-dir">${label}</span>
+      <span class="chap-name">${displayTitle(piece)}</span></button>`;
+  };
+  return `<nav class="chap-nav">
+    ${pv ? btn(pv, 'prev', 'Previous') : '<span class="chap-gap"></span>'}
+    ${nx ? btn(nx, 'next', 'Next') : '<span class="chap-gap"></span>'}
+  </nav>`;
 }
 
 /* +1 turns to the next leaf, which sits to the left. Turning past the last
