@@ -26,7 +26,7 @@
      script, where nothing that reads the page without running it can see
      it — so "which version is actually live?" could only be answered from
      a phone. Keep the two in step when bumping. -->
-<meta name="app-version" content="v83">
+<meta name="app-version" content="v84">
 <!-- YouTube's embedded player refuses to configure itself unless the host page
      sends a Referer (Error 153 / embedder.identity.missing.referrer). This is
      the browser default in most cases, but a standalone PWA or a WebView may
@@ -603,9 +603,10 @@
      The internal ones are faded and a shade smaller, so the full-strength
      rosettes are the ones that mark where a verse begins and ends.
 
-     Study needs no modifier class: that view appends no closing rosette, so
-     every `.rosette` in it is internal by definition. The Book Version sets
-     both from `ms-r`, which is why the internal ones there carry `ms-r-in`. */
+     The Book Version sets both from `ms-r`, which is why the internal ones
+     there carry `ms-r-in`. Study is deliberately NOT faded: it appends no
+     closing rosette, so a fade there dims every rosette the reader sees and
+     marks nothing — shipped that way in v405 and taken back out. */
   .ms-r.ms-r-in{
     opacity:.42;
     background-size:1.02em 1.02em;
@@ -613,10 +614,6 @@
   /* Night ink is lower-contrast to begin with, so the same fade reads as
      almost absent — it needs a little more. */
   html.dark .ms-r.ms-r-in{ opacity:.55; }
-  /* Study is not faded. In the Dalāʾil the recitation unit IS the card
-     there, so an internal rosette never reaches the reader at all; in
-     every other collection the rosette divides the two hemistichs of one
-     line of poetry, where full strength is what the page wants. */
 
   /* The صلى الله عليه وسلم mark is a letterform, not an ornament — it keeps its glyph. */
   .ms-r.salawat, html.dark .ms-r.salawat{
@@ -2453,26 +2450,6 @@ function segWrap(s, rosClass){ let out='',buf='',sg=0; const emit=t=>{ if(buf.tr
 function segWrapMark(s, rosClass, kind, idx, keyN, marks, placedHere, placedSeg){ let out='',buf='',sg=0; const emit=t=>{ if(buf.trim()!==''){ const k=kind+':'+idx+':'+keyN+':'+sg; const mk=marks[k]?' marked':''; const pl=(placedHere && placedSeg===sg)?' placed':''; out+='<span class="seg'+mk+pl+'" data-sg="'+sg+'" data-mk="'+k+'" onclick="markVerse(\''+kind+'\','+idx+',\''+keyN+'\','+sg+')">'+buf+t+'</span>'; sg++; } buf=''; }; for(const ch of String(s)){ if(ch==='۞'){ emit(''); out+='<span class="'+rosClass+'">۞</span>'; } else if(ch==='،'){ emit('،'); } else buf+=ch; } emit(''); if(!sg){ const k=kind+':'+idx+':'+keyN+':0'; out='<span class="seg" data-sg="0" data-mk="'+k+'" onclick="markVerse(\''+kind+'\','+idx+',\''+keyN+'\',0)">'+String(s)+'</span>'; } return out; }
 const withRosettes = (s, seg) => seg ? segWrap(s, 'rosette') : String(s).split('۞').join('<span class="rosette">۞</span>');
 const arHTML = (s, seg) => markInline(withRosettes(stripBreaks(s).replaceAll('\n','<br>'), seg), false);
-/* One rendered chunk per recitation unit, for the Dalāʾil's Study reader, where
-   the rosette is the card boundary rather than a glyph. Split the FINISHED html
-   on the rosette span instead of splitting the raw string and rendering each
-   piece on its own: that keeps `.seg` numbering running on across the whole
-   verse, which is what a search hit (jumpToVerse) indexes into. Falls back to a
-   single chunk if the split does not line up, so a surprise costs the split and
-   never the text. */
-const ROSETTE_SPAN = '<span class="rosette">۞</span>';
-function arUnitsHTML(s){
-  const parts = arHTML(s, true).split(ROSETTE_SPAN);
-  return parts.length === stripBreaks(s).split('۞').length ? parts : [arHTML(s, true)];
-}
-/* The Dalāʾil's Study reader numbers recitation units, not corpus verses, so a
-   saved place has to be announced in the number a reader can actually see. */
-function dalailUnitNo(idx, n){
-  const vs = ((DALAIL_CHAPTERS[idx] || {}).verses) || [];
-  let u = 0;
-  for(let i = 0; i < n && i < vs.length; i++) u += stripBreaks(vs[i].ar || '').split('۞').length;
-  return u + 1;
-}
 
 /* ── Favourites ──────────────────────────────────────────────────
    Stored in this browser's localStorage, so they stay on the device and are
@@ -2632,11 +2609,10 @@ function topVisibleVerse(){
 function placeVerse(idx, n){
   const cur = loadPlace();
   const same = cur && cur.idx === idx && cur.view === 'study' && cur.verse === n;
-  /* A Dalāʾil verse can be several unit cards in the Study reader, so the ribbon
-     and the lit button belong to the whole group — clear and set them by
-     group, or a second tap leaves a stray ribbon behind. */
-  document.querySelectorAll('article.verse.placed').forEach(e => e.classList.remove('placed'));
-  document.querySelectorAll('.verse-place.on').forEach(e => e.classList.remove('on'));
+  const prev = document.querySelector('article.verse.placed');
+  if(prev) prev.classList.remove('placed');
+  const btnPrev = document.querySelector('.verse-place.on');
+  if(btnPrev) btnPrev.classList.remove('on');
 
   if(same){                       // tapping the marked verse lifts the bookmark
     try { localStorage.removeItem(PLACE_KEY); } catch(e){}
@@ -2645,11 +2621,12 @@ function placeVerse(idx, n){
   const c = DALAIL_CHAPTERS[idx];
   if(!c) return;
   writePlace({ idx, title: c.titleEnglish || '', at: Date.now(), view: 'study', verse: n });
-  document.querySelectorAll('article.verse[data-v="' + n + '"]').forEach(el => {
+  const el = document.querySelector('article.verse[data-v="' + n + '"]');
+  if(el){
     el.classList.add('placed');
     const b = el.querySelector('.verse-place');
     if(b) b.classList.add('on');
-  });
+  }
 }
 
 /* Is this the verse currently bookmarked? */
@@ -2852,7 +2829,7 @@ function resumeCard(){
     ? (p.verse != null
         ? 'Book Version · verse ' + toArNum(p.verse + 1)
         : 'Book Version · page ' + ((p.leaf || 0) + 1))
-    : 'Study Version · verse ' + toArNum(dalailUnitNo(p.idx, p.verse || 0));
+    : 'Study Version · verse ' + toArNum((p.verse || 0) + 1);
   return `<div class="resume-wrap">
       <button class="resume-card" onclick="resumeDalail()">
         <span class="resume-ribbon">${bookmarkIcon(true)}</span>
@@ -3087,16 +3064,10 @@ function scrollToVerse(kind, idx, n, seg){
     (()=>{ const sg=(seg!=null)?vEl.querySelector('.seg[data-sg="'+seg+'"]'):null; if(sg){ sg.classList.remove('seg-flash'); void sg.offsetWidth; sg.classList.add('seg-flash'); } else { vEl.classList.remove('ms-flash'); void vEl.offsetWidth; vEl.classList.add('ms-flash'); } })();
     return true;
   }
-  /* A Dalāʾil verse can span several unit cards, and the phrase a search hit
-     names may sit in a later one — so find the card that actually holds that
-     seg before scrolling, or the hit lands short of what it flashes. */
-  const els = document.querySelectorAll('article.verse[data-v="'+n+'"]');
-  if(!els.length) return false;
-  let el = els[0], sg = null;
-  if(seg != null) for(const c of els){ const s = c.querySelector('.seg[data-sg="'+seg+'"]'); if(s){ el = c; sg = s; break; } }
+  const el = document.querySelector('article.verse[data-v="'+n+'"]');
+  if(!el) return false;
   window.scrollTo({ top: Math.max(0, el.getBoundingClientRect().top + window.scrollY - 84) });
-  if(sg){ sg.classList.remove('seg-flash'); void sg.offsetWidth; sg.classList.add('seg-flash'); }
-  else { el.classList.remove('hit-flash'); void el.offsetWidth; el.classList.add('hit-flash'); }
+  (()=>{ const sg=(seg!=null)?el.querySelector('.seg[data-sg="'+seg+'"]'):null; if(sg){ sg.classList.remove('seg-flash'); void sg.offsetWidth; sg.classList.add('seg-flash'); } else { el.classList.remove('hit-flash'); void el.offsetWidth; el.classList.add('hit-flash'); } })();
   return true;
 }
 
@@ -12021,7 +11992,7 @@ const MAWLID_COLLECTIONS = [
 
 /* Bumped with sw.js on every release. Shown small at the foot of the home page
    so you can tell at a glance which build a given phone is actually running. */
-const APP_VERSION = 'v83';
+const APP_VERSION = 'v84';
 /* Where the home-page feedback button sends corrections. Change to your address. */
 const FEEDBACK_EMAIL = 'zayd.boon@gmail.com';
 
@@ -15670,29 +15641,6 @@ function readerHTML(q, backOnclick, kind, idx){
      read as they were printed — no transliteration or translation over them. */
   const hasPages = Array.isArray(q.folios) && q.folios.length > 0;
   const pageView = hasPages && state.pageView;
-  /* The Dalāʾil's Study reader takes the rosette as the verse boundary: one
-     recitation unit, one numbered card. The corpus is NOT re-chunked — every
-     card still carries its source verse's data-v, so bookmarks, scroll-to-verse,
-     search hits and a live session all go on speaking in verse indices, and the
-     Book Version's pagination (its folios are verse-index ranges) is untouched.
-     The number a reader sees is the unit's place in the chapter, counted
-     straight through, because the verse array's boundaries are an editorial
-     chunking that the printing does not mark.
-     Dalāʾil only: elsewhere the rosette divides the two hemistichs of a single
-     line of poetry, and a card boundary there would cut the line in half.
-     tr/en carry no rosette and cannot be split mechanically (only 21 of the 129
-     multi-unit verses even have a sentence per unit), so a verse's translation
-     sits under the last of its unit cards. */
-  const unitCards = kind === 'd' && !pageView;
-  const cards = [];
-  if(!pageView && !empty) (q.verses || []).forEach((v, n) => {
-    const html = unitCards ? arUnitsHTML(v.ar) : [null];
-    html.forEach((h, k) => cards.push({
-      v, n, html: h, num: cards.length + 1,
-      first: k === 0, last: k === html.length - 1,
-      basmala: unitCards && isBasmala((stripBreaks(v.ar).split('۞')[k] || '').trim()),
-    }));
-  });
   return `
     <div class="reader-bar">
       <div class="rside"><button class="back" onclick="${backOnclick}">‹ Back</button></div>
@@ -15730,30 +15678,28 @@ function readerHTML(q, backOnclick, kind, idx){
       ${noteBlock(q.note)}
       ${(q.video || audioFor(kind, idx).length) ? `<button class="qtune" onclick="openPlayerFor('${kind}',${idx},1)">▶ ${(kind === 'd' || kind === 'l') ? 'Listen to this ḥizb' : 'Listen to the tune'}</button>` : ''}
       ${q.video2 ? `<button class="qtune" onclick="openPlayerFor('${kind}',${idx},2)">▶ Listen — alternate version</button>` : ''}
-      ${cards.map(c=>{ const v=c.v, n=c.n; return `
+      ${q.verses.map((v,n)=>`
         <article class="verse ${v.refrain?'refrain':''} ${v.instruction?'v-instruction':''}${kind==='d'&&placedVerse(idx,n)?' placed':''}" data-v="${n}">
           ${kind === 'd' ? `<button class="verse-place ${placedVerse(idx,n)?'on':''}"
             onclick="placeVerse(${idx},${n})"
             aria-label="${placedVerse(idx,n)?'Remove my place':'Mark my place here'}"
             title="${placedVerse(idx,n)?'Remove my place':'Mark my place here'}">${bookmarkIcon(placedVerse(idx,n))}</button>` : ''}
-          <div class="v-num">${toArNum(c.num)}</div>
-          ${(v.refrain && c.first)?'<div class="refrain-note">Refrain · يُرَدَّد</div>':''}
-          ${(v.instruction && c.first)?'<div class="instruction-note">Instruction · إِرْشَاد</div>':''}
-          ${(v.note && c.first)?`<div class="v-note">${v.note}</div>`:''}
+          <div class="v-num">${toArNum(n+1)}</div>
+          ${v.refrain?'<div class="refrain-note">Refrain · يُرَدَّد</div>':''}
+          ${v.instruction?'<div class="instruction-note">Instruction · إِرْشَاد</div>':''}
+          ${v.note?`<div class="v-note">${v.note}</div>`:''}
           ${q.latin
             ? `<div class="v-latin">${stripBreaks(v.ar).replaceAll('\n','<br>')}</div>`
-            : `${c.html != null
-                ? `<div class="v-ar${c.basmala?' v-basmala':''}">${c.html}${(v.sep && c.last) ? ` <span class="v-salawat">${v.sep}</span>` : ''}</div>`
-                : (() => {
+            : `${(() => {
                 const sp = splitBasmala(stripBreaks(v.ar));
                 if(!sp) return `<div class="v-ar">${arHTML(v.ar, kind==='d')}${v.sep ? ` <span class="v-salawat">${v.sep}</span>` : ''}</div>`;
                 return `${sp.pre ? `<div class="v-ar">${arHTML(sp.pre)}</div>` : ''}
                         <div class="v-ar v-basmala">${arHTML(sp.basmala)}</div>
                         ${sp.rest ? `<div class="v-ar">${arHTML(sp.rest)}</div>` : ''}`;
               })()}
-          ${(v.tr && c.last) ? `<div class="v-tr ${state.showTr?'':'hide'}">${v.tr.replaceAll('\n','<br>')}</div>` : ''}`}
-          ${(v.en && c.last) ? `<div class="v-en ${state.showEn?'':'hide'}">${v.en.replaceAll('\n','<br>')}</div>` : ''}
-        </article>${(v.repeatRefrain && c.last) ? refrainRepeatHTML(q) : ''}`; }).join('')}`}
+          ${v.tr ? `<div class="v-tr ${state.showTr?'':'hide'}">${v.tr.replaceAll('\n','<br>')}</div>` : ''}`}
+          ${v.en ? `<div class="v-en ${state.showEn?'':'hide'}">${v.en.replaceAll('\n','<br>')}</div>` : ''}
+        </article>${v.repeatRefrain ? refrainRepeatHTML(q) : ''}`).join('')}`}
       ${pageView ? '' : chapterNav(kind, idx)}
     </main>
 `;
