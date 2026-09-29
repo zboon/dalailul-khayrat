@@ -26,7 +26,7 @@
      script, where nothing that reads the page without running it can see
      it — so "which version is actually live?" could only be answered from
      a phone. Keep the two in step when bumping. -->
-<meta name="app-version" content="v98">
+<meta name="app-version" content="v99">
 <!-- YouTube's embedded player refuses to configure itself unless the host page
      sends a Referer (Error 153 / embedder.identity.missing.referrer). This is
      the browser default in most cases, but a standalone PWA or a WebView may
@@ -12227,7 +12227,7 @@ const MAWLID_COLLECTIONS = [
 
 /* Bumped with sw.js on every release. Shown small at the foot of the home page
    so you can tell at a glance which build a given phone is actually running. */
-const APP_VERSION = 'v98';
+const APP_VERSION = 'v99';
 /* Where the home-page feedback button sends corrections. Change to your address. */
 const FEEDBACK_EMAIL = 'zayd.boon@gmail.com';
 
@@ -15852,24 +15852,31 @@ function sessionPanel(){
    markup, because some notes carry an Arabic line in a span. */
 const NOTE_FOLD_AT = 160;
 
-/* The top of a reader, kept to one slim row (owner's call, v428 / v99): a
-   small "About" button where the note is long enough to fold, and "Listen"
-   where there is a recording or a video. They used to be two full-width
-   bars. A short note is still simply shown, as noteBlock always did. In the
-   Book Version the row is offered from the opening leaf only (#ms-tune;
-   msSyncDots hides it after), as the Listen bar was. */
+/* The top of a Dalāʾil or ḥizb reader (the other collections keep noteBlock
+   and their full-width bars).
+
+   The chapter note is HIDDEN for now (owner's call, v428 / v99): the owner
+   may want it back, so it is switched off here rather than removed. Set
+   SHOW_CHAPTER_NOTES to true and it returns as a small "About · نُبْذَة"
+   button that opens the note beneath it (a short note simply shows). The
+   notes themselves are untouched in the data.
+
+   Listen is the full-width bar again ("wider again", owner's call — v427
+   had shrunk it to a small button beside About). In the Book Version it
+   sits in #ms-tune, offered from the opening leaf only, as before. */
+const SHOW_CHAPTER_NOTES = false;
 function readerActions(q, kind, idx, book){
-  const note = q.note ? String(q.note) : '';
+  const note = (SHOW_CHAPTER_NOTES && q.note) ? String(q.note) : '';
   const plain = note.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
   const folds = plain.length > NOTE_FOLD_AT;
-  const btns = [];
-  if(folds) btns.push(`<button class="ra-btn" onclick="toggleAbout(this)" aria-expanded="false">About · نُبْذَة</button>`);
-  if(q.video || audioFor(kind, idx).length) btns.push(`<button class="ra-btn" onclick="openPlayerFor('${kind}',${idx},1)">▶ Listen</button>`);
-  if(q.video2) btns.push(`<button class="ra-btn" onclick="openPlayerFor('${kind}',${idx},2)">▶ Alternate</button>`);
   const shortNote = (note && !folds) ? `<div class="qnote">${note}</div>` : '';
-  const row = (btns.length || folds) ? `<div class="reader-actions">${btns.join('')}</div>${folds ? `<div class="qnote about-body" hidden>${note}</div>` : ''}` : '';
-  if(!row) return shortNote;
-  return shortNote + (book ? `<div class="ms-tune" id="ms-tune">${row}</div>` : row);
+  const about = folds ? `<div class="reader-actions"><button class="ra-btn" onclick="toggleAbout(this)" aria-expanded="false">About · نُبْذَة</button></div>
+    <div class="qnote about-body" hidden>${note}</div>` : '';
+  const listen = `${(q.video || audioFor(kind, idx).length) ? `<button class="qtune" onclick="openPlayerFor('${kind}',${idx},1)">▶ Listen to this ḥizb</button>` : ''}
+    ${q.video2 ? `<button class="qtune" onclick="openPlayerFor('${kind}',${idx},2)">▶ Listen — alternate version</button>` : ''}`;
+  const block = about + listen;
+  if(!block.trim()) return shortNote;
+  return shortNote + (book ? `<div class="ms-tune" id="ms-tune">${block}</div>` : block);
 }
 function toggleAbout(btn){
   const body = btn.parentElement && btn.parentElement.nextElementSibling;
@@ -15921,9 +15928,12 @@ function readerHTML(q, backOnclick, kind, idx){
      read as they were printed — no transliteration or translation over them. */
   const hasPages = Array.isArray(q.folios) && q.folios.length > 0;
   const pageView = hasPages && state.pageView;
-  /* What the Aa panel holds: the script in both views, the columns and the
-     text size in the Study view. */
-  const aaHas = !pageView || !q.latin;
+  /* The compact top — Aa panel, slim About · Listen row — is for the Dalāʾil
+     and the aḥzāb only (owner's call); every other collection keeps its
+     settings in the open and its full-width bars. The Aa panel holds the
+     script in both views, the columns and the text size in the Study view. */
+  const compact = kind === 'd' || kind === 'l';
+  const aaHas = compact && (!pageView || !q.latin);
   return `
     <div class="reader-bar">
       <div class="rside"><button class="back" onclick="${backOnclick}">‹ Back</button></div>
@@ -15957,11 +15967,23 @@ function readerHTML(q, backOnclick, kind, idx){
           ${q.latin ? '' : sizeSlider('ar', state.arScale)}
           ${sizeSlider('latin', state.latinScale)}
         </div>`}
-      </div>` : ''}
+      </div>` : compact ? '' : `
+      ${q.latin ? '' : `<span class="view-switch script-switch" role="group" aria-label="Arabic script">${[['uthmani','Uthmani'],['indopak','IndoPak'],['naskh','Naskh']].map(([v,l]) =>
+        `<button data-font="${v}" class="${arFont===v?'on':''}" aria-pressed="${arFont===v}" onclick="setArFont('${v}')">${l}</button>`).join('')}</span>`}
+      ${pageView ? '' : `
+      ${q.latin ? '' : `<button class="chip ${state.showTr?'':'off'}" onclick="toggle(${controlsTarget})">Transliteration</button>`}
+      <button class="chip ${state.showEn?'':'off'}" onclick="toggleEn(${controlsTarget})">Translation</button>
+      <div class="size-row">
+        ${q.latin ? '' : sizeSlider('ar', state.arScale)}
+        ${sizeSlider('latin', state.latinScale)}
+      </div>`}
+      `}
     </div>`}
     <main class="verses${pageView ? ' ms-view' : ''}${(kind === 'd' || kind === 'l') ? ' paper' : ''}">
       ${pageView ? manuscriptPages(q, kind, idx) : empty ? placeholder(q.titleEnglish) : `
-      ${readerActions(q, kind, idx, false)}
+      ${compact ? readerActions(q, kind, idx, false) : `${noteBlock(q.note)}
+      ${(q.video || audioFor(kind, idx).length) ? `<button class="qtune" onclick="openPlayerFor('${kind}',${idx},1)">▶ Listen to the tune</button>` : ''}
+      ${q.video2 ? `<button class="qtune" onclick="openPlayerFor('${kind}',${idx},2)">▶ Listen — alternate version</button>` : ''}`}
       ${q.verses.map((v,n)=>`
         <article class="verse ${v.refrain?'refrain':''} ${v.instruction?'v-instruction':''}${kind==='d'&&placedVerse(idx,n)?' placed':''}" data-v="${n}">
           ${kind === 'd' ? `<button class="verse-place ${placedVerse(idx,n)?'on':''}"
