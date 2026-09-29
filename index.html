@@ -26,7 +26,7 @@
      script, where nothing that reads the page without running it can see
      it — so "which version is actually live?" could only be answered from
      a phone. Keep the two in step when bumping. -->
-<meta name="app-version" content="v97">
+<meta name="app-version" content="v98">
 <!-- YouTube's embedded player refuses to configure itself unless the host page
      sends a Referer (Error 153 / embedder.identity.missing.referrer). This is
      the browser default in most cases, but a standalone PWA or a WebView may
@@ -765,7 +765,7 @@
   .refrain-repeat.open .refrain-repeat-body{
     display:block;
     border:1px solid var(--gold-soft);border-radius:16px;
-    background:linear-gradient(var(--card),var(--card-alt));
+    background:linear-gradient(var(--verse-bg, var(--card)),var(--verse-bg2, var(--card-alt)));
     padding:1rem 1.1rem;margin-top:.1rem;
   }
   .refrain-note{
@@ -861,6 +861,23 @@
      above #ms-book rather than inside a sheet, so turning the page does not
      carry it away and msSyncDots has to hide it. */
   .ms-tune.off{ display:none }
+  .reader-actions{ display:flex; justify-content:center; flex-wrap:wrap; gap:.5rem; margin:0 0 1.1rem; }
+  .ra-btn{
+    display:inline-flex; align-items:center; gap:.35rem; cursor:pointer; font-family:inherit;
+    background:var(--card); border:1.5px solid var(--gold); color:var(--chip-ink);
+    border-radius:999px; padding:.38rem .95rem; font-weight:700; font-size:.82rem;
+  }
+  .ra-btn:active{ background:var(--paper-edge); }
+  .ra-btn.on{ background:var(--gold); color:#fff; }
+  .qnote.about-body{ margin-top:-.4rem; }
+  .aa-btn{ font-family:'Crimson Pro',serif; font-size:.95rem; letter-spacing:0; padding:.28rem .95rem; }
+  .aa-btn.on{ background:var(--gold); color:#fff; }
+  .aa-panel{ display:none; }
+  .aa-panel.open{
+    display:flex; flex-basis:100%; flex-direction:column; align-items:center; gap:.55rem;
+    padding:.75rem .6rem; border:1px solid var(--rule-soft); border-radius:14px; background:var(--card-alt);
+  }
+  .aa-row{ display:flex; flex-wrap:wrap; gap:.5rem; justify-content:center; }
 
   /* Previous / Next chapter, at the foot of a reader in both views, so a
      mawlid can be read straight through without going back to the index.
@@ -971,14 +988,19 @@
     cursor:pointer; white-space:nowrap; text-decoration:none; font-family:inherit;
   }
   .ytdock-btn:active{ background:rgba(255,255,255,.14); }
-  /* The Study card is printed on the Book Version's paper (owner's call), so
-     switching views keeps the same page colour; a gold hairline edges it. */
+  /* In the Dalāʾil and the aḥzāb — the collections with a Book Version — the
+     Study card is printed on the Book Version's paper, with a gold hairline,
+     so switching views keeps the page colour (owner's call). Every other
+     collection keeps the white card. Done with variables set on
+     main.verses.paper, so the refrain, instruction, bookmarked and repeat
+     styles below need no paper-specific copies. */
+  .verses.paper{ --verse-bg:var(--ms-paper); --verse-bg2:var(--ms-paper-deep); --verse-edge:var(--rule-soft); }
   .verse{
-    background:var(--ms-paper);border:1px solid var(--rule-soft);border-radius:16px;
+    background:var(--verse-bg, var(--card));border:1px solid var(--verse-edge, var(--paper-edge));border-radius:16px;
     padding:1.3rem 1.2rem 1.15rem;margin-bottom:1rem;position:relative;
     box-shadow:0 1px 2px rgba(18,53,40,.05);
   }
-  .verse.refrain{border-color:var(--gold-soft);background:linear-gradient(var(--ms-paper),var(--ms-paper-deep))}
+  .verse.refrain{border-color:var(--gold-soft);background:linear-gradient(var(--verse-bg, var(--card)),var(--verse-bg2, var(--card-alt)))}
   .v-num{
     position:absolute;top:-0.85rem;left:50%;transform:translateX(-50%);
     background:var(--bg);border:1.5px solid var(--gold);color:var(--gold);
@@ -1049,6 +1071,7 @@
   html.immersive .qnote,
   html.immersive .ms-hint,
   html.immersive .ms-tune,
+  html.immersive .reader-actions,
   html.immersive .chap-nav,
   html.immersive .ms-chap,
   html.immersive .scrollbar,
@@ -1088,7 +1111,7 @@
      the supplication standing around it. */
   .verse.v-instruction{
     border-color:var(--gold); border-width:1.5px;
-    background-color:var(--ms-paper);
+    background-color:var(--verse-bg, var(--card));
     background-image:linear-gradient(rgba(184,147,74,.11), rgba(184,147,74,.03));
   }
   .instruction-note{
@@ -1351,10 +1374,9 @@
   .view-swap svg{ width:1rem; height:1rem; display:block; }
   .view-swap:hover{ opacity:1; }
   .view-swap:active{ transform:scale(.9); }
-  /* At the top the calligraphy is showing and the labelled Book/Study switch
-     is in the controls just below, so the little bar swap steps aside; it
-     appears once you scroll into the reading (the bar goes slim). */
-  .reader-bar:not(.slim) .view-swap{ display:none; }
+  /* The Book/Study swap is the only place the view is chosen (owner's call,
+     v428 / v99): the labelled pair that used to sit under the title went,
+     to clear the top of the page, so this one no longer hides at the top. */
   /* The day/night toggle rides in the reader bar too, so it is reachable from
      every screen and not only from the mastheads. The base .theme-toggle is
      absolutely positioned against the masthead; inside the bar it is an
@@ -2598,14 +2620,27 @@ function saveViewPref(on){
 
 /* Which script the Arabic is set in: 'uthmani' (the standard, KFGQPC Hafs),
    'indopak' (DigitalKhatt IndoPak) or 'naskh' (Scheherazade New). Unset, or
-   anything unrecognised, means Uthmani. Written only from
+   anything unrecognised, means the version's own default: IndoPak in the
+   Mughlay Version, Uthmani in Istanbul (owner's call) — so a reader who
+   has never chosen a script sees the Mughlay text in the script of its
+   Indo-Pak printing, and switching versions carries the default with it.
+   Once a script is chosen it holds in both versions. Written only from
    setArFont, the reader's own switch — like the size, the columns and the
    view, and for the same reason: a live session does not carry it, so a
    follower keeps their own script and nothing a leader does rewrites it.
    Only the font changes; the text is the same bytes either way. */
 const FONT_KEY = 'dlk-font';
 const AR_FONTS = { uthmani: null, indopak: 'DKIndoPak', naskh: 'SchNew' };
-let arFont = (() => { try { const v = localStorage.getItem(FONT_KEY); return AR_FONTS[v] !== undefined ? v : 'uthmani'; } catch(e){ return 'uthmani'; } })();
+let arFontChosen = (() => { try { const v = localStorage.getItem(FONT_KEY); return AR_FONTS[v] !== undefined ? v : null; } catch(e){ return null; } })();
+/* dalailEdition is declared further down, so on the first call the stored
+   version is read directly (the same key and rule as its initialiser). */
+function defaultArFont(){
+  let ed;
+  try { ed = dalailEdition; }
+  catch(e){ try { ed = localStorage.getItem('dlk-edition') === 'sayyidina' ? 'sayyidina' : 'istanbul'; } catch(e2){ ed = 'istanbul'; } }
+  return ed === 'sayyidina' ? 'indopak' : 'uthmani';
+}
+let arFont = arFontChosen || defaultArFont();
 function applyArFont(){
   document.documentElement.classList.toggle('ar-indopak', arFont === 'indopak');
   document.documentElement.classList.toggle('ar-naskh', arFont === 'naskh');
@@ -7679,6 +7714,8 @@ function setDalailEdition(v){
   dalailEdition = v;
   try { localStorage.setItem(EDITION_KEY, v); } catch(e){}
   applyDalailEdition();
+  // Never having chosen a script, the reader gets the version's own.
+  if(!arFontChosen && defaultArFont() !== arFont) showArFont(defaultArFont());
   document.querySelectorAll('.edition-switch button').forEach(b => {
     b.classList.toggle('on', b.dataset.ed === v);
     b.setAttribute('aria-pressed', String(b.dataset.ed === v));
@@ -12190,7 +12227,7 @@ const MAWLID_COLLECTIONS = [
 
 /* Bumped with sw.js on every release. Shown small at the foot of the home page
    so you can tell at a glance which build a given phone is actually running. */
-const APP_VERSION = 'v97';
+const APP_VERSION = 'v98';
 /* Where the home-page feedback button sends corrections. Change to your address. */
 const FEEDBACK_EMAIL = 'zayd.boon@gmail.com';
 
@@ -15815,6 +15852,45 @@ function sessionPanel(){
    markup, because some notes carry an Arabic line in a span. */
 const NOTE_FOLD_AT = 160;
 
+/* The top of a reader, kept to one slim row (owner's call, v428 / v99): a
+   small "About" button where the note is long enough to fold, and "Listen"
+   where there is a recording or a video. They used to be two full-width
+   bars. A short note is still simply shown, as noteBlock always did. In the
+   Book Version the row is offered from the opening leaf only (#ms-tune;
+   msSyncDots hides it after), as the Listen bar was. */
+function readerActions(q, kind, idx, book){
+  const note = q.note ? String(q.note) : '';
+  const plain = note.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+  const folds = plain.length > NOTE_FOLD_AT;
+  const btns = [];
+  if(folds) btns.push(`<button class="ra-btn" onclick="toggleAbout(this)" aria-expanded="false">About · نُبْذَة</button>`);
+  if(q.video || audioFor(kind, idx).length) btns.push(`<button class="ra-btn" onclick="openPlayerFor('${kind}',${idx},1)">▶ Listen</button>`);
+  if(q.video2) btns.push(`<button class="ra-btn" onclick="openPlayerFor('${kind}',${idx},2)">▶ Alternate</button>`);
+  const shortNote = (note && !folds) ? `<div class="qnote">${note}</div>` : '';
+  const row = (btns.length || folds) ? `<div class="reader-actions">${btns.join('')}</div>${folds ? `<div class="qnote about-body" hidden>${note}</div>` : ''}` : '';
+  if(!row) return shortNote;
+  return shortNote + (book ? `<div class="ms-tune" id="ms-tune">${row}</div>` : row);
+}
+function toggleAbout(btn){
+  const body = btn.parentElement && btn.parentElement.nextElementSibling;
+  if(!body || !body.classList.contains('about-body')) return;
+  const open = body.hidden;
+  body.hidden = !open;
+  btn.classList.toggle('on', open);
+  btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+}
+/* Opens and closes in place — like the refrain markers and the size sliders,
+   never through reopen(), so the reader keeps its scroll. state.aaOpen is in
+   memory only, so it survives the re-render a column toggle makes but a
+   chapter still opens with the panel shut. */
+function toggleAa(){
+  state.aaOpen = !state.aaOpen;
+  document.querySelectorAll('.aa-panel').forEach(p => p.classList.toggle('open', !!state.aaOpen));
+  document.querySelectorAll('.aa-btn').forEach(b => {
+    b.classList.toggle('on', !!state.aaOpen);
+    b.setAttribute('aria-expanded', state.aaOpen ? 'true' : 'false');
+  });
+}
 function noteBlock(note){
   if(!note) return '';
   const plain = String(note).replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
@@ -15845,6 +15921,9 @@ function readerHTML(q, backOnclick, kind, idx){
      read as they were printed — no transliteration or translation over them. */
   const hasPages = Array.isArray(q.folios) && q.folios.length > 0;
   const pageView = hasPages && state.pageView;
+  /* What the Aa panel holds: the script in both views, the columns and the
+     text size in the Study view. */
+  const aaHas = !pageView || !q.latin;
   return `
     <div class="reader-bar">
       <div class="rside"><button class="back" onclick="${backOnclick}">‹ Back</button></div>
@@ -15857,34 +15936,32 @@ function readerHTML(q, backOnclick, kind, idx){
       ${enTitle ? `<div class="piece-title-en">${enTitle}</div>` : ''}
     </div>
     ${empty ? '' : `<div class="controls">
-      ${kind === 'd' && dalailHasEditions(idx) ? editionSwitch() : ''}
       ${kind === 'd' && pageView ? `<button class="chip place-btn ${placeIsHere(idx)&&placeStillMarked()?'on':''}"
         data-idx="${idx}" onclick="saveDalailPlace(${idx})">${placeBtnLabel(idx)}</button>` : ''}
-      ${hasPages ? `<span class="view-switch" role="group" aria-label="How to read this">
-        <button class="${pageView?'on':''}" onclick="setPageView(true,${controlsTarget})">Book Version</button>
-        <button class="${pageView?'':'on'}" onclick="setPageView(false,${controlsTarget})">Study Version</button>
-        </span>
+      ${hasPages ? `
       ${pageView && spreadOffered() ? `<button class="chip ${spreadOn()?'on':'off'}"
         onclick="toggleSpread(${controlsTarget})">Two pages</button>` : ''}
       ${pageView ? `<button class="chip icon" onclick="setImmersive(true)" aria-label="Full screen">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M9 3H3v6M15 3h6v6M9 21H3v-6M15 21h6v-6"/></svg>
       </button>` : ''}` : ''}
-      ${q.latin ? '' : `<span class="view-switch script-switch" role="group" aria-label="Arabic script">${[['uthmani','Uthmani'],['indopak','IndoPak'],['naskh','Naskh']].map(([v,l]) =>
-        `<button data-font="${v}" class="${arFont===v?'on':''}" aria-pressed="${arFont===v}" onclick="setArFont('${v}')">${l}</button>`).join('')}</span>`}
-      ${pageView ? '' : `
-      ${q.latin ? '' : `<button class="chip ${state.showTr?'':'off'}" onclick="toggle(${controlsTarget})">Transliteration</button>`}
-      <button class="chip ${state.showEn?'':'off'}" onclick="toggleEn(${controlsTarget})">Translation</button>`}
-      ${pageView ? '' : `<div class="size-row">
-        ${q.latin ? '' : sizeSlider('ar', state.arScale)}
-        ${sizeSlider('latin', state.latinScale)}
-      </div>`}
+      ${aaHas ? `<button class="chip aa-btn${state.aaOpen?' on':''}" onclick="toggleAa()" aria-expanded="${state.aaOpen?'true':'false'}"
+        aria-label="Reading settings">Aa</button>
+      <div class="aa-panel${state.aaOpen?' open':''}">
+        ${q.latin ? '' : `<div class="aa-row"><span class="view-switch script-switch" role="group" aria-label="Arabic script">${[['uthmani','Uthmani'],['indopak','IndoPak'],['naskh','Naskh']].map(([v,l]) =>
+          `<button data-font="${v}" class="${arFont===v?'on':''}" aria-pressed="${arFont===v}" onclick="setArFont('${v}')">${l}</button>`).join('')}</span></div>`}
+        ${pageView ? '' : `<div class="aa-row">
+        ${q.latin ? '' : `<button class="chip ${state.showTr?'':'off'}" onclick="toggle(${controlsTarget})">Transliteration</button>`}
+        <button class="chip ${state.showEn?'':'off'}" onclick="toggleEn(${controlsTarget})">Translation</button></div>
+        <div class="size-row">
+          ${q.latin ? '' : sizeSlider('ar', state.arScale)}
+          ${sizeSlider('latin', state.latinScale)}
+        </div>`}
+      </div>` : ''}
     </div>`}
-    <main class="verses${pageView ? ' ms-view' : ''}">
+    <main class="verses${pageView ? ' ms-view' : ''}${(kind === 'd' || kind === 'l') ? ' paper' : ''}">
       ${pageView ? manuscriptPages(q, kind, idx) : empty ? placeholder(q.titleEnglish) : `
-      ${noteBlock(q.note)}
-      ${(q.video || audioFor(kind, idx).length) ? `<button class="qtune" onclick="openPlayerFor('${kind}',${idx},1)">▶ ${(kind === 'd' || kind === 'l') ? 'Listen to this ḥizb' : 'Listen to the tune'}</button>` : ''}
-      ${q.video2 ? `<button class="qtune" onclick="openPlayerFor('${kind}',${idx},2)">▶ Listen — alternate version</button>` : ''}
+      ${readerActions(q, kind, idx, false)}
       ${q.verses.map((v,n)=>`
         <article class="verse ${v.refrain?'refrain':''} ${v.instruction?'v-instruction':''}${kind==='d'&&placedVerse(idx,n)?' placed':''}" data-v="${n}">
           ${kind === 'd' ? `<button class="verse-place ${placedVerse(idx,n)?'on':''}"
@@ -16134,9 +16211,16 @@ function toggle(kind,i){ state.showTr = !state.showTr; saveCols(); reopen(kind,i
    view loses its place; the Book leaves are re-fitted, since the IndoPak
    and Naskh letters set wider and taller than the Uthmani ones. */
 function setArFont(v){
-  if(AR_FONTS[v] === undefined || v === arFont) return;
+  if(AR_FONTS[v] === undefined) return;
+  /* A tap is a choice even on the script already showing: it is stored, so
+     a version's default no longer moves it. */
+  arFontChosen = v;
+  try { localStorage.setItem(FONT_KEY, v); } catch(e){}
+  if(v === arFont) return;
+  showArFont(v);
+}
+function showArFont(v){
   arFont = v;
-  try { localStorage.setItem(FONT_KEY, arFont); } catch(e){}
   applyArFont();
   document.querySelectorAll('.script-switch button').forEach(b => {
     b.classList.toggle('on', b.dataset.font === arFont);
@@ -16357,11 +16441,7 @@ function manuscriptPages(q, kind, idx){
   const dots = expandedFolios.map((f, i) => (two && i % 2) ? '' :
     `<button class="ms-dot${i === 0 ? ' on' : ''}" data-pg="${i}" onclick="msGoTo(${i})"
              aria-label="${two ? 'Pages ' + (i + 1) + '\u2013' + (i + 2) : 'Page ' + (i + 1)}"></button>`).join('');
-  return `${noteBlock(q.note)}
-    ${(q.video || q.video2) ? `<div class="ms-tune" id="ms-tune">
-      ${(q.video || audioFor(kind, idx).length) ? `<button class="qtune" onclick="openPlayerFor('${kind}',${idx},1)">▶ ${(kind === 'd' || kind === 'l') ? 'Listen to this ḥizb' : 'Listen to the tune'}</button>` : ''}
-      ${q.video2 ? `<button class="qtune" onclick="openPlayerFor('${kind}',${idx},2)">▶ Listen — alternate version</button>` : ''}
-    </div>` : ''}
+  return `${readerActions(q, kind, idx, true)}
     <p class="ms-hint">Turn the leaf right to left · tap a phrase to mark your place</p>
     ${MS_DEFS}
     <div class="ms-book${two ? ' spread' : ''}" id="ms-book" onscroll="msSyncDots()">${expandedFolios.map(sheet).join('')}</div>
