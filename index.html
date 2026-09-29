@@ -2843,10 +2843,11 @@ function clearDalailPlace(){
      "kind:idx:n", so Dalāʾil marks start "d:"), so Clear wipes the resume place
      and all gold-ring verse bookmarks together. */
   try {
-    const m = loadMarks();
+    const m = readMarkStore('dlk-marks');     // both versions' Dalāʾil highlights go
     let changed = false;
     Object.keys(m).forEach(k => { if(k.slice(0, 2) === 'd:'){ delete m[k]; changed = true; } });
     if(changed) localStorage.setItem('dlk-marks', JSON.stringify(m));
+    localStorage.removeItem('dlk-marks-mughlay');
   } catch(e){}
   msPlaceCandidate = null;
   renderIndex();
@@ -7658,8 +7659,8 @@ function editionSwitch(){
    versions, so the Book view keeps the leaf itself — going via the top verse
    landed one leaf early whenever a verse ran on from the previous page; the
    Study view keeps the verse at the top, as the Book/Study toggle does. */
-/* A short note that the switch happened and that saved places don't carry
-   across: the two versions divide the text differently, so a place saved in
+/* A short note that the switch happened and that saved places and
+   highlights don't carry across: the two versions divide the text differently, so a place saved in
    one would land on a different phrase in the other. */
 function editionToast(msg){
   let t = document.getElementById('ed-toast');
@@ -7679,8 +7680,8 @@ function setDalailEdition(v){
     b.setAttribute('aria-pressed', String(b.dataset.ed === v));
   });
   editionToast(v === 'sayyidina'
-    ? 'Mughlay Version. Saved places are kept separately for each version.'
-    : 'Istanbul Version. Saved places are kept separately for each version.');
+    ? 'Mughlay Version. Saved places and highlights are kept separately for each version.'
+    : 'Istanbul Version. Saved places and highlights are kept separately for each version.');
   const view = renderedView();
   if(view === 'none' || !msPiece || msPiece.kind !== 'd'){
     /* On the Dalāʾil landing page the "Continue where you left off" card
@@ -17147,19 +17148,35 @@ function msGoTo(i){
   requestAnimationFrame(goTop);
 }
 
-/* Marks are kept per phrase, on the device. */
-function loadMarks(){
-  try { return JSON.parse(localStorage.getItem('dlk-marks')) || {}; }
+/* Marks are kept per phrase, on the device. The Dalāʾil's own ("d:" keys)
+   are kept per version: the Mughlay Version divides phrases where its own
+   printing does, so a highlight made in one version would light a
+   different phrase in the other. Istanbul's stay in the original store, so
+   highlights made before there were two versions are still found; the
+   Mughlay Version's sit beside it under '-mughlay'. Every other collection
+   shares one store whichever version is chosen. Function declarations, not
+   consts, because marks can be read before this point in the script. */
+function readMarkStore(key){
+  try { return JSON.parse(localStorage.getItem(key)) || {}; }
   catch(e){ return {}; }
+}
+function mughlayNow(){ try { return dalailEdition === 'sayyidina'; } catch(e){ return false; } }
+function markStoreFor(kind){ return (kind === 'd' && mughlayNow()) ? 'dlk-marks-mughlay' : 'dlk-marks'; }
+function loadMarks(){
+  const m = readMarkStore('dlk-marks');
+  if(!mughlayNow()) return m;
+  Object.keys(m).forEach(k => { if(k.slice(0, 2) === 'd:') delete m[k]; });
+  return Object.assign(m, readMarkStore('dlk-marks-mughlay'));
 }
 
 function markKey(kind, idx, n, seg){ return kind + ':' + idx + ':' + n + (seg != null && seg !== '' ? ':' + seg : ''); }
 
 function markVerse(kind, idx, n, seg){
-  const m = loadMarks(), k = markKey(kind, idx, n, seg);
+  const k = markKey(kind, idx, n, seg), store = markStoreFor(kind);
+  const m = readMarkStore(store);
   const on = !m[k];
   if(m[k]) delete m[k]; else m[k] = 1;
-  try { localStorage.setItem('dlk-marks', JSON.stringify(m)); } catch(e){}
+  try { localStorage.setItem(store, JSON.stringify(m)); } catch(e){}
   const el = document.querySelector('[data-mk="' + k + '"]');
   if(el) el.classList.toggle('marked', on);
   /* In the Dalāʾil, the phrase you last highlight is the one "Save my place"
