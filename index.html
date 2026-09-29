@@ -113,7 +113,8 @@
     --paper-edge:#EFE6D2;
     --gold:#B8934A;
     --gold-soft:#D8C193;
-    --ms-paper:#FBF4DE;   /* the leaf itself */
+    --ms-paper:#F6ECD2;   /* the leaf itself — and the Study card, so both read as one book's paper */
+    --ms-paper-deep:#EEE0BF;  /* the same paper, a shade down, for a refrain's gradient */
     --ms-ink:#2A2118;
     --ms-rule:#6B4E2A;
     --ms-gold:#B8934A;
@@ -144,6 +145,7 @@
     --paper-edge:#2E3324;
     --gold:#C9A55E;
     --ms-paper:#191510;   /* the same leaf, inverted for a dark room */
+    --ms-paper-deep:#211B13;
     --ms-ink:#EADEC2;
     --ms-rule:#A98A55;
     --ms-gold:#C9A55E;
@@ -969,12 +971,14 @@
     cursor:pointer; white-space:nowrap; text-decoration:none; font-family:inherit;
   }
   .ytdock-btn:active{ background:rgba(255,255,255,.14); }
+  /* The Study card is printed on the Book Version's paper (owner's call), so
+     switching views keeps the same page colour; a gold hairline edges it. */
   .verse{
-    background:var(--card);border:1px solid var(--paper-edge);border-radius:16px;
+    background:var(--ms-paper);border:1px solid var(--rule-soft);border-radius:16px;
     padding:1.3rem 1.2rem 1.15rem;margin-bottom:1rem;position:relative;
     box-shadow:0 1px 2px rgba(18,53,40,.05);
   }
-  .verse.refrain{border-color:var(--gold-soft);background:linear-gradient(var(--card),var(--card-alt))}
+  .verse.refrain{border-color:var(--gold-soft);background:linear-gradient(var(--ms-paper),var(--ms-paper-deep))}
   .v-num{
     position:absolute;top:-0.85rem;left:50%;transform:translateX(-50%);
     background:var(--bg);border:1.5px solid var(--gold);color:var(--gold);
@@ -1084,7 +1088,7 @@
      the supplication standing around it. */
   .verse.v-instruction{
     border-color:var(--gold); border-width:1.5px;
-    background-color:var(--card);
+    background-color:var(--ms-paper);
     background-image:linear-gradient(rgba(184,147,74,.11), rgba(184,147,74,.03));
   }
   .instruction-note{
