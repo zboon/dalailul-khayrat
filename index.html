@@ -26,7 +26,7 @@
      script, where nothing that reads the page without running it can see
      it — so "which version is actually live?" could only be answered from
      a phone. Keep the two in step when bumping. -->
-<meta name="app-version" content="v99">
+<meta name="app-version" content="v100">
 <!-- YouTube's embedded player refuses to configure itself unless the host page
      sends a Referer (Error 153 / embedder.identity.missing.referrer). This is
      the browser default in most cases, but a standalone PWA or a WebView may
@@ -1374,9 +1374,12 @@
   .view-swap svg{ width:1rem; height:1rem; display:block; }
   .view-swap:hover{ opacity:1; }
   .view-swap:active{ transform:scale(.9); }
-  /* The Book/Study swap is the only place the view is chosen (owner's call,
-     v428 / v99): the labelled pair that used to sit under the title went,
-     to clear the top of the page, so this one no longer hides at the top. */
+  /* The labelled Book Version / Study Version pair is back under the title
+     (owner's call, v429/v100 — the bar icon alone was too easy for a new
+     reader to miss). At the top the calligraphy is showing and the labelled
+     pair is in the controls just below, so the little bar swap steps aside;
+     it appears once you scroll into the reading (the bar goes slim). */
+  .reader-bar:not(.slim) .view-swap{ display:none; }
   /* The day/night toggle rides in the reader bar too, so it is reachable from
      every screen and not only from the mastheads. The base .theme-toggle is
      absolutely positioned against the masthead; inside the bar it is an
@@ -12227,7 +12230,7 @@ const MAWLID_COLLECTIONS = [
 
 /* Bumped with sw.js on every release. Shown small at the foot of the home page
    so you can tell at a glance which build a given phone is actually running. */
-const APP_VERSION = 'v99';
+const APP_VERSION = 'v100';
 /* Where the home-page feedback button sends corrections. Change to your address. */
 const FEEDBACK_EMAIL = 'zayd.boon@gmail.com';
 
@@ -15948,7 +15951,10 @@ function readerHTML(q, backOnclick, kind, idx){
     ${empty ? '' : `<div class="controls">
       ${kind === 'd' && pageView ? `<button class="chip place-btn ${placeIsHere(idx)&&placeStillMarked()?'on':''}"
         data-idx="${idx}" onclick="saveDalailPlace(${idx})">${placeBtnLabel(idx)}</button>` : ''}
-      ${hasPages ? `
+      ${hasPages ? `<span class="view-switch" role="group" aria-label="How to read this">
+        <button class="${pageView?'on':''}" onclick="setPageView(true,${controlsTarget})">Book Version</button>
+        <button class="${pageView?'':'on'}" onclick="setPageView(false,${controlsTarget})">Study Version</button>
+        </span>
       ${pageView && spreadOffered() ? `<button class="chip ${spreadOn()?'on':'off'}"
         onclick="toggleSpread(${controlsTarget})">Two pages</button>` : ''}
       ${pageView ? `<button class="chip icon" onclick="setImmersive(true)" aria-label="Full screen">
