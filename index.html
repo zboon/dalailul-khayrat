@@ -26,7 +26,7 @@
      script, where nothing that reads the page without running it can see
      it — so "which version is actually live?" could only be answered from
      a phone. Keep the two in step when bumping. -->
-<meta name="app-version" content="v97">
+<meta name="app-version" content="v98">
 <!-- YouTube's embedded player refuses to configure itself unless the host page
      sends a Referer (Error 153 / embedder.identity.missing.referrer). This is
      the browser default in most cases, but a standalone PWA or a WebView may
@@ -765,7 +765,7 @@
   .refrain-repeat.open .refrain-repeat-body{
     display:block;
     border:1px solid var(--gold-soft);border-radius:16px;
-    background:linear-gradient(var(--card),var(--card-alt));
+    background:linear-gradient(var(--ms-paper),var(--ms-paper-deep));
     padding:1rem 1.1rem;margin-top:.1rem;
   }
   .refrain-note{
@@ -2598,14 +2598,27 @@ function saveViewPref(on){
 
 /* Which script the Arabic is set in: 'uthmani' (the standard, KFGQPC Hafs),
    'indopak' (DigitalKhatt IndoPak) or 'naskh' (Scheherazade New). Unset, or
-   anything unrecognised, means Uthmani. Written only from
+   anything unrecognised, means the version's own default: IndoPak in the
+   Mughlay Version, Uthmani in Istanbul (owner's call) — so a reader who
+   has never chosen a script sees the Mughlay text in the script of its
+   Indo-Pak printing, and switching versions carries the default with it.
+   Once a script is chosen it holds in both versions. Written only from
    setArFont, the reader's own switch — like the size, the columns and the
    view, and for the same reason: a live session does not carry it, so a
    follower keeps their own script and nothing a leader does rewrites it.
    Only the font changes; the text is the same bytes either way. */
 const FONT_KEY = 'dlk-font';
 const AR_FONTS = { uthmani: null, indopak: 'DKIndoPak', naskh: 'SchNew' };
-let arFont = (() => { try { const v = localStorage.getItem(FONT_KEY); return AR_FONTS[v] !== undefined ? v : 'uthmani'; } catch(e){ return 'uthmani'; } })();
+let arFontChosen = (() => { try { const v = localStorage.getItem(FONT_KEY); return AR_FONTS[v] !== undefined ? v : null; } catch(e){ return null; } })();
+/* dalailEdition is declared further down, so on the first call the stored
+   version is read directly (the same key and rule as its initialiser). */
+function defaultArFont(){
+  let ed;
+  try { ed = dalailEdition; }
+  catch(e){ try { ed = localStorage.getItem('dlk-edition') === 'sayyidina' ? 'sayyidina' : 'istanbul'; } catch(e2){ ed = 'istanbul'; } }
+  return ed === 'sayyidina' ? 'indopak' : 'uthmani';
+}
+let arFont = arFontChosen || defaultArFont();
 function applyArFont(){
   document.documentElement.classList.toggle('ar-indopak', arFont === 'indopak');
   document.documentElement.classList.toggle('ar-naskh', arFont === 'naskh');
@@ -7679,6 +7692,8 @@ function setDalailEdition(v){
   dalailEdition = v;
   try { localStorage.setItem(EDITION_KEY, v); } catch(e){}
   applyDalailEdition();
+  // Never having chosen a script, the reader gets the version's own.
+  if(!arFontChosen && defaultArFont() !== arFont) showArFont(defaultArFont());
   document.querySelectorAll('.edition-switch button').forEach(b => {
     b.classList.toggle('on', b.dataset.ed === v);
     b.setAttribute('aria-pressed', String(b.dataset.ed === v));
@@ -12190,7 +12205,7 @@ const MAWLID_COLLECTIONS = [
 
 /* Bumped with sw.js on every release. Shown small at the foot of the home page
    so you can tell at a glance which build a given phone is actually running. */
-const APP_VERSION = 'v97';
+const APP_VERSION = 'v98';
 /* Where the home-page feedback button sends corrections. Change to your address. */
 const FEEDBACK_EMAIL = 'zayd.boon@gmail.com';
 
@@ -16134,9 +16149,16 @@ function toggle(kind,i){ state.showTr = !state.showTr; saveCols(); reopen(kind,i
    view loses its place; the Book leaves are re-fitted, since the IndoPak
    and Naskh letters set wider and taller than the Uthmani ones. */
 function setArFont(v){
-  if(AR_FONTS[v] === undefined || v === arFont) return;
+  if(AR_FONTS[v] === undefined) return;
+  /* A tap is a choice even on the script already showing: it is stored, so
+     a version's default no longer moves it. */
+  arFontChosen = v;
+  try { localStorage.setItem(FONT_KEY, v); } catch(e){}
+  if(v === arFont) return;
+  showArFont(v);
+}
+function showArFont(v){
   arFont = v;
-  try { localStorage.setItem(FONT_KEY, arFont); } catch(e){}
   applyArFont();
   document.querySelectorAll('.script-switch button').forEach(b => {
     b.classList.toggle('on', b.dataset.font === arFont);
