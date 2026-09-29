@@ -7564,8 +7564,9 @@ const DALAIL_CHAPTERS = [
    DALAIL_CHAPTERS above is the ISTANBUL version: collated word by word
    against the Istanbul printing, which removed 520 سيدنا the app had carried
    (one commit per day; Mawalid v388, the Dalāʾil app v66). The owner then
-   asked for the earlier text to be offered too, as "With Sayyidinā" (a
-   working name), and for that version to be read without the Arabic commas.
+   asked for the earlier text to be offered too, as the Mughlay Version
+   (first called "With Sayyidinā"; the code keeps that name, and the stored
+   value 'sayyidina'), and for it to be read without the Arabic commas.
 
    DALAIL_WITH_SAYYIDINA holds the 153 verses those splices changed, keyed
    "chapter:verse", with ar, tr and en together (the splices moved all three).
@@ -7575,7 +7576,7 @@ const DALAIL_CHAPTERS = [
    that every ۞ and ‖ is where it was (so Book leaves, segments and saved
    places line up in both versions), and 520 restored in all: Mon1 119,
    Tue 35, Wed 25, Thu 63, Fri 134, Sat 94, Sun 28, Mon2 22. The data keeps
-   its commas; the With Sayyidinā version drops every Arabic comma (U+060C)
+   its commas; the Mughlay Version drops every Arabic comma (U+060C)
    from the Arabic of the whole Dalāʾil as it is applied — all 1,065 sit as
    "word، next", so removing one leaves a single space. tr and en keep theirs.
 
@@ -7616,7 +7617,7 @@ const DALAIL_EDITION_CHAPTERS = DALAIL_ISTANBUL.map((vs, ci) =>
 const dalailHasEditions = idx => !!DALAIL_EDITION_CHAPTERS[idx];
 function editionSwitch(){
   return `<span class="view-switch edition-switch" role="group" aria-label="Version of the Dalāʾil">${
-    [['istanbul', 'Istanbul'], ['sayyidina', 'With Sayyidinā']].map(([v, l]) =>
+    [['istanbul', 'Istanbul'], ['sayyidina', 'Mughlay']].map(([v, l]) =>
       `<button data-ed="${v}" class="${dalailEdition === v ? 'on' : ''}" aria-pressed="${dalailEdition === v}" onclick="setDalailEdition('${v}')">${l}</button>`).join('')
   }</span>`;
 }
