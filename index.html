@@ -26,7 +26,7 @@
      script, where nothing that reads the page without running it can see
      it — so "which version is actually live?" could only be answered from
      a phone. Keep the two in step when bumping. -->
-<meta name="app-version" content="v102">
+<meta name="app-version" content="v103">
 <!-- YouTube's embedded player refuses to configure itself unless the host page
      sends a Referer (Error 153 / embedder.identity.missing.referrer). This is
      the browser default in most cases, but a standalone PWA or a WebView may
@@ -2789,6 +2789,50 @@ function msVerseEl(idx, n, mk){
       || document.querySelector('[data-mk^="' + base + '."]');
 }
 
+/* Where the reader is on the current leaf, for a switch to the Study view:
+   the phrase they last highlighted, else the bookmarked phrase, if either is
+   on this leaf; else the top verse on the leaf. Before this the switch always
+   took the top verse, so a reader who had marked words lower down — or on a
+   leaf that opens mid-verse — landed on a different verse in Study.
+
+   The phrase travels as its text plus its position among the verse's
+   phrases, because the two views number phrases differently: the Book
+   Version restarts the count on each page a verse spans, and a page turn
+   inside a phrase splits it in two there but not in Study. */
+function bookSpotForSwitch(){
+  const book = document.getElementById('ms-book');
+  if(!book) return { n: null };
+  const sheet = book.children[msCurrentPage()];
+  let el = null;
+  if(msPlaceCandidate && msPiece && msPlaceCandidate.idx === msPiece.idx && msPlaceCandidate.mk){
+    const c = book.querySelector('.seg[data-mk="' + msPlaceCandidate.mk + '"]');
+    if(c && sheet && sheet.contains(c)) el = c;
+  }
+  if(!el && sheet) el = sheet.querySelector('.seg.placed[data-mk]');
+  if(!el) return { n: topVisibleMsVerse() };
+  const mk = el.getAttribute('data-mk');
+  const n = mkVerseIndex(mk);
+  const base = mk.split(':').slice(0, 2).join(':') + ':' + n;
+  const all = Array.from(book.querySelectorAll('.seg[data-mk^="' + base + ':"], .seg[data-mk^="' + base + '."]'));
+  return { n, seg: { text: el.textContent, est: Math.max(0, all.indexOf(el)) } };
+}
+
+/* The Study phrase matching a phrase carried over from the Book Version: the
+   one containing its words, nearest its position if the words recur. */
+function studySegFor(art, spot){
+  const segs = Array.from(art.querySelectorAll('.seg[data-sg]'));
+  const norm = t => String(t).replace(/[\s،]+/g, '');
+  const want = norm(spot.text);
+  let best = null, bestD = Infinity;
+  segs.forEach((sg, i) => {
+    if(want && norm(sg.textContent).indexOf(want) !== -1){
+      const d = Math.abs(i - spot.est);
+      if(d < bestD){ bestD = d; best = sg; }
+    }
+  });
+  return best || segs[Math.min(spot.est, segs.length - 1)] || null;
+}
+
 /* The top-most verse still on screen on the current leaf — the fallback when
    the reader saves without having tapped a verse. */
 function topVisibleMsVerse(){
@@ -2905,7 +2949,7 @@ function resumeDalail(){
   const hasPages = Array.isArray(c.folios) && c.folios.length > 0;
   state.pageView = (p.view === 'book') && hasPages;
   openDalail(p.idx);
-  const go = () => {
+  const go = (flash) => {
     if(state.pageView){
       const book = document.getElementById('ms-book');
       if(!book) return;
@@ -2921,20 +2965,32 @@ function resumeDalail(){
       }
       if(vEl){
         markPlacedMsVerse(p.idx, p.verse, p.seg, p.mk);
-        const r = vEl.getBoundingClientRect();
-        if(r.top < 84 || r.bottom > window.innerHeight - 8){
-          window.scrollTo({ top: Math.max(0, r.top + window.scrollY - 96) });
+        /* Aim at the saved phrase itself — the words between two rosettes —
+           not the start of its verse. A long verse fills most of a leaf, so
+           scrolling to where the verse begins left the phrase below the
+           screen; and a verse that runs on from the previous page begins
+           on a page the reader is not on. */
+        const segEl = p.mk ? book.querySelector('.seg[data-mk="' + p.mk + '"]') : null;
+        const target = segEl || vEl;
+        const r = target.getBoundingClientRect();
+        /* Low on the screen counts as out of view: the fixed leaf arrows sit
+           over the bottom of it. */
+        if(r.top < 84 || r.bottom > window.innerHeight * 0.75){
+          window.scrollTo({ top: Math.max(0, r.top + window.scrollY - 160) });
         }
-        vEl.classList.remove('ms-flash'); void vEl.offsetWidth; vEl.classList.add('ms-flash');
+        if(flash){
+          const cls = segEl ? 'seg-flash' : 'ms-flash';
+          target.classList.remove(cls); void target.offsetWidth; target.classList.add(cls);
+        }
       }
     } else if(p.verse != null){
       const el = document.querySelector('article.verse[data-v="' + p.verse + '"]');
       if(el) window.scrollTo({ top: Math.max(0, el.getBoundingClientRect().top + window.scrollY - 84) });
     }
   };
-  if(window.requestAnimationFrame) requestAnimationFrame(() => requestAnimationFrame(go));
-  else setTimeout(go, 40);
-  setTimeout(go, 320);
+  if(window.requestAnimationFrame) requestAnimationFrame(() => requestAnimationFrame(() => go(false)));
+  else setTimeout(() => go(false), 40);
+  setTimeout(() => go(true), 320);
 }
 
 /* The card that offers the place back, shown at the head of the Dalāʾil tab. */
@@ -3183,8 +3239,19 @@ function scrollToVerse(kind, idx, n, seg){
   }
   const el = document.querySelector('article.verse[data-v="'+n+'"]');
   if(!el) return false;
-  window.scrollTo({ top: Math.max(0, el.getBoundingClientRect().top + window.scrollY - 84) });
-  (()=>{ const sg=(seg!=null)?el.querySelector('.seg[data-sg="'+seg+'"]'):null; if(sg){ sg.classList.remove('seg-flash'); void sg.offsetWidth; sg.classList.add('seg-flash'); } else { el.classList.remove('hit-flash'); void el.offsetWidth; el.classList.add('hit-flash'); } })();
+  /* seg is a Study phrase index, or — coming from the Book Version — the
+     phrase's text and position (bookSpotForSwitch). */
+  const sgEl = (seg != null && typeof seg === 'object') ? studySegFor(el, seg)
+             : (seg != null ? el.querySelector('.seg[data-sg="'+seg+'"]') : null);
+  let y = el.getBoundingClientRect().top + window.scrollY - 84;
+  /* A long verse can run several screens; keep its number in view if the
+     phrase still shows, otherwise bring the phrase up. */
+  if(sgEl){
+    const sy = sgEl.getBoundingClientRect().top + window.scrollY;
+    if(sy - y > window.innerHeight * 0.6) y = sy - 160;
+  }
+  window.scrollTo({ top: Math.max(0, y) });
+  (()=>{ const sg=sgEl; if(sg){ sg.classList.remove('seg-flash'); void sg.offsetWidth; sg.classList.add('seg-flash'); } else { el.classList.remove('hit-flash'); void el.offsetWidth; el.classList.add('hit-flash'); } })();
   return true;
 }
 
@@ -12231,7 +12298,7 @@ const MAWLID_COLLECTIONS = [
 
 /* Bumped with sw.js on every release. Shown small at the foot of the home page
    so you can tell at a glance which build a given phone is actually running. */
-const APP_VERSION = 'v102';
+const APP_VERSION = 'v103';
 /* Where the home-page feedback button sends corrections. Change to your address. */
 const FEEDBACK_EMAIL = 'zayd.boon@gmail.com';
 
@@ -17476,15 +17543,16 @@ function setPageView(on, kind, idx){
      opener and returned, and in the fork the wrong view was persisted on
      the way out. Bail before touching state, not after. */
   if(typeof window[OPENERS[kind]] !== 'function') return;
-  /* Keep your place across the switch: note the verse at the top of the current
-     view, then land on the same verse index in the other one. */
-  const keepVerse = state.pageView ? topVisibleMsVerse() : topVisibleVerse();
+  /* Keep your place across the switch. From the Book Version that is the
+     phrase the reader highlighted or bookmarked on this leaf, if any, else
+     the leaf's top verse; from Study, the verse at the top of the screen. */
+  const keep = state.pageView ? bookSpotForSwitch() : { n: topVisibleVerse() };
   state.pageView = on;
   saveViewPref(on);
   if(!on) setImmersive(false);
   reopen(kind, idx);
   if(window.requestAnimationFrame) requestAnimationFrame(msFloatPosition);
-  afterViewScroll(kind, idx, keepVerse);
+  afterViewScroll(kind, idx, keep.n, keep.seg);
 }
 
 function toggleEn(kind,i){ state.showEn = !state.showEn; saveCols(); reopen(kind,i); }
