@@ -7,15 +7,15 @@
    missed sw.js froze the app permanently with no way out from the phone.
    Everything else (fonts, icons, manifest) stays cache-first: it's large,
    it doesn't change, and it's what makes the app work with no signal. */
-const CACHE = 'dalail-v103'; // bump this whenever you update index.html
+const CACHE = 'dalail-v104'; // bump this whenever you update index.html
 const CORE = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png'];
 
 /* Downloaded recitations live in their own cache, opened by the page rather
    than by this worker. It is listed here so the cleanup below spares it.
 
-   This matters more than it looks. The cleanup deletes every cache whose name
-   is not the current one — which is right for the app shell, and was quietly
-   fatal for audio: a listener downloads all seven portions over the masjid
+   This matters more than it looks. The cleanup once deleted every cache whose
+   name was not the current one — right for the app shell, and quietly fatal
+   for audio (and, below, for the other app): a listener downloads all seven portions over the masjid
    wifi, a typo fix ships, and 150MB disappears on next launch with nothing
    said. Audio is expensive to fetch and must outlive app versions, so its
    cache name carries no version and is never swept.
@@ -40,10 +40,17 @@ self.addEventListener('install', e => {
   );
 });
 
+/* Only this app's own old versions are swept. Mawalid and the Dalāʾil app
+   are both served from zboon.github.io, so they share one origin and one
+   cache storage: caches.keys() lists the other app's caches too. Sweeping
+   "everything not ours" deleted the other app's offline copy every time
+   this one updated, and that app then would not open with no signal — the
+   owner hit exactly that. */
+const OWN = 'dalail-v';
 self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys().then(keys =>
-      Promise.all(keys.filter(k => KEEP.indexOf(k) === -1).map(k => caches.delete(k)))
+      Promise.all(keys.filter(k => k.indexOf(OWN) === 0 && KEEP.indexOf(k) === -1).map(k => caches.delete(k)))
     ).then(() => self.clients.claim())
   );
 });
