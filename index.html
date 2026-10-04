@@ -26,7 +26,7 @@
      script, where nothing that reads the page without running it can see
      it — so "which version is actually live?" could only be answered from
      a phone. Keep the two in step when bumping. -->
-<meta name="app-version" content="v107">
+<meta name="app-version" content="v108">
 <!-- YouTube's embedded player refuses to configure itself unless the host page
      sends a Referer (Error 153 / embedder.identity.missing.referrer). This is
      the browser default in most cases, but a standalone PWA or a WebView may
@@ -12324,7 +12324,7 @@ const MAWLID_COLLECTIONS = [
 
 /* Bumped with sw.js on every release. Shown small at the foot of the home page
    so you can tell at a glance which build a given phone is actually running. */
-const APP_VERSION = 'v107';
+const APP_VERSION = 'v108';
 /* Where the home-page feedback button sends corrections. Change to your address. */
 const FEEDBACK_EMAIL = 'zayd.boon@gmail.com';
 
@@ -12360,7 +12360,7 @@ function tabIsActive(id){
 /* The 10 chapters of Imam al-Būṣīrī's Qaṣīdat al-Burda.
    Titles are in place; add verses (same {ar,tr,en} format) to fill each. */
 const BURDAH_CHAPTERS = [
-  { titleArabic:"فِي الْغَزَلِ وَشَكْوَى الْغَرَامِ", titleEnglish:"1 · On Longing and the Complaint of Love", video:"https://youtu.be/CnfY5RCWBi0?t=5", verses:[
+  { titleArabic:"فِي الْغَزَلِ وَشَكْوَى الْغَرَامِ", titleEnglish:"1 · On Longing and the Complaint of Love", video:"https://youtu.be/CnfY5RCWBi0", videoStart:10, videoEnd:355, verses:[
       { ar:"أَمِنْ تَذَكُّرِ جِيرَانٍ بِذِي سَلَمِ ۞ مَزَجْتَ دَمْعًا جَرَى مِنْ مُقْلَةٍ بِدَمِ",
         tr:"Amin tadhakkuri jīrānin bi dhī salami · Mazajta damʿan jarā min muqlatin bidami",
         en:"Is it from recalling the neighbours at Dhū Salam that you mixed with blood the tears streaming from your eyes?" },
@@ -12398,7 +12398,7 @@ const BURDAH_CHAPTERS = [
         tr:"Innit tahamtu naṣīḥash shaybi fī ʿadhalī · Wash shaybu abʿadu fī nuṣḥin ʿanit tuhami",
         en:"I have even held suspect the counsel of my grey hairs in their reproach — though grey hair, in its counsel, is the furthest from suspicion." }
     ] },
-  { titleArabic:"فِي التَّحْذِيرِ مِنْ هَوَى النَّفْسِ", titleEnglish:"2 · On Warning against the Caprice of the Self", video:"https://youtu.be/CnfY5RCWBi0?t=355", verses:[
+  { titleArabic:"فِي التَّحْذِيرِ مِنْ هَوَى النَّفْسِ", titleEnglish:"2 · On Warning against the Caprice of the Self", video:"https://youtu.be/CnfY5RCWBi0", videoStart:355, videoEnd:648, verses:[
       { ar:"فَإِنَّ أَمَّارَتيِ بِالسُّوءِ مَا اتَّعَظَتْ ۞ مِنْ جَهْلِهَا بِنَذِيرِ الشَّيْبِ وَالهَرَمِ",
         tr:"Fa inna ammāratī bis sūʾi mat taʿaẓat · Min jahlihā bi nadhīrish shaybi wal harami",
         en:"For my soul, ever commanding evil, took no warning — in its ignorance — from the warner of grey hair and old age." },
@@ -12448,7 +12448,7 @@ const BURDAH_CHAPTERS = [
         tr:"Wa lā tazawwadtu qablal mawti nāfīlatan · Wa lam uṣalli siwā farḍin wa lam aṣumi",
         en:"Nor did I lay up, before death, any voluntary works; I prayed nothing beyond the obligatory, and I did not fast." }
     ] },
-  { titleArabic:"فِي مَدْحِ النَّبِيِّ ﷺ", titleEnglish:"3 · In Praise of the Prophet ﷺ", video:"https://youtu.be/CnfY5RCWBi0?t=648", verses:[
+  { titleArabic:"فِي مَدْحِ النَّبِيِّ ﷺ", titleEnglish:"3 · In Praise of the Prophet ﷺ", video:"https://youtu.be/CnfY5RCWBi0", videoStart:648, videoEnd:1213, verses:[
       { ar:"ظَلَمْتُ سُنَّةَ مَنْ أَحْيَا الظَّلاَمَ إِلَى ۞ أَنِ اشْتَكَتْ قَدَمَاهُ الضُّرَّ مِنْ وَرَمِ",
         tr:"Ẓalamtu sunnata man aḥyādh ẓalāma ilā · Anishtakat qadamāhuḍ ḍurra min warami",
         en:"I have wronged the way of him who kept the nights alive in prayer until his feet complained of the hurt of swelling." },
@@ -12540,7 +12540,7 @@ const BURDAH_CHAPTERS = [
         tr:"Lā ṭība yaʿdilu turban ḍamma aʿẓumahu · Ṭūbā li muntashiqin minhu wa multathimi",
         en:"No perfume equals the earth that embraces his blessed remains; blessed is the one who breathes its scent or kisses it." }
     ] },
-  { titleArabic:"فِي مَوْلِدِهِ ﷺ", titleEnglish:"4 · On His Noble Birth", video:"https://youtu.be/CnfY5RCWBi0?t=1213", verses:[
+  { titleArabic:"فِي مَوْلِدِهِ ﷺ", titleEnglish:"4 · On His Noble Birth", video:"https://youtu.be/CnfY5RCWBi0", videoStart:1213, videoEnd:1479, verses:[
       { ar:"أَبَانَ مَوْلِدُهُ عَنْ طِيبِ عُنْصُرِهِ ۞ يَا طِيبَ مُبْتَدَإٍ مِنْهُ وَمُخْتَتَمِ",
         tr:"Abāna mawliduhu ʿan ṭībi ʿunṣurihi · Yā ṭība mubtadaʾin minhu wa mukhtatami",
         en:"His birth made plain the purity of his origin — O how pure were his beginning and his end!" },
@@ -12581,7 +12581,7 @@ const BURDAH_CHAPTERS = [
         tr:"Nabdhan bihi baʿda tasbīḥin bi baṭnihimā · Nabdhal musabbiḥi min aḥshāʾi multaqimi",
         en:"Cast out by his hands after they had glorified Allah within his palms, as the glorifier was cast from the belly of the whale." }
     ] },
-  { titleArabic:"فِي مُعْجِزَاتِهِ ﷺ", titleEnglish:"5 · On His Miracles", video:"https://youtu.be/CnfY5RCWBi0?t=1479", verses:[
+  { titleArabic:"فِي مُعْجِزَاتِهِ ﷺ", titleEnglish:"5 · On His Miracles", video:"https://youtu.be/CnfY5RCWBi0", videoStart:1479, videoEnd:1822, verses:[
       { ar:"جَاءَتْ لِدَعْوَتِهِ الْأَشْجَارُ سَاجِدَةً ۞ تَمْشِي إِلَيْهِ عَلٰى سَاقٍ بِلاَ قَدَمِ",
         tr:"Jāʾat li daʿwatihil ashjāru sājidatan · Tamshī ilayhi ʿalā sāqin bilā qadami",
         en:"At his call the trees came prostrating, walking towards him upon trunks without feet." },
@@ -12631,7 +12631,7 @@ const BURDAH_CHAPTERS = [
         tr:"Bi ʿāriḍin jāda aw khiltal biṭāḥa bihā · Sayban minal yammi aw saylan minal ʿarimi",
         en:"With a rain-cloud so generous you would think the valleys ran with a flow from the sea, or the bursting flood of ʿArim." }
     ] },
-  { titleArabic:"فِي شَرَفِ الْقُرْآنِ وَمَدْحِهِ", titleEnglish:"6 · On the Nobility of the Qur'an", video:"https://youtu.be/CnfY5RCWBi0?t=1822", verses:[
+  { titleArabic:"فِي شَرَفِ الْقُرْآنِ وَمَدْحِهِ", titleEnglish:"6 · On the Nobility of the Qur'an", video:"https://youtu.be/CnfY5RCWBi0", videoStart:1822, videoEnd:2154, verses:[
       { ar:"دَعْنيِ وَوَصْفِي آيَاتٍ لَهُ ظَهَرَتْ ۞ ظُهُورَ نَارِ الْقِرَى لَيْلاً عَلٰى عَلَمِ",
         tr:"Daʿnī wa waṣfī āyātin lahu ẓaharat · Ẓuhūra nāril qirā laylan ʿalā ʿalami",
         en:"Leave me to describe the signs made manifest through him — plain as a host's welcoming fire lit at night upon a hill." },
@@ -12684,7 +12684,7 @@ const BURDAH_CHAPTERS = [
         tr:"Qad tunkirul ʿaynu ḍawʾash shamsi min ramadin · Wa yunkirul famu ṭaʿmal māʾi min saqami",
         en:"The eye may reject the light of the sun on account of inflammation, and the mouth may reject the taste of water on account of illness." }
     ] },
-  { titleArabic:"فِي مِعْرَاجِهِ ﷺ", titleEnglish:"7 · On the Night Journey and Ascension", video:"https://youtu.be/CnfY5RCWBi0?t=2154", video2:"https://www.youtube.com/watch?v=pyjaFgnuESw", verses:[
+  { titleArabic:"فِي مِعْرَاجِهِ ﷺ", titleEnglish:"7 · On the Night Journey and Ascension", video:"https://youtu.be/CnfY5RCWBi0", videoStart:2154, videoEnd:2423, video2:"https://www.youtube.com/watch?v=pyjaFgnuESw", verses:[
       { ar:"يَا خَيْرَ مَنْ يَمَّمَ الْعّافُونَ سَاحَتَهُ ۞ سَعْيًا وَفَوْقَ مُتُونِ الْأَيْنُقِ الرُّسُمِ",
         tr:"Yā Khayra man yammamal ʿāfūna sāḥatahu · Saʿyan wa fawqa mutūnil aynuqir rusumi",
         en:"O best of those to whose courtyard the seekers make their way — on foot and on the backs of sturdy, tireless she-camels!" },
@@ -12725,7 +12725,7 @@ const BURDAH_CHAPTERS = [
         tr:"Lammā daʿāLlāhu dāʿīnā liṭāʿatihi · Bi akramir rusli kunna akramal umami",
         en:"When Allah called the one who calls us to His obedience the noblest of Messengers, we became the noblest of nations." }
     ] },
-  { titleArabic:"فِي جِهَادِهِ ﷺ", titleEnglish:"8 · On His Campaigns and Striving", video:"https://youtu.be/CnfY5RCWBi0?t=2423", verses:[
+  { titleArabic:"فِي جِهَادِهِ ﷺ", titleEnglish:"8 · On His Campaigns and Striving", video:"https://youtu.be/CnfY5RCWBi0", videoStart:2423, videoEnd:2840, verses:[
       { ar:"رَاعَتْ قُلُوبَ الْعِدَا أَنْبَاءُ بِعْثَتِهِ ۞ كَنَبْأَةٍ أَجْفَلَتْ غُفْلاً مِنَ الْغَنَمِ",
         tr:"Rāʿat qulūbal ʿidā anbāʾu biʿthatihi · Kanabʾatin ajfalat ghuflan minal ghanami",
         en:"The tidings of his sending struck terror into the hearts of the enemies, like a sudden sound that scatters heedless sheep." },
@@ -12793,7 +12793,7 @@ const BURDAH_CHAPTERS = [
         tr:"Kafāka bil ʿilmi fīl ummiyyi muʿjizatan · Fīl jāhiliyyati wat taʾdībi fīl yutumi",
         en:"Knowledge in one unlettered is miracle enough for you — in an age of ignorance — as is refinement in one orphaned." }
     ] },
-  { titleArabic:"فِي التَّوَسُّلِ", titleEnglish:"9 · On Seeking Intercession", video:"https://youtu.be/CnfY5RCWBi0?t=2840", verses:[
+  { titleArabic:"فِي التَّوَسُّلِ", titleEnglish:"9 · On Seeking Intercession", video:"https://youtu.be/CnfY5RCWBi0", videoStart:2840, videoEnd:3289, verses:[
       { ar:"خَدَمْتُهُ بِمَدِيحٍ أَسْتَقِيلُ بِهِ ۞ ذُنُوبَ عُمْرٍ مَضَى فِي الشِّعْرِ وَالخِدَمِ",
         tr:"Khadamtuhu bi madīḥin astaqīlu bihi · Dhunūba ʿumrin maḍā fish shiʿri wal khidami",
         en:"I have served him with a praise by which I seek release from the sins of a life spent in poetry and in service to patrons." },
@@ -12831,7 +12831,7 @@ const BURDAH_CHAPTERS = [
         tr:"Wa lam urid zahratad dunyal latiqtaṭafat · Yadā zuhayrin bimā athnā ʿalā harimi",
         en:"I did not seek the bloom of this world that the hands of Zuhayr plucked in return for his praise of Harim." }
     ] },
-  { titleArabic:"فِي الْمُنَاجَاةِ وَعَرْضِ الْحَاجَاتِ", titleEnglish:"10 · On Intimate Prayer and Petition", video:"https://youtu.be/CnfY5RCWBi0?t=3289", verses:[
+  { titleArabic:"فِي الْمُنَاجَاةِ وَعَرْضِ الْحَاجَاتِ", titleEnglish:"10 · On Intimate Prayer and Petition", video:"https://youtu.be/CnfY5RCWBi0", videoStart:3289, verses:[
       { ar:"يَا أَكْرَمَ الْخَلْقِ مَالَي مَنْ أَلُوذُ بِهِ ۞ سِوَاكَ عِنْدَ حُلُولِ الْحَادِثِ الْعَمِمِ",
         tr:"Yā akramal khalqi mālī man alūdhu bihi · Siwāka ʿinda ḥulūlil ḥādithil ʿamimi",
         en:"O noblest of creation, I have no one to shelter with but you when the all-encompassing event descends." },
@@ -16931,7 +16931,7 @@ async function refreshDownloads(){
             ' · ' + fmtDur(e.rec.secs) + '</div>' +
         '</div>' +
         '<button class="session-btn quiet dl-act" ' +
-          'onclick="rowAction(\'' + e.rec.file + '\')">' +
+          'onclick="rowAction(' + attrEsc(JSON.stringify(e.rec.file)) + ')">' +
           (size ? 'Remove · ' + fmtMB(size) : 'Download') +
         '</button>' +
       '</div>';
