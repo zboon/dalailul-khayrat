@@ -26,7 +26,7 @@
      script, where nothing that reads the page without running it can see
      it — so "which version is actually live?" could only be answered from
      a phone. Keep the two in step when bumping. -->
-<meta name="app-version" content="v108">
+<meta name="app-version" content="v109">
 <!-- YouTube's embedded player refuses to configure itself unless the host page
      sends a Referer (Error 153 / embedder.identity.missing.referrer). This is
      the browser default in most cases, but a standalone PWA or a WebView may
@@ -2256,7 +2256,7 @@ const QASIDAS = [
     group: "qasidas",
     titleArabic: "قَصِيدَةُ السَّلَامِ",
     titleEnglish: "Qaṣīdatu s-Salām — The Poem of Peace",
-    note: "Repeat the refrain after each set of verses.",
+    note: "Repeat the chorus after each set of verses.",
     video: "https://www.youtube.com/watch?v=gF1w8R9SpZA",
     verses: [
       { refrain: true,
@@ -2303,7 +2303,7 @@ const QASIDAS = [
     group: "qasidas",
     titleArabic: "وِشْلُون أَنَام اللَّيل",
     titleEnglish: "Wishlōn Anām al-Layl — How Can I Sleep at Night?",
-    note: "A traditional Iraqi qasida in praise of the Prophet ﷺ. Repeat the refrain after each verse.",
+    note: "A traditional Iraqi qasida in praise of the Prophet ﷺ. Repeat the chorus after each verse.",
     video: "https://www.youtube.com/watch?v=BKg_kuVeZig",
     verses: [
       { refrain: true,
@@ -2361,7 +2361,7 @@ const QASIDAS = [
     group: "qasidas",
     titleArabic: "يَا تَوَّابُ تُبْ عَلَيْنَا",
     titleEnglish: "22 · Yā Tawwāb Tub ʿAlaynā",
-    note:"The refrain is sung twice, and repeated after each verse.",
+    note:"The chorus is sung twice, and repeated after each verse.",
     verses: [
       { refrain:true, ar:"يَا تَوَّابُ تُبْ عَلَيْنَا ۞ وَارْحَمْنَا وَانْظُرْ إِلَيْنَا",
         tr:"Yā Tawwābu tub ʿalaynā · wa-rḥamnā wa-nẓur ilaynā",
@@ -2447,7 +2447,7 @@ const QASIDAS = [
     group: "qasidas",
     titleArabic: "الْقَصِيدَةُ الْمُحَمَّدِيَّةُ",
     titleEnglish: "34 · The Muhammadan Qasidah",
-    note:"Each verse opens with the blessed name; the refrain is repeated after each.",
+    note:"Each verse opens with the blessed name; the chorus is repeated after each.",
     verses: [
       { refrain:true, ar:"سَلَامٌ عَلَيْكَ يَا نَبِي سَلَامٌ عَلَيْكَ سَيِّدِي ۞ يَا نَبِي يَا إِمَامَ الْحَرَمَيْنِ",
         tr:"Salāmun ʿalayk yā Nabī, salāmun ʿalayk sayyidī · yā Nabī yā Imāma l-ḥaramayn",
@@ -12324,7 +12324,7 @@ const MAWLID_COLLECTIONS = [
 
 /* Bumped with sw.js on every release. Shown small at the foot of the home page
    so you can tell at a glance which build a given phone is actually running. */
-const APP_VERSION = 'v108';
+const APP_VERSION = 'v109';
 /* Where the home-page feedback button sends corrections. Change to your address. */
 const FEEDBACK_EMAIL = 'zayd.boon@gmail.com';
 
@@ -13387,7 +13387,7 @@ const ILAHI_CHAPTERS = [
     ]
   },
   { latin:true, titleArabic:"Şu Cennetin İrmakları", titleEnglish:"Şu Cennetin İrmakları — The Rivers of Paradise",
-    note:"By Yunus Emre (13th c.). Each couplet closes with the refrain “Allah deyu deyu” — “saying: Allah, Allah.”",
+    note:"By Yunus Emre (13th c.). Each couplet closes with the chorus “Allah deyu deyu” — “saying: Allah, Allah.”",
     video:"https://www.youtube.com/watch?v=_mtNsDodFxM",
     verses:[
       { ar:"Şol cennetin ırmakları akar Allah deyu deyu\nÇıkmış İslam bülbülleri öter Allah deyu deyu",
@@ -13413,7 +13413,7 @@ const ILAHI_CHAPTERS = [
     ]
   },
   { latin:true, titleArabic:"Sordum Sarı Çiçeğe", titleEnglish:"Sordum Sarı Çiçeğe — I Asked the Yellow Flower",
-    note:"By Yunus Emre (13th c.). A dialogue between the dervish and a fading yellow flower; each verse closes on the refrain of tawḥīd.", video:"https://www.youtube.com/results?search_query=Sordum+Sari+Cicege+ilahi", 
+    note:"By Yunus Emre (13th c.). A dialogue between the dervish and a fading yellow flower; each verse closes on the chorus of tawḥīd.", video:"https://www.youtube.com/results?search_query=Sordum+Sari+Cicege+ilahi", 
     verses:[
       { ar:"Sordum sarı çiçeğe\nAnnen baban var mıdır?\nÇiçek eydür derviş baba\nAnnem babam topraktır\nHak Lâ ilâhe illallah · Allah Lâ ilâhe illallah",
         tr:"",
@@ -16091,7 +16091,7 @@ function readerHTML(q, backOnclick, kind, idx){
             aria-label="${placedVerse(idx,n)?'Remove my place':'Mark my place here'}"
             title="${placedVerse(idx,n)?'Remove my place':'Mark my place here'}">${bookmarkIcon(placedVerse(idx,n))}</button>` : ''}
           <div class="v-num">${toArNum(verseNo(kind, idx, n))}</div>
-          ${v.refrain?'<div class="refrain-note">Refrain · يُرَدَّد</div>':''}
+          ${v.refrain?'<div class="refrain-note">Chorus · يُرَدَّد</div>':''}
           ${v.instruction?'<div class="instruction-note">Instruction · إِرْشَاد</div>':''}
           ${v.note?`<div class="v-note">${v.note}</div>`:''}
           ${q.latin
@@ -16377,7 +16377,7 @@ function refrainRepeatHTML(q){
   if(!r) return '';
   return `<div class="refrain-repeat${state.refrainOpen ? ' open' : ''}">
       <button class="refrain-repeat-btn" onclick="toggleRefrain()"
-        aria-expanded="${state.refrainOpen ? 'true' : 'false'}">↻ Repeat refrain · يُرَدَّد</button>
+        aria-expanded="${state.refrainOpen ? 'true' : 'false'}">↻ Repeat chorus · يُرَدَّد</button>
       <div class="refrain-repeat-body">
         <div class="v-ar">${arHTML(r.ar)}</div>
         ${r.tr ? `<div class="v-tr ${state.showTr?'':'hide'}">${r.tr.replaceAll('\n','<br>')}</div>` : ''}
