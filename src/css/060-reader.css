@@ -1,0 +1,26 @@
+  /* ---------- reader ---------- */
+  .reader-bar{
+    position:sticky;top:0;z-index:10;
+    transition:padding .24s ease;
+    background:var(--green);color:var(--paper);
+    padding:calc(env(safe-area-inset-top,0px) + .6rem) .8rem .6rem;
+    display:flex;align-items:center;gap:.6rem;
+    box-shadow:0 2px 8px rgba(11,36,27,.25);
+  }
+  .reader-bar .back{font-size:1rem;font-weight:700;padding:.45rem .7rem;border-radius:9px;background:rgba(250,245,234,.12)}
+  .reader-bar .rtitle{flex:1;font-family:'UthmanicHafs','Amiri',serif;font-size:1.2rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center}
+  /* Back is a text button and the bookmark an icon, so they're different widths.
+     Holding each in an equal-width side keeps the bismillah on the bar's true
+     centre rather than centred between the buttons. */
+  .reader-bar .rside{ flex:1 1 0; display:flex; align-items:center; min-width:0 }
+  .reader-bar .rside.end{ justify-content:flex-end }
+  /* The bismillah sits in the green bar, set apart from the piece's own title. */
+  .reader-bismillah{
+    display:block; width:min(150px, 40%); height:auto;
+    opacity:.94; flex:0 0 auto;
+    transition:width .24s ease, opacity .18s ease;
+  }
+  /* Once you scroll into the verses the bar slims to just Back and bookmark. */
+  .reader-bar.slim .reader-bismillah{ width:0; opacity:0; }
+  .reader-bar.slim{ padding-top:calc(env(safe-area-inset-top,0px) + .45rem); padding-bottom:.45rem; }
+  .piece-head{ text-align:center; padding:.95rem 1rem .1rem; }

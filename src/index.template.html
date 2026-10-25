@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Dalāʾil al-Khayrāt</title>
+<meta name="description" content="Mawlid, qasidas, the Burdah and devotional ilahis — Arabic, transliteration and English. An accessory app for gatherings of devotion.">
+<!-- Link previews (WhatsApp, iMessage, etc). Without these, scrapers fall back
+     to whatever they can find and the shared link shows the wrong name. -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Dalāʾil al-Khayrāt">
+<meta property="og:title" content="Dalāʾil al-Khayrāt · دلائل الخيرات">
+<meta property="og:description" content="Mawlid, qasidas, the Burdah and devotional ilahis — Arabic, transliteration and English. An accessory app for gatherings of devotion.">
+<meta property="og:url" content="https://zboon.github.io/Mawlid-app/">
+<meta property="og:image" content="https://zboon.github.io/Mawlid-app/icon-512.png">
+<meta property="og:image:width" content="512">
+<meta property="og:image:height" content="512">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Dalāʾil al-Khayrāt · دلائل الخيرات">
+<meta name="twitter:description" content="Mawlid, qasidas, the Burdah and devotional ilahis — Arabic, transliteration and English. An accessory app for gatherings of devotion.">
+<meta name="twitter:image" content="https://zboon.github.io/Mawlid-app/icon-512.png">
+<meta name="application-name" content="Dalāʾil al-Khayrāt">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#123528">
+<!-- Plain-HTML copy of APP_VERSION below. The number lives inside the
+     script, where nothing that reads the page without running it can see
+     it — so "which version is actually live?" could only be answered from
+     a phone. Keep the two in step when bumping. -->
+<meta name="app-version" content="{{version}}">
+<!-- YouTube's embedded player refuses to configure itself unless the host page
+     sends a Referer (Error 153 / embedder.identity.missing.referrer). This is
+     the browser default in most cases, but a standalone PWA or a WebView may
+     not apply it, so it is stated outright. -->
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<!-- iOS home-screen support -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Dalāʾil al-Khayrāt">
+<!-- Browser tab icon: the محمد calligraphy on the header green. Embedded so
+     it needs no extra request and works offline like the rest of the app. -->
+<link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,{{inline:img/favicon-32x32.png}}">
+<link rel="icon" type="image/png" sizes="48x48" href="data:image/png;base64,{{inline:img/favicon-48x48.png}}">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Karla:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+{{css}}
+</style>
+</head>
+<body>
+
+<div id="app"></div>
+
+<script>
+{{js}}
+</script>
+</body>
+</html>

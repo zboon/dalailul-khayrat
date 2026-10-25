@@ -14,4 +14,10 @@ the Mawalid app even when both are served from the same github.io account.
 
 Files: index.html · sw.js · manifest.json · icon-192.png · icon-512.png · OFL.txt
 
+## Source
+`index.html` and `sw.js` are **generated** from `src/` by `build.js` — edit `src/`,
+then run `node build.js` (and `node build.js --check` to confirm the committed pair is
+current). The page still ships as one self-contained file. The version lives in
+`src/version.txt` only. See `src/README.md` for the layout.
+
 After deploying an update, open the app twice to clear the old service-worker cache.

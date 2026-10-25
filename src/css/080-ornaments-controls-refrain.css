@@ -1,0 +1,163 @@
+  /* The صلى الله عليه وسلم mark is a letterform, not an ornament — it keeps its glyph. */
+  .ms-r.salawat, html.dark .ms-r.salawat{
+    color:var(--ms-ink) !important; background-image:none;
+  }
+  /* The ṣallā-Llāhu ʿalayhi wa-sallam mark, as the printing sets it after
+     each name — larger than a rosette, and in the ink rather than the red. */
+  .ms-r.salawat{ color:var(--ms-ink) !important; font-size:1em; padding:0 .12em; opacity:.85 }
+  .v-salawat{ color:var(--accent-green); font-size:.9em }
+  .ms-folio{
+    position:absolute; left:0; right:0; bottom:.75rem; text-align:center;
+    font-family:'UthmanicHafs','Amiri',serif; font-size:.85rem; color:var(--ms-rule);
+  }
+  .ms-folio::before, .ms-folio::after{
+    content:'—'; color:var(--ms-gold); padding:0 .45rem; opacity:.8;
+  }
+  /* The closing leaf: ornament in the four corners, text held in the middle. */
+  .ms-closing{ display:flex; flex-direction:column; justify-content:center; }
+  .ms-closing .ms-text{ position:relative; z-index:1; padding:1.6rem .6rem; }
+  .ms-orn{ position:absolute; width:26%; max-width:104px; aspect-ratio:1/1; pointer-events:none; }
+  .ms-orn svg{ width:100%; height:100%; display:block }
+  .ms-orn.tl{ top:.35rem; left:.35rem }
+  .ms-orn.tr{ top:.35rem; right:.35rem; transform:scaleX(-1) }
+  .ms-orn.bl{ bottom:.35rem; left:.35rem; transform:scaleY(-1) }
+  .ms-orn.br{ bottom:.35rem; right:.35rem; transform:scale(-1,-1) }
+  /* Discrete recitations sit as their own sections rather than running on. */
+  .ms-sec{ margin:0 0 1rem; padding:0 0 .95rem; border-bottom:1px solid var(--ms-gold); }
+  .ms-sec:last-child{ border-bottom:none; padding-bottom:0; margin-bottom:0 }
+  .ms-sec-head{
+    font-family:'Crimson Pro',serif; font-size:.78rem; letter-spacing:.04em;
+    color:var(--ms-rule); direction:ltr; margin-bottom:.35rem;
+  }
+  .ms-hint{
+    text-align:center; font-family:'Crimson Pro',serif; font-size:.82rem;
+    color:var(--ink-soft); opacity:.75; margin:.1rem 0 .9rem;
+  }
+  .piece-title-ar{
+    font-family:'UthmanicHafs','Amiri',serif; font-size:1.45rem; line-height:1.6;
+    color:var(--accent-green);
+  }
+  .piece-title-en{
+    font-family:'Crimson Pro',serif; font-size:.95rem; color:var(--ink-soft);
+    margin-top:.1rem;
+  }
+  .reader-bar .spacer{width:3.4rem}
+
+  .controls{
+    max-width:640px;margin:0 auto;padding:.8rem 1.1rem 0;
+    display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;
+  }
+  .chip{
+    font-size:.8rem;font-weight:700;letter-spacing:.03em;
+    padding:.4rem .85rem;border-radius:999px;
+    border:1.5px solid var(--gold);color:var(--chip-ink);background:transparent;
+  }
+  /* "Off" reads by its muted grey border and label, not by fading the text out —
+     opacity alone made it unreadable on the dark background. */
+  .chip.off{opacity:.85;border-color:var(--ink-soft);color:var(--ink-soft)}
+  .chip.size{border-color:var(--paper-edge);background:var(--card)}
+
+  /* Text size: one slider per script, replacing four −/+ chips. The glyph at
+     each end says which script and which way is bigger. ض rather than the
+     أ these used to carry — at chip size its hamza is too small to see, so
+     the Arabic control read as a bare stroke and looked like the Latin one. */
+  /* The sliders take a line of their own rather than wrapping one at a time
+     into whatever gap the toggles leave: side by side they read as a pair and
+     the row stops reflowing as chapter titles change its earlier chips. */
+  .size-row{flex-basis:100%;display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center}
+  .size-slider{
+    display:inline-flex;align-items:center;gap:.4rem;
+    padding:.2rem .7rem;border-radius:999px;
+    border:1.5px solid var(--paper-edge);background:var(--card);
+  }
+  .size-slider .sz-gl{color:var(--ink-soft);line-height:1;user-select:none;-webkit-user-select:none}
+  .size-slider .sz-ar{font-family:'UthmanicHafs','Amiri',serif}
+  .size-slider .sz-la{font-family:'Crimson Pro',serif}
+  .size-slider .sz-sm{font-size:.78rem}
+  .size-slider .sz-lg{font-size:1.18rem}
+  .size-slider input[type=range]{
+    -webkit-appearance:none;appearance:none;
+    width:5rem;height:1.5rem;margin:0;background:transparent;
+  }
+  .size-slider input[type=range]:focus-visible{
+    outline:2px solid var(--gold);outline-offset:2px;border-radius:999px;
+  }
+  /* Track and thumb are spelled out once per engine on purpose: a selector
+     list mixing -webkit- and -moz- pseudo-elements is dropped whole by both. */
+  .size-slider input[type=range]::-webkit-slider-runnable-track{
+    height:3px;border-radius:999px;background:var(--paper-edge);
+  }
+  .size-slider input[type=range]::-moz-range-track{
+    height:3px;border-radius:999px;background:var(--paper-edge);
+  }
+  .size-slider input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;appearance:none;
+    width:1.05rem;height:1.05rem;border-radius:50%;
+    background:var(--gold);border:none;margin-top:-.43rem;
+  }
+  .size-slider input[type=range]::-moz-range-thumb{
+    width:1.05rem;height:1.05rem;border-radius:50%;
+    background:var(--gold);border:none;
+  }
+
+  .verses{max-width:640px;margin:0 auto;padding:1.2rem 1.1rem calc(env(safe-area-inset-bottom,0px) + 7rem)}
+  /* Book Version: trim the trailing space so the reader can't scroll far past a
+     leaf's end — the nav sits just below, and the bottom gap is limited so at
+     most about a sixth of a screen shows under the current page. */
+  .verses.ms-view{ padding-bottom:calc(env(safe-area-inset-bottom,0px) + 16dvh); }
+  .verses.ms-view .ms-nav{ margin-top:.6rem; }
+  /* The repeat marker: a rule with the words on it, so it reads as a return
+     rather than as another verse. Collapsed by default — the body stays in
+     the DOM and is hidden here, which is what lets a tap flip a class instead
+     of re-rendering and losing the reader's place. */
+  .refrain-repeat{margin:-.4rem 0 1rem;text-align:center}
+  .refrain-repeat-btn{
+    background:transparent;border:0;cursor:pointer;font-family:inherit;
+    color:var(--gold);font-weight:700;font-size:.76rem;
+    letter-spacing:.12em;text-transform:uppercase;
+    padding:.35rem .9rem;border-radius:999px;
+  }
+  .refrain-repeat-btn::before{content:'\2014\00a0'}
+  .refrain-repeat-btn::after{content:'\00a0\2014'}
+  .refrain-repeat-btn:active{background:var(--card-alt)}
+  .refrain-repeat-body{display:none}
+  .refrain-repeat.open .refrain-repeat-body{
+    display:block;
+    border:1px solid var(--gold-soft);border-radius:16px;
+    background:linear-gradient(var(--verse-bg, var(--card)),var(--verse-bg2, var(--card-alt)));
+    padding:1rem 1.1rem;margin-top:.1rem;
+  }
+  .refrain-note{
+    text-align:center;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--gold);font-weight:700;margin:.2rem 0 1rem;
+  }
+  .qnote{
+    background:var(--green);color:var(--paper);
+    border-radius:14px;padding:.9rem 1.1rem;margin-bottom:.9rem;
+    font-size:.92rem;line-height:1.5;text-align:center;
+  }
+  .qnote .qnote-ar{
+    display:block;font-family:'UthmanicHafs','Amiri',serif;font-size:1.15rem;
+    color:var(--gold-soft);direction:rtl;margin-top:.4rem;
+  }
+  /* A long note is folded away by default. Short ones stay open — the fold is
+     there to keep the reader from scrolling past an essay to reach the prayer,
+     and a one-line note costs nothing to leave showing. */
+  details.qnote{ padding:0; overflow:hidden; }
+  details.qnote > summary{
+    list-style:none; cursor:pointer; padding:.72rem 1.1rem;
+    display:flex; align-items:center; justify-content:center; gap:.45rem;
+    font-size:.86rem; letter-spacing:.02em;
+  }
+  details.qnote > summary::-webkit-details-marker{ display:none; }
+  details.qnote > summary::marker{ content:''; }
+  .qnote-chev{
+    display:inline-block; color:var(--gold-soft); font-size:1.05rem; line-height:1;
+    transition:transform .18s ease;
+  }
+  details.qnote[open] > summary .qnote-chev{ transform:rotate(90deg); }
+  .qnote-body{
+    padding:0 1.1rem .95rem;
+    border-top:1px solid rgba(216,193,147,.28); margin-top:0; padding-top:.8rem;
+  }
+

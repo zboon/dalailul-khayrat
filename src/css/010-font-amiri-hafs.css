@@ -1,0 +1,29 @@
+
+  /* ── Amiri (SIL Open Font License 1.1) ──────────────────────────────
+     Bundled rather than fetched, so the Arabic — and crucially its harakat —
+     renders correctly with no connection at all. Subset to Arabic + Latin and
+     WOFF-compressed, with all layout features kept: Amiri's calligraphic
+     ligatures are the reason to use it. Full licence in OFL.txt. */
+  @font-face{
+    font-family:'UthmanicHafs';
+    font-style:normal; font-weight:400; font-display:swap;
+    src:url(data:font/otf;base64,{{inline:fonts/font-uthmanichafs.otf}}) format('opentype');
+    /* KFGQPC Uthmanic Hafs. It maps 171 codepoints — the Arabic comma,
+       semicolon, question mark, full stop, the rosette and every Persian
+       letter among them — to an EMPTY placeholder box that renders as a
+       black blob. So it is served only for the codepoints it genuinely
+       draws; everything else falls through to Amiri below, which is why a
+       comma still looks like a comma. Embedded byte-for-byte: the licence
+       forbids modifying the font, so it cannot be subset. */
+    unicode-range: U+0600, U+0621-063A, U+0640-0657, U+065C, U+065E, U+0660-0669, U+066E, U+0670-0671, U+06D6-06DD, U+06E0-06E2, U+06E4-06E9, U+06EC;
+  }
+  @font-face{
+    font-family:'Amiri';
+    font-style:normal; font-weight:400; font-display:swap;
+    src:url(data:font/woff;base64,{{inline:fonts/font-amiri.woff}}) format('woff');
+  }
+  @font-face{
+    font-family:'Amiri';
+    font-style:normal; font-weight:700; font-display:swap;
+    src:url(data:font/woff;base64,{{inline:fonts/font-amiri-2.woff}}) format('woff');
+  }

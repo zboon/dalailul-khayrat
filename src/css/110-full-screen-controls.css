@@ -1,0 +1,296 @@
+  /* Full screen used to offer only a way out. Everything else — the theme,
+     the two readings, and Save my place — lived in furniture that immersive
+     mode hides, so a reader following the leaf had to leave full screen to
+     mark their place and then find it again. Home and a menu now ride at the
+     top instead, and the menu carries what the hidden bars used to. */
+  .ms-bar{
+    display:none;
+    position:fixed; top:calc(env(safe-area-inset-top, 0px) + .7rem);
+    left:.8rem; right:.8rem; z-index:61;
+    justify-content:space-between; align-items:flex-start; pointer-events:none;
+  }
+  html.immersive .ms-bar{ display:flex }
+  .ms-bar > *{ pointer-events:auto; }
+  .ms-rnd{
+    width:2.4rem; height:2.4rem; border-radius:50%; cursor:pointer; padding:0;
+    border:1px solid var(--ms-gold); background:var(--ms-paper); color:var(--ms-rule);
+    font-size:1.05rem; line-height:1; display:flex; align-items:center; justify-content:center;
+    box-shadow:0 2px 10px rgba(11,36,27,.3); font-family:inherit;
+  }
+  .ms-rnd:active{ transform:scale(.94); }
+  .ms-rnd svg{ width:1.15rem; height:1.15rem; display:block; }
+  .ms-menu-wrap{ position:relative; display:flex; flex-direction:column; align-items:flex-end; gap:.45rem; }
+  /* Stacked vertically, in the order a reader reaches for them. */
+  .ms-menu{
+    display:none; flex-direction:column; gap:.3rem;
+    background:var(--ms-paper); border:1px solid var(--ms-gold); border-radius:14px;
+    padding:.4rem; box-shadow:0 6px 22px rgba(11,36,27,.34); min-width:11.5rem;
+  }
+  .ms-menu.open{ display:flex }
+  .ms-menu button{
+    display:flex; align-items:center; gap:.55rem; width:100%;
+    background:transparent; border:none; cursor:pointer; text-align:left;
+    color:var(--ms-rule); font-family:'Crimson Pro',serif; font-size:.92rem;
+    padding:.5rem .6rem; border-radius:9px; line-height:1.2;
+  }
+  .ms-menu button:active{ background:rgba(11,36,27,.09); }
+  .ms-menu button svg{ width:1.05rem; height:1.05rem; flex:0 0 auto; }
+  .ms-menu button .tick{ margin-left:auto; opacity:.75; font-size:.8rem; }
+  .ms-menu hr{ border:none; border-top:1px solid var(--ms-gold); opacity:.5; margin:.15rem .3rem; }
+  html.immersive .masthead,
+  html.immersive .tabbar,
+  html.immersive .reader-bar,
+  html.immersive .piece-head,
+  html.immersive .controls,
+  html.immersive .qnote,
+  html.immersive .ms-hint,
+  html.immersive .ms-tune,
+  html.immersive .reader-actions,
+  html.immersive .chap-nav,
+  html.immersive .ms-chap,
+  html.immersive .scrollbar,
+  html.immersive footer,
+  html.immersive .build-tag{ display:none !important }
+  html.immersive .ms-sheet{ padding:0; max-width:none; width:100vw }
+  html.immersive .ms-page{ min-height:calc(100dvh - var(--player-h)); border-radius:0; border-left:none; border-right:none }
+  html.immersive .verses{ max-width:none; padding:0 }
+  html.immersive .ms-book{ padding-bottom:0 }
+  .view-switch{
+    display:inline-flex; border:1.5px solid var(--paper-edge); border-radius:999px;
+    overflow:hidden; background:var(--card);
+  }
+  .view-switch button{
+    border:none; background:none; cursor:pointer; padding:.34rem .62rem;
+    font-family:'Crimson Pro',serif; font-size:.8rem; letter-spacing:.01em;
+    color:var(--ink-soft); white-space:nowrap;
+  }
+  .view-switch button.on{ background:var(--accent-green); color:var(--paper); }
+  .edition-row{ display:flex; align-items:center; justify-content:center; gap:.6rem; margin:0 0 1rem; flex-wrap:wrap; }
+  .ed-toast{ position:fixed; left:50%; bottom:calc(var(--player-h, 0px) + 1.1rem + env(safe-area-inset-bottom, 0px)); transform:translate(-50%, .6rem); z-index:9999;
+    max-width:min(26rem, calc(100vw - 2rem)); padding:.6rem 1rem; border-radius:.7rem; background:var(--green-deep); color:#fbf7ec;
+    font-family:'Crimson Pro',serif; font-size:.95rem; line-height:1.35; text-align:center; box-shadow:0 6px 22px rgba(0,0,0,.22);
+    opacity:0; pointer-events:none; transition:opacity .25s, transform .25s; }
+  .ed-toast.show{ opacity:1; transform:translate(-50%, 0); }
+  .edition-k{ font-family:'Crimson Pro',serif; font-size:.82rem; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-soft); }
+  /* Daily Litanies card pinned below Dalāʾil parts list */
+  .dalail-litanies{ margin-top:1.6rem; padding-top:1.2rem; border-top:1px solid var(--rule); }
+  .dalail-litanies .home-card{ width:100%; }
+    font-family:'Crimson Pro',serif; font-size:.82rem; letter-spacing:.03em;
+    color:var(--accent-green); opacity:.9; margin-bottom:.35rem;
+    text-align:center;
+  }
+  /* Instruction / rubric verses (not a prayer — a transitional note from the
+     book). Set apart by a gold border and a faint gold wash, following the same
+     pattern as a refrain verse, so the eye doesn't read the rubric as part of
+     the supplication standing around it. */
+  .verse.v-instruction{
+    border-color:var(--gold); border-width:1.5px;
+    background-color:var(--verse-bg, var(--card));
+    background-image:linear-gradient(rgba(184,147,74,.11), rgba(184,147,74,.03));
+  }
+  .instruction-note{
+    text-align:center;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--gold);font-weight:700;margin:.2rem 0 1rem;
+  }
+  .v-instruction .v-ar{ color:var(--gold); }
+  .v-instruction .v-en::before{ content:'('; }
+  .v-instruction .v-en::after { content:')'; }
+  .v-instruction .v-en{
+    font-style:italic; color:var(--ink-soft);
+  }
+  .v-instruction .v-tr{ display:none; }  /* instructions shown only in Arabic + English */
+  /* Book version: the rubric in gold italic, set off by hairline rules above and
+     below. Tapping it opens the English (showInstrBubble) rather than marking. */
+  .ms-instruction{ color:var(--ms-gold); font-size:.92em; font-style:italic; display:block;
+    text-align:center; margin:.6rem 0; padding:.5rem 0;
+    border-top:1px solid var(--rule); border-bottom:1px solid var(--rule); }
+  .ms-v.has-instr{ cursor:pointer; }
+  /* A blank the reader fills in: gold against the leaf's ink, and tappable for
+     the instruction, the same gesture the rubric below it answers to. */
+  .ms-gloss{ color:var(--gold); }
+  .ms-gloss.has-instr{ cursor:pointer; }
+  /* The bubble is fixed to the viewport and never inserted into the leaf: the
+     leaf is measured by msAutoFit, and anything added inside it would move
+     where the printed page breaks. */
+  .instr-bubble{
+    position:fixed; z-index:80; opacity:0; transform:translateY(4px);
+    transition:opacity .14s ease, transform .14s ease;
+  }
+  .instr-bubble.on{ opacity:1; transform:none; }
+  .instr-bubble-in{
+    background:var(--ms-paper); color:var(--ms-ink);
+    border:1px solid var(--rule); border-radius:12px;
+    padding:.7rem .9rem; font-size:.9rem; line-height:1.5; font-style:italic;
+    text-align:center; box-shadow:0 6px 22px rgba(11,36,27,.3);
+  }
+  .v-ar{
+    font-family:'UthmanicHafs','Amiri',serif;
+    font-size:var(--ar-size);
+    line-height:2.1;
+    direction:rtl;text-align:center;color:var(--ar-color);
+    margin-top:.3rem;
+  }
+  /* The IndoPak script covers the reading text only — Study verses and Book
+     leaves. Titles, cards and the rest of the chrome keep the Uthmani face. */
+  html.ar-indopak .v-ar, html.ar-indopak .ms-text{
+    font-family:'DKIndoPak','UthmanicHafs','Amiri',serif;
+  }
+  html.ar-naskh .v-ar, html.ar-naskh .ms-text{
+    font-family:'SchNew','UthmanicHafs','Amiri',serif;
+  }
+  .script-switch{ margin-top:.1rem; }
+  .v-tr{
+    font-size:calc(1.02rem * var(--latin-scale));font-style:italic;color:var(--ink);
+    text-align:center;margin-top:.7rem;line-height:1.6;
+  }
+  .v-en{
+    font-family:'Crimson Pro',serif;font-size:calc(1.12rem * var(--latin-scale));color:var(--ink-soft);
+    text-align:center;margin-top:.55rem;line-height:1.55;
+  }
+  .v-latin{
+    font-family:'Crimson Pro',serif;font-size:calc(1.5rem * var(--latin-scale));color:var(--ar-color);
+    text-align:center;line-height:1.7;margin-top:.3rem;font-weight:600;
+  }
+  .home-grid{
+    display:flex; flex-wrap:wrap; gap:.6rem;
+    justify-content:center;
+    max-width:600px;
+    margin:0 auto; padding:1rem 1.1rem 1.2rem;
+    border-bottom:1px solid var(--rule-soft);
+  }
+  .home-card{
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center; gap:.1rem;
+    text-align:center; width:calc(33% - .45rem); min-width:148px; cursor:pointer; min-height:6.4rem;
+    background:var(--card); border:1px solid var(--paper-edge);
+    border-radius:14px; padding:.9rem .55rem;
+    transition:transform .1s, border-color .12s;
+  }
+  .home-card:hover{ border-color:var(--gold-soft); }
+  .home-card:active{ transform:scale(.98); }
+  .barz-note{ max-width:640px; margin:.7rem auto 0; padding:0 1.1rem; }
+  .barz-note .qnote{ margin-bottom:.6rem; }
+  .section-intro{
+    max-width:640px; margin:0 auto; padding:.2rem 1.1rem .1rem;
+    font-family:'Crimson Pro',serif; font-size:.92rem; line-height:1.5;
+    color:var(--ink-soft); text-align:center;
+  }
+  /* The Dalāʾil intro line is tappable — it opens the book's title page. */
+  .dalail-intro{ display:block; width:100%; background:none; border:none; cursor:pointer; font:inherit; }
+  .dalail-intro:active{ opacity:.65; }
+  .dalail-intro .di-go{ color:var(--gold); font-weight:700; padding-inline-start:.15rem; }
+  .hc-ar{ font-family:'UthmanicHafs','Amiri',serif; font-size:1.2rem; line-height:1.75; color:var(--accent-green); }
+  .hc-en{ font-weight:700; font-size:.85rem; line-height:1.3; color:var(--ink); }
+  .hc-count{
+    font-size:.6rem; color:var(--gold); letter-spacing:.05em;
+    text-transform:uppercase; margin-top:.3rem; line-height:1.3;
+  }
+  .masthead .logo.tappable{ cursor:pointer; }
+  .session-banner{
+    position:fixed; top:calc(env(safe-area-inset-top, 0px) + .5rem);
+    left:50%; transform:translateX(-50%); z-index:70;
+    display:flex; align-items:center; justify-content:center; gap:.5rem;
+    flex-wrap:wrap; max-width:min(94vw, 27rem);
+    background:var(--green-deep); color:var(--paper);
+    padding:.35rem .6rem; border-radius:999px;
+    box-shadow:0 4px 16px rgba(0,0,0,.35);
+    font-size:.75rem; letter-spacing:.02em;
+    border:1px solid rgba(184,147,74,.5);
+  }
+  .session-banner .dot{
+    width:.5rem; height:.5rem; border-radius:999px;
+    background:#5FBF7F; box-shadow:0 0 6px #5FBF7F;
+  }
+  .session-banner.paused .dot{ background:var(--gold); box-shadow:none; }
+  /* Open mic: gold rim, so it reads across the room as needing someone. */
+  .session-banner.open-mic{ border-color:var(--gold); }
+  .qr-wrap{
+    position:fixed; inset:0; z-index:120; display:flex; align-items:center;
+    justify-content:center; padding:1.2rem; background:rgba(10,26,20,.72);
+    -webkit-backdrop-filter:blur(3px); backdrop-filter:blur(3px);
+  }
+  .qr-card{
+    background:var(--paper); color:var(--ink); border:1px solid var(--gold);
+    border-radius:16px; padding:1.3rem 1.2rem 1.1rem; text-align:center;
+    max-width:min(340px,92vw); box-shadow:0 18px 46px rgba(0,0,0,.4);
+  }
+  .qr-t{ font-family:'Crimson Pro',serif; font-size:1.15rem; color:var(--green); margin-bottom:.8rem; }
+  .qr-code{ line-height:0; }
+  .qr-code svg{ width:min(260px,72vw); height:auto; border-radius:8px; }
+  .qr-fail{ font-size:.85rem; padding:2rem 0; }
+  .qr-num{
+    font-size:1.6rem; letter-spacing:.16em; margin:.7rem 0 .15rem;
+    color:var(--green); font-variant-numeric:tabular-nums;
+  }
+  .qr-link{ font-size:.7rem; opacity:.6; word-break:break-all; margin-bottom:.9rem; }
+  .qr-btns{ display:flex; gap:.5rem; justify-content:center; flex-wrap:wrap; }
+  .qr-card .rep{
+    text-align:left; font-family:ui-monospace,Menlo,Consolas,monospace; font-size:.62rem;
+    line-height:1.5; white-space:pre; overflow:auto; max-height:52vh; margin:0 0 .9rem;
+    background:rgba(18,53,40,.06); border-radius:8px; padding:.6rem .7rem;
+    user-select:text; -webkit-user-select:text;
+  }
+  .session-banner .txt.dbg{ font-size:.68rem; opacity:.75; font-variant-numeric:tabular-nums; }
+  .session-banner button.mic{ background:var(--gold); color:var(--green); }
+  .session-banner button{
+    border:none; background:rgba(243,236,216,.16); color:var(--paper);
+    padding:.2rem .5rem; border-radius:999px; cursor:pointer;
+    font-size:.7rem; font-weight:700;
+  }
+  .session-panel{
+    max-width:520px; margin:0 auto; padding:.5rem 1.1rem 2rem;
+    text-align:center; color:var(--ink);
+  }
+  .session-panel p{ color:var(--ink-soft); font-size:.92rem; line-height:1.55; margin:.6rem 0 1rem; }
+  .session-code{
+    font-family:'Karla',system-ui,sans-serif; font-weight:700;
+    font-size:2.6rem; letter-spacing:.25em; color:var(--gold);
+    padding:.6rem 0 .2rem; font-variant-numeric:tabular-nums;
+  }
+  .session-btn{
+    border:1.5px solid var(--gold); background:transparent; color:var(--chip-ink);
+    padding:.6rem 1.2rem; border-radius:999px; cursor:pointer;
+    font-weight:700; font-size:.9rem;
+  }
+  .session-btn.primary{ background:var(--gold); color:var(--green-deep); border-color:var(--gold); }
+  .session-hint{
+    font-size:.82rem !important; color:var(--gold) !important;
+    margin:.2rem auto .8rem !important; max-width:32ch;
+  }
+  .session-share{ display:flex; gap:.5rem; justify-content:center; flex-wrap:wrap; margin-bottom:.4rem; }
+  .session-btn.quiet{
+    border-color:var(--paper-edge); color:var(--ink-soft);
+    font-size:.82rem; padding:.45rem 1rem; margin-top:1rem;
+  }
+  .session-join{ display:flex; gap:.5rem; justify-content:center; margin-top:1rem; }
+  .session-join input{
+    width:9.5rem; text-align:center; font-size:1.05rem; letter-spacing:.12em;
+    padding:.55rem .5rem; border-radius:12px;
+    border:1.5px solid var(--paper-edge); background:var(--card); color:var(--ink);
+    font-variant-numeric:tabular-nums;
+  }
+  .session-status{
+    margin:1rem auto 0; max-width:34ch; font-size:.82rem;
+    color:var(--ink-soft); line-height:1.5;
+  }
+  /* A verse carrying the bookmark: warm paper, gold edge, and a ribbon in the
+     margin — visible at a glance when you come back to a long portion. */
+  .verse.placed{
+    border-color:var(--gold);
+    box-shadow:0 0 0 1px var(--gold), 0 1px 3px rgba(18,53,40,.08);
+  }
+  .verse.placed::before{
+    content:''; position:absolute; inset:0 auto 0 0; width:3px;
+    background:var(--gold); border-radius:16px 0 0 16px;
+  }
+  .verse-place{
+    position:absolute; top:.5rem; left:.5rem; z-index:2;
+    border:none; background:none; cursor:pointer; padding:.25rem;
+    display:flex; align-items:center; justify-content:center;
+    color:var(--gold-soft); opacity:.35;
+    transition:opacity .12s, transform .12s, color .12s;
+  }
+  .verse-place:active{ transform:scale(.9); }
+  .verse-place.on{ color:var(--gold); opacity:1; }
+  @media (hover:hover){ .verse-place:hover{ opacity:.85; } }
+

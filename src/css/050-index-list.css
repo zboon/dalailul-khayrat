@@ -1,0 +1,107 @@
+  /* ---------- placeholder for empty sections ---------- */
+  .placeholder{
+    text-align:center;color:var(--ink-soft);padding:2.4rem 1.4rem;line-height:1.6;
+  }
+  .placeholder .ph-star{font-family:'UthmanicHafs','Amiri',serif;font-size:2.4rem;color:var(--gold);margin-bottom:.6rem}
+  .placeholder strong{color:var(--green);font-size:1.05rem}
+  .placeholder p{margin:.5rem 0}
+
+  /* ---------- index list ---------- */
+  .index{max-width:640px;margin:0 auto;padding:1.4rem 1.1rem calc(env(safe-area-inset-bottom,0px) + 3rem)}
+  .index-label{
+    font-size:.75rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--ink-soft);margin:.4rem 0 1rem;text-align:center;
+  }
+  .search-wrap{position:relative;margin:.2rem 0 1.4rem}
+  /* Resting: quiet — transparent, thin border, dimmed. It's there when you
+     want it and out of the way when you don't. */
+  .search{
+    width:100%;box-sizing:border-box;
+    font-family:inherit;font-size:.95rem;color:var(--ink);
+    background:transparent;
+    border:1px solid var(--paper-edge);border-radius:12px;
+    padding:.6rem 2.4rem .6rem 2.3rem;outline:none;
+    opacity:.7;box-shadow:none;
+    transition:opacity .15s, background .15s, border-color .15s, box-shadow .15s;
+  }
+  .search:hover{opacity:.9}
+  /* Focused: full contrast, gold border, lifted */
+  .search:focus{
+    opacity:1;
+    background:var(--card);
+    border-color:var(--gold);
+    box-shadow:0 2px 10px rgba(18,53,40,.10);
+  }
+  .search::placeholder{color:var(--ink-soft);opacity:.75}
+  .search-icon{
+    position:absolute;left:.8rem;top:50%;transform:translateY(-50%);
+    width:.95rem;height:.95rem;color:var(--ink-soft);
+    opacity:.5;pointer-events:none;
+    transition:opacity .15s, color .15s;
+  }
+  .search-wrap:focus-within .search-icon{opacity:1;color:var(--gold)}
+  /* On the home page the bar is pinned to the bottom of the screen.
+     Note: position:sticky does NOT work here — a sticky element can only travel
+     inside its parent's box, and this is the last child of .index, so its whole
+     range would be that element's own bottom padding (~3rem). Fixed is correct. */
+  .search-wrap.at-bottom{
+    position:fixed;
+    left:50%; transform:translateX(-50%);
+    bottom:calc(env(safe-area-inset-bottom, 0px) + .85rem + var(--player-h));
+    width:min(605px, calc(100% - 2.2rem));
+    margin:0;
+    z-index:20;
+  }
+  /* Needs a solid backdrop here — content scrolls underneath it. */
+  .search-wrap.at-bottom .search{
+    opacity:1;
+    background:var(--card);
+    box-shadow:0 2px 12px rgba(0,0,0,.10);
+  }
+  .search-wrap.at-bottom .search:focus{
+    box-shadow:0 4px 16px rgba(0,0,0,.16);
+  }
+  .search::placeholder{color:var(--ink-soft);opacity:.7}
+  .search-clear{
+    position:absolute;right:.5rem;top:50%;transform:translateY(-50%);
+    width:1.9rem;height:1.9rem;border-radius:50%;
+    color:var(--ink-soft);font-size:.85rem;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .search-clear:active{background:var(--paper-edge)}
+  .no-results{
+    text-align:center;color:var(--ink-soft);font-size:.95rem;
+    padding:2rem 1rem;line-height:1.5;
+  }
+  .qcard{
+    display:flex;align-items:center;gap:1rem;width:100%;text-align:left;
+    background:var(--card);
+    border:1px solid var(--paper-edge);
+    border-radius:14px;
+    padding:1rem 1.1rem;
+    margin-bottom:.8rem;
+    box-shadow:0 1px 2px rgba(18,53,40,.06);
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .qcard:active{transform:scale(.985)}
+  .qcard .num{
+    flex:none;width:2.4rem;height:2.4rem;border-radius:50%;
+    border:1.5px solid var(--gold);color:var(--gold);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'UthmanicHafs','Amiri',serif;font-size:1.15rem;padding-top:2px;
+  }
+  /* The two title lines were plain inline spans, so they only fell onto
+     separate lines when the Arabic happened to be long enough to wrap. A short
+     leading line (a day name) left room for the Arabic to ride up beside it.
+     Stacking them explicitly makes the break structural rather than accidental. */
+  .qcard .titles{flex:1;min-width:0;display:flex;flex-direction:column;align-items:stretch}
+  .qcard .t-ar{font-family:'UthmanicHafs','Amiri',serif;font-size:1.35rem;line-height:1.4;direction:rtl;text-align:left;color:var(--ar-color)}
+  .qcard .t-en{font-size:.85rem;color:var(--ink-soft);margin-top:.1rem}
+  /* Dalāʾil index only: the English day name leads and the Arabic ḥizb title
+     sits under it. A line that comes first has to carry the weight of a title,
+     so it takes ink colour and a little more size; the Arabic eases down a
+     step in turn, without giving up its place as the larger of the two. */
+  .qcard .t-en.lead{font-size:1rem;color:var(--ink);font-weight:600;margin-top:0}
+  .qcard .t-en.lead + .t-ar{font-size:1.2rem;margin-top:.15rem}
+  .qcard .chev{color:var(--gold);font-size:1.2rem}
+

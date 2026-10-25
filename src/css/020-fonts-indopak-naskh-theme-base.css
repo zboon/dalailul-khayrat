@@ -1,0 +1,105 @@
+  /* ── DigitalKhatt IndoPak (SIL Open Font License 1.1) ─────────────────
+     © 2024-2025 Amine Anane, © 2024-2025 Tarteel Inc.
+     https://github.com/DigitalKhatt/indopakfont — licence text in OFL.txt.
+     The optional IndoPak script, chosen from the reader's IndoPak chip.
+     Bundled like the faces above, so a reader who picks it still has it with
+     no connection. It is the built "coretext" TrueType from the DigitalKhatt
+     project, re-wrapped as WOFF2 with no glyph changes (101 KB). It maps
+     only 96 codepoints: the Arabic comma, question mark, ﷺ, the small wāw
+     and the ornate brackets are not among them and fall through to the
+     faces after it in the stack, which is why no unicode-range is needed. */
+  @font-face{
+    font-family:'DKIndoPak';
+    font-style:normal; font-weight:400; font-display:swap;
+    src:url(data:font/woff2;base64,{{inline:fonts/font-dkindopak.woff2}}) format('woff2');
+  }
+  /* ── Scheherazade New (SIL Open Font License 1.1) ───────────────────
+     © 1994-2026 SIL Global, with Reserved Font Names "Scheherazade" and
+     "SIL" — licence text in OFL.txt. The "Naskh" choice of the script
+     switch: a traditional book Naskh designed for full vowelling. This is
+     SIL's own web font from the 4.500 release
+     (web/ScheherazadeNew-Regular.woff2), embedded byte for byte: the
+     reserved names mean a modified copy could not keep its name, so it is
+     not subset or re-encoded. It covers every codepoint the corpus uses. */
+  @font-face{
+    font-family:'SchNew';
+    font-style:normal; font-weight:400; font-display:swap;
+    src:url(data:font/woff2;base64,{{inline:fonts/font-schnew.woff2}}) format('woff2');
+  }
+
+  :root{
+    --green:#123528;
+    --green-deep:#0B241B;
+    --paper:#FAF5EA;
+    --bg:#FAF5EA;
+    --card:#ffffff;
+    --card-alt:#FCF8EF;
+    --paper-edge:#EFE6D2;
+    --gold:#B8934A;
+    --gold-soft:#D8C193;
+    --ms-paper:#FBF4DE;   /* the leaf itself — and the Study card, so both read as one book's paper */
+    --ms-paper-deep:#F3E7C8;  /* the same paper, a shade down, for a refrain's gradient */
+    --ms-ink:#2A2118;
+    --ms-rule:#6B4E2A;
+    --ms-gold:#B8934A;
+    --ms-rosette:#B23A2E;
+    --ms-band-a:#2E6B63;  /* the woven band across the head of the leaf */
+    --ms-band-b:#8C3B2F;
+    --ms-mark:rgba(184,147,74,.28);
+    --rule:rgba(184,147,74,.5);      /* fine gold hairline on the green */
+    --rule-soft:rgba(184,147,74,.3); /* the same, quieter, on the paper */
+    --ink:#26281F;
+    --ink-soft:#6B6A5C;
+    --chip-ink:#123528;   /* control-chip label; must contrast with the page, not the header */
+    --ar-color:#0B241B;
+    --star-fill:#BCD6E4;   /* light blue inside the seam-band stars */
+    --band-field:#0B241B;  /* deep-green ground between the stars */
+    --star-stroke:#CB8090; /* the calligraphy dots' pink, outlining the stars */
+    --accent-green:#1E5540;    /* bismillah + section titles: light enough to read as green */
+    --ar-size:1.9rem;
+    --latin-scale:1;
+  }
+  :root.dark{
+    --green:#1B3A2C;
+    --green-deep:#0E2318;
+    /* --paper stays light: it's the text colour on the green header/bars */
+    --bg:#12150E;
+    --card:#1E2318;
+    --card-alt:#232819;
+    --paper-edge:#2E3324;
+    --gold:#C9A55E;
+    --ms-paper:#191510;   /* the same leaf, inverted for a dark room */
+    --ms-paper-deep:#211B13;
+    --ms-ink:#EADEC2;
+    --ms-rule:#A98A55;
+    --ms-gold:#C9A55E;
+    --ms-rosette:#D9705F;
+    --ms-band-a:#24504B;
+    --ms-band-b:#6B2E26;
+    --ms-mark:rgba(201,165,94,.26);
+    --rule:rgba(201,165,94,.5);
+    --rule-soft:rgba(201,165,94,.28);
+    --gold-soft:#D8C193;
+    --ink:#ECE7D6;
+    --ink-soft:#C7C3AF;   /* brightened: was #A3A08E, too dim for the translation line */
+    --chip-ink:#EFE7CF;   /* light label on the dark card, instead of the dark green */
+    --ar-color:#F3ECD8;
+    --star-fill:#7FA3B8;   /* deeper blue so the stars read on the dark page */
+    --band-field:#0E2318;  /* deep-green ground between the stars */
+    --star-stroke:#D793A2; /* dot-pink, lifted slightly for the dark theme */
+    --accent-green:#618B77;    /* pushed toward the header's forest green (#1B3A2C) as far as
+                                  readability allows: this also colours the ~19px section
+                                  titles, which need 4.5:1. The header green itself is 1.5:1
+                                  here — invisible. */
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Karla',system-ui,sans-serif;
+    min-height:100vh;
+    min-height:100dvh;
+  }
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+

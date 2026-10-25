@@ -1,0 +1,28 @@
+  /* ---------- top nav bar (sections, left-to-right) ---------- */
+  .tabbar{
+    display:flex;gap:.5rem;overflow-x:auto;-webkit-overflow-scrolling:touch;
+    padding:.9rem 1rem;background:var(--green-deep);
+    border-bottom:1px solid var(--rule);
+    scrollbar-width:none;
+    justify-content:flex-start;
+  }
+  /* Center the tabs only when they all fit; when they overflow, this wrapper
+     keeps them left-aligned so the first tab is always reachable to scroll. */
+  .tabbar > .tab:first-child{margin-left:auto}
+  .tabbar > .tab:last-child{margin-right:auto}
+  .tabbar::-webkit-scrollbar{display:none}
+  /* When tabs overflow on narrow screens they scroll; centering still holds
+     because flex wraps naturally from the centre outward. */
+  .tabbar::-webkit-scrollbar{display:none}
+  .tab{
+    flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:.15rem;
+    padding:.55rem .9rem;border-radius:12px;
+    background:rgba(250,245,234,.08);color:var(--paper);
+    border:1.5px solid transparent;transition:background .12s,border-color .12s;
+    min-width:5.2rem;
+  }
+  .tab.active{background:var(--gold);border-color:var(--gold-soft);color:var(--green-deep)}
+  .tab-en{font-size:.78rem;font-weight:700;line-height:1.15;text-align:center;white-space:nowrap}
+  .tab-ar{font-family:'UthmanicHafs','Amiri',serif;font-size:1rem;line-height:1;opacity:.85}
+  .tab.active .tab-ar{opacity:1}
+

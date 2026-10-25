@@ -14,6 +14,12 @@
 set -uo pipefail
 PROTECTED='^refs/heads/(main|master)$'
 
+# index.html and sw.js are generated from src/; a stale pair would ship old code.
+if [ -f build.js ] && command -v node >/dev/null 2>&1 && ! node build.js --check >/dev/null 2>&1; then
+  echo "pre-push: index.html / sw.js are out of date with src/ — run: node build.js" >&2
+  exit 1
+fi
+
 while read -r _local_ref _local_sha remote_ref _remote_sha; do
   if printf '%s' "$remote_ref" | grep -Eq "$PROTECTED"; then
     if [ "${MAIN_PUSH_OK:-}" = "1" ]; then

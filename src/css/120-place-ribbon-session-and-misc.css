@@ -1,0 +1,86 @@
+  /* ── The place ribbon: one saved spot in the Dalāʾil ─────────────── */
+  /* Sits inside .index, which already caps width and pads 1.1rem — so this
+     wrapper must NOT re-apply them, or the Continue bar ends up ~2.2rem
+     narrower than the today card and the nav rows beside it. */
+  .resume-wrap{
+    margin:.2rem 0 .6rem; padding:0;
+    display:flex; flex-direction:column; align-items:stretch; gap:.35rem;
+  }
+  .resume-card{
+    display:flex; align-items:center; gap:.85rem; width:100%;
+    text-align:left; cursor:pointer;
+    background:var(--card); border:1px solid var(--gold-soft); border-radius:16px;
+    padding:.85rem .95rem;
+    box-shadow:0 1px 2px rgba(18,53,40,.05);
+  }
+  .resume-card:active{ transform:scale(.995); }
+  .resume-ribbon{ color:var(--gold); display:flex; flex:0 0 auto; }
+  .resume-text{ display:flex; flex-direction:column; gap:.12rem; min-width:0; flex:1; }
+  .resume-label{
+    font-size:.72rem; letter-spacing:.06em; text-transform:uppercase;
+    color:var(--gold); font-weight:700;
+  }
+  .resume-ar{
+    font-family:'UthmanicHafs','Amiri',serif; font-size:1.25rem; direction:rtl;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .resume-where{ font-size:.82rem; opacity:.7; }
+  .resume-clear{
+    align-self:flex-end; border:none; background:none; cursor:pointer;
+    font:inherit; font-size:.78rem; opacity:.55; padding:.15rem .3rem;
+  }
+  .resume-clear:active{ opacity:.9; }
+  .chip.place-btn.on{ border-color:var(--gold); color:var(--gold); }
+  .fav-btn{
+    border:none; background:none; cursor:pointer; padding:.2rem .3rem;
+    display:flex; align-items:center; justify-content:center;
+    color:var(--gold-soft);
+    opacity:.75; transition:transform .12s, opacity .12s;
+  }
+  .fav-btn:hover{ opacity:1; }
+  .fav-btn:active{ transform:scale(.85); }
+  .fav-btn.on{ color:var(--gold); opacity:1; }
+  /* Always-visible view swap in the pinned reader bar, so you can switch
+     Book/Study without scrolling up to the controls — it keeps your place. */
+  .view-swap{
+    display:inline-flex; align-items:center; gap:.24rem; border:none;
+    background:rgba(250,245,234,.14); color:var(--paper); cursor:pointer;
+    padding:.32rem .55rem; border-radius:9px; margin-right:.3rem;
+    font-family:'Crimson Pro',serif; font-size:.82rem; font-weight:700; letter-spacing:.01em;
+    opacity:.94; transition:transform .12s, opacity .12s;
+  }
+  .view-swap svg{ width:1rem; height:1rem; display:block; }
+  .view-swap:hover{ opacity:1; }
+  .view-swap:active{ transform:scale(.9); }
+  /* The labelled Book Version / Study Version pair is back under the title
+     (owner's call, v429/v100 — the bar icon alone was too easy for a new
+     reader to miss). At the top the calligraphy is showing and the labelled
+     pair is in the controls just below, so the little bar swap steps aside;
+     it appears once you scroll into the reading (the bar goes slim). */
+  .reader-bar:not(.slim) .view-swap{ display:none; }
+  /* The day/night toggle rides in the reader bar too, so it is reachable from
+     every screen and not only from the mastheads. The base .theme-toggle is
+     absolutely positioned against the masthead; inside the bar it is an
+     ordinary flex item, and a shade smaller so it sits beside the bookmark. */
+  .reader-bar .theme-toggle.bar-theme{
+    position:static; top:auto; right:auto;
+    width:2rem; height:2rem; margin-right:.3rem; flex:0 0 auto;
+  }
+  .reader-bar .theme-toggle.bar-theme svg{ width:1.1rem; height:1.1rem; }
+  .hide{display:none}
+
+  .home-feedback{ text-align:center; padding:.5rem 1rem 1.2rem; }
+  .feedback-btn{
+    display:inline-block; text-decoration:none;
+    font-family:'Karla',sans-serif; font-size:.9rem; font-weight:600;
+    color:var(--green); background:var(--card);
+    border:1px solid var(--gold-soft); border-radius:11px;
+    padding:.6rem 1.1rem; transition:border-color .12s, background .12s;
+  }
+  .feedback-btn:active{ background:var(--paper); border-color:var(--gold); }
+  .feedback-sub{ margin-top:.5rem; font-size:.72rem; color:var(--ink-soft); }
+  footer{ text-align:center;color:var(--ink-soft);font-size:.75rem;padding:0 1rem 2.5rem }
+
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none !important}
+  }
