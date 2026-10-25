@@ -6,10 +6,11 @@
  *                            exactly what src/ builds (run before every commit)
  *
  * The app is still ONE self-contained page — offline-first, nothing to fetch —
- * so this only changes how it is *edited*: css/, js/ and fonts/ under src/ are
- * read in filename order (directories recursed) and inlined into
- * src/index.template.html. {{version}} comes from src/version.txt and
- * {{inline:path}} is replaced by the base64 of that file. Never edit the
+ * so this only changes how it is *edited*: src/css and src/js are read in
+ * filename order (directories recursed) and inlined into src/index.template.html.
+ * The texts live in content/<section>/*.json (order in each index.json) and are
+ * pulled in by {{content:section}}; {{version}} comes from src/version.txt and
+ * {{inline:fonts/x}} is the base64 of that file, relative to the repo root. Never edit the
  * generated index.html or sw.js by hand: the next build overwrites them.
  */
 const fs = require('fs');
@@ -22,11 +23,25 @@ function walk(dir) {
   }).join('');
 }
 
+/* content/<section>/index.json lists the piece files in reading order. {{content:x}}
+   becomes the JSON array of those pieces; {{content-map:x}} merges them into one object
+   (the Mughlay alternates). Every .json in the folder must be listed, and vice versa. */
+function content(root, section, map) {
+  const D = path.join(root, 'content', section);
+  const order = JSON.parse(fs.readFileSync(path.join(D, 'index.json'), 'utf8'));
+  const on = fs.readdirSync(D).filter(f => f.endsWith('.json') && f !== 'index.json').map(f => f.slice(0, -5)).sort();
+  if (JSON.stringify(on) !== JSON.stringify(order.slice().sort()) || new Set(order).size !== order.length)
+    throw new Error('content/' + section + ': index.json and the files in the folder disagree');
+  const items = order.map(n => JSON.parse(fs.readFileSync(path.join(D, n + '.json'), 'utf8')));
+  return JSON.stringify(map ? Object.assign({}, ...items) : items);
+}
+
 function build(root) {
   const S = path.join(root, 'src');
   const version = fs.readFileSync(path.join(S, 'version.txt'), 'utf8').trim();
   const fill = t => t
-    .replace(/\{\{inline:([^}]+)\}\}/g, (_, f) => fs.readFileSync(path.join(S, f)).toString('base64'))
+    .replace(/\{\{content(-map)?:([^}]+)\}\}/g, (_, m, sec) => content(root, sec, !!m))
+    .replace(/\{\{inline:([^}]+)\}\}/g, (_, f) => fs.readFileSync(path.join(root, f)).toString('base64'))
     .replace(/\{\{version\}\}/g, () => version);
   const css = walk(path.join(S, 'css'));
   const js = walk(path.join(S, 'js'));

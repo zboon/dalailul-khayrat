@@ -1,1 +1,0 @@
-  { titleArabic:"الْحِزْبُ الْأَعْظَمُ",     titleEnglish:"Al-Ḥizb al-Aʿẓam", verses:[] },

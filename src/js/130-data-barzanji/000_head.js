@@ -1,1 +1,0 @@
-const BARZANJI_CHAPTERS = [

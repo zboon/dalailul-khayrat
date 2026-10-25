@@ -1,1 +1,0 @@
-const SIRAH_CHAPTERS = [

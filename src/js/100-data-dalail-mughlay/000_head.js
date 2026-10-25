@@ -1,1 +1,0 @@
-const DALAIL_WITH_SAYYIDINA = {

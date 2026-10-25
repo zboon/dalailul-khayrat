@@ -1,2 +1,0 @@
-const QASIDAS = [
-  /* ============ DUAS & DEVOTIONS ============ */
