@@ -61,7 +61,7 @@ let arFontChosen = (() => { try { const v = localStorage.getItem(FONT_KEY); retu
 function defaultArFont(){
   let ed;
   try { ed = dalailEdition; }
-  catch(e){ try { ed = localStorage.getItem('dlk-edition') === 'sayyidina' ? 'sayyidina' : 'istanbul'; } catch(e2){ ed = 'istanbul'; } }
+  catch(e){ ed = initialEdition(); }
   return ed === 'sayyidina' ? 'indopak' : 'uthmani';
 }
 let arFont = arFontChosen || defaultArFont();

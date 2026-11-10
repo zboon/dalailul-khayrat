@@ -4,6 +4,22 @@
    marks a piece you want to find again, a place marks how far you have read
    through a long portion you mean to finish. */
 const PLACE_KEY = 'dlk-dalail-place';
+/* Which version of the Dalāʾil a reader gets. A stored choice always wins. For
+   a reader who has never chosen it is the Mughlay Version (owner's call),
+   unless an Istanbul place or highlight is already saved from before that was
+   the default — then they stay on Istanbul so their bookmark is not stranded.
+   Literal keys, and no reliance on consts declared further down, because this
+   is called at load, before dalailEdition and the stores' own helpers exist. */
+function initialEdition(){
+  try {
+    const v = localStorage.getItem('dlk-edition');
+    if(v === 'sayyidina' || v === 'istanbul') return v;
+    if(localStorage.getItem('dlk-dalail-place')) return 'istanbul';
+    const m = JSON.parse(localStorage.getItem('dlk-marks')) || {};
+    if(Object.keys(m).some(k => k.indexOf('d:') === 0)) return 'istanbul';
+  } catch(e){}
+  return 'sayyidina';
+}
 /* One saved place per version of the Dalāʾil. The Mughlay Version divides
    its text where the Mughlay printing does, so a phrase (and so a saved
    place) in one version is not the same phrase in the other. The Istanbul
@@ -11,7 +27,7 @@ const PLACE_KEY = 'dlk-dalail-place';
    versions are still found. Read through a try because a place can be
    looked up before dalailEdition is declared further down. */
 function placeKey(){
-  let ed = 'istanbul';
+  let ed = initialEdition();
   try { ed = dalailEdition; } catch(e){}
   return ed === 'sayyidina' ? PLACE_KEY + '-mughlay' : PLACE_KEY;
 }
